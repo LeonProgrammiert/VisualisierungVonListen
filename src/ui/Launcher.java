@@ -1,5 +1,4 @@
 package ui;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -12,65 +11,108 @@ public class Launcher {
     }
 
     public static void createUI() {
-        JFrame frame = new JFrame("Listen-Launcher");
+        JFrame frame = new JFrame("Visualisierung von Listen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 500);
+        frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
 
         // Hintergrund dunkel
         JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(24, 26, 28)); // sehr dunkles Grau
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.DARK_GRAY);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // + Button
-        JButton plusButton = createDarkButton("+", 100, 100, 36);
-        JLabel plusLabel = new JLabel("neue Liste");
-        plusLabel.setForeground(Color.LIGHT_GRAY);
-        plusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        plusLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 30, 0));
+        // Titel & Untertitel
+        JLabel title = new JLabel("Willkommen bei den friedlichen Koalas");
+        title.setFont(new Font("SansSerif", Font.BOLD, 24));
+        title.setForeground(Color.WHITE);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Öffnen Button
-        JButton oeffnen = createDarkButton("öffnen", 200, 50, 16);
+        JLabel subtitle1 = new JLabel("Hier wird deine Liste visualisiert");
+        subtitle1.setFont(new Font("SansSerif", Font.BOLD, 19));
+        subtitle1.setForeground(Color.WHITE);
+        subtitle1.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Import/Export Button
-        JButton eximport = createDarkButton("ex / import", 200, 50, 16);
-        eximport.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        JLabel subtitle2 = new JLabel("Erstelle oder öffne eine Liste");
+        subtitle2.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        subtitle2.setForeground(new Color(255, 182, 193));
+        subtitle2.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Hinzufügen
-        mainPanel.add(plusButton);
-        mainPanel.add(plusLabel);
-        mainPanel.add(oeffnen);
-        mainPanel.add(eximport);
+        // Button-Container (untereinander, zentriert)
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBackground(mainPanel.getBackground());
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Buttons einfügen
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        buttonPanel.add(createIconButton("+", "Neue Liste"));
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen"));
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        buttonPanel.add(createIconButton("\uD83D\uDCE4", "Exportieren"));
+
+        // Alles vertikal mittig
+        mainPanel.add(Box.createVerticalGlue());
+        mainPanel.add(title);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainPanel.add(subtitle1);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        mainPanel.add(subtitle2);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+        mainPanel.add(buttonPanel);
+        mainPanel.add(Box.createVerticalGlue());
 
         frame.add(mainPanel);
         frame.setVisible(true);
     }
 
-    private static JButton createDarkButton(String text, int width, int height, int fontSize) {
-        JButton button = new JButton(text);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(new Dimension(width, height));
-        button.setPreferredSize(new Dimension(width, height));
-        button.setBackground(Color.GRAY);
-        button.setForeground(Color.BLACK);
-        button.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(true);
-        button.setOpaque(true);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    private static JPanel createIconButton(String icon, String labelText) {
+        Color normalBg = new Color(40, 40, 40);
+        Color hoverBg = new Color(65, 65, 65);
 
-        // Hover-Rahmen
-        button.addMouseListener(new MouseAdapter() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(normalBg);
+        panel.setPreferredSize(new Dimension(160, 80));
+        panel.setMaximumSize(new Dimension(160, 80));
+        panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panel.setBorder(BorderFactory.createLineBorder(normalBg, 1));
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setOpaque(true);
+
+        JLabel iconLabel = new JLabel(icon, SwingConstants.CENTER);
+        iconLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
+        iconLabel.setForeground(Color.WHITE);
+        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel textLabel = new JLabel(labelText, SwingConstants.CENTER);
+        textLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        textLabel.setForeground(Color.LIGHT_GRAY);
+        textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(iconLabel);
+        panel.add(Box.createRigidArea(new Dimension(0, 8)));
+        panel.add(textLabel);
+        panel.add(Box.createVerticalGlue());
+
+        // Hover-Effekt
+        panel.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+                panel.setBackground(hoverBg);
+                panel.setBorder(BorderFactory.createLineBorder(new Color(255, 182, 193), 1));
+                textLabel.setForeground(new Color(255, 182, 193)); // ← Rosa Text beim Hover
+
             }
+
             public void mouseExited(MouseEvent e) {
-                button.setBorder(BorderFactory.createEmptyBorder());
+                panel.setBackground(normalBg);
+                panel.setBorder(BorderFactory.createLineBorder(normalBg, 1));
+                textLabel.setForeground(Color.LIGHT_GRAY);
             }
         });
 
-        return button;
+        return panel;
     }
 }
