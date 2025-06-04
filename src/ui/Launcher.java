@@ -1,10 +1,22 @@
 package ui;
+import controls.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 public class Launcher {
+
+    enum eventTypes {add, open, export}
+
+    static Controller controller;
+
+    public Launcher(Controller controller) {
+        Launcher.controller = controller;
+        createUI();
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Launcher::createUI);
@@ -46,11 +58,11 @@ public class Launcher {
 
         // Buttons einfügen
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20))); //wie margin in css, abstand zwischen den buttons
-        buttonPanel.add(createIconButton("+", "Neue Liste")); // button besteht aus Icon+Text, wird per Methode createIconButton(...) gebaut
+        buttonPanel.add(createIconButton("+", "Neue Liste", eventTypes.add)); // button besteht aus Icon+Text, wird per Methode createIconButton(...) gebaut
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen"));
+        buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen", eventTypes.open));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        buttonPanel.add(createIconButton("\uD83D\uDCE4", "Exportieren"));
+        buttonPanel.add(createIconButton("\uD83D\uDCE4", "Exportieren", eventTypes.export));
 
         //
 
@@ -71,7 +83,7 @@ public class Launcher {
 
     }
 
-    private static JPanel createIconButton(String icon, String labelText) {
+    private static JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); //icon oben text unten
@@ -115,8 +127,35 @@ public class Launcher {
                 panel.setBorder(BorderFactory.createLineBorder(new Color(40, 40, 40), 1));
                 textLabel.setForeground(Color.LIGHT_GRAY);
             }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                switch (eventType) {
+                    case open -> open();
+                    case export -> export();
+                    case add -> addList();
+                }
+            }
         });
 
         return panel;
     }
+
+    private static void open() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.showOpenDialog(null);
+        File file = fileChooser.getSelectedFile();
+        controller.openList(file);
+    }
+
+    private static void export() {
+
+    }
+
+    private static void addList() {
+
+    }
+
+
 }
