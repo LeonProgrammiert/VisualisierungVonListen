@@ -14,6 +14,7 @@ public class DatabaseAccessor {
 
     public void addList() {
         // Create empty csv-file
+        System.out.println();
     }
 
     public ArrayList<CustomObject> openList(File file) {
