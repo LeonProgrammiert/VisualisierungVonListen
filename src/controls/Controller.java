@@ -1,9 +1,9 @@
 package controls;
 
-import backend.CustomObject;
 import storage.DatabaseAccessor;
 import ui.Launcher;
-import ui.ListenEditor;
+import backend.CustomObject;
+import ui.ListEditor;
 
 import javax.swing.*;
 import java.io.File;
@@ -47,7 +47,15 @@ public class Controller {
     }
 
     public void openList(File file) {
-        ArrayList<CustomObject> data = databaseAccessor.openList(file);
+        CustomObject anker = databaseAccessor.openList(file);
+
+        // Test
+        while (anker != null) {
+            System.out.println(anker.getData());
+            anker = anker.getNext();
+        }
+
+
 
         //ListenEditor.load(data);
     }

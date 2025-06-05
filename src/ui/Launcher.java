@@ -144,6 +144,7 @@ public class Launcher {
     private static void open() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         fileChooser.showOpenDialog(null);
         File file = fileChooser.getSelectedFile();
         controller.openList(file);

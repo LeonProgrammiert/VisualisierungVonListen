@@ -2,9 +2,7 @@ package storage;
 
 import backend.CustomObject;
 import controls.Controller;
-
 import java.io.*;
-import java.util.ArrayList;
 
 public class DatabaseAccessor {
 
@@ -17,28 +15,34 @@ public class DatabaseAccessor {
         System.out.println();
     }
 
-    public ArrayList<CustomObject> openList(File file) {
-        // Read the file and returns it values
+    public CustomObject openList(File file) {
+        CustomObject head = null;
+        CustomObject previous = null;
 
-        ArrayList<CustomObject> data = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            // Skip the first line because it's only metadata
-            reader.readLine();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            reader.readLine(); // Skip metadata line
 
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] elements = line.split(";");
-                data.add(new CustomObject(elements[0], elements[1], elements[2]));
+                CustomObject current = new CustomObject(elements[1]);
+
+                if (previous != null) {
+                    previous.setNext(current);
+                    current.setPrevious(previous);
+                } else {
+                    head = current; // First element becomes the head
+                }
+
+                previous = current;
             }
-            reader.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Controller.handleError(e.getLocalizedMessage());
         }
-        return data;
+
+        return head;
     }
+
 }
 
 
