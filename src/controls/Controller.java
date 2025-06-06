@@ -1,5 +1,6 @@
 package controls;
 
+import backend.CustomObject;
 import storage.DatabaseAccessor;
 import backend.CustomObject;
 import ui.ListEditor;
@@ -7,10 +8,14 @@ import ui.Launcher;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Controller {
 
+    private String currentListName;
+
     public static void main (String[] args) {
+
         // Set look and feel
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -21,14 +26,13 @@ public class Controller {
         new Controller();
     }
 
+
     private final DatabaseAccessor databaseAccessor;
     private final Launcher launcher;
     private final ListEditor listEditor;
 
     public Controller() {
-
         databaseAccessor = new DatabaseAccessor();
-
         launcher = new Launcher(this);
         launcher.setVisible(true);
 
@@ -41,8 +45,11 @@ public class Controller {
         // Später über JOptionPane ausgeben
     }
 
-    public void addList() {
-        databaseAccessor.addList();
+
+    public void addList(String name) {
+        this.currentListName = name;
+        databaseAccessor.addList(name);
+        System.out.println("Neue Liste erstellt: " + name);
     }
 
     public void openList(File file) {

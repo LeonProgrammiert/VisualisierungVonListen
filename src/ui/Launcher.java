@@ -3,6 +3,8 @@ package ui;
 import ui.legos.CustomIconButton;
 import controls.Controller;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -95,6 +97,7 @@ public class Launcher extends JFrame {
                 }
             }
         });
+
         return panel;
     }
 
@@ -116,6 +119,12 @@ public class Launcher extends JFrame {
     }
 
     private void addList() {
+        String listenName = JOptionPane.showInputDialog(null, "Wie soll die neue Liste heißen?", "Neue Liste erstellen", JOptionPane.PLAIN_MESSAGE);
 
+        if (listenName != null && !listenName.trim().isEmpty()) {
+            controller.addList(listenName.trim());
+        } else {
+            JOptionPane.showMessageDialog(null, "Die Liste braucht einen gültigen Namen.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
