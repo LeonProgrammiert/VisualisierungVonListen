@@ -4,14 +4,15 @@ import backend.CustomObject;
 import controls.Controller;
 
 import java.io.*;
-import java.util.ArrayList;
 
 public class DatabaseAccessor {
+
+    private final String source = "src/saves/";
 
     public void addList(String name) {
         // Create empty csv-file
         // Erstelle eine neue leere CSV-Datei im Projektordner
-        File file = new File(name + ".csv");
+        File file = new File(source + name + ".csv");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("");
