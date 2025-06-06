@@ -31,13 +31,24 @@ public class Controller {
     private final Launcher launcher;
     private final ListEditor listEditor;
 
+    private static Controller instance;
+
     public Controller() {
+        instance = this;
+
         databaseAccessor = new DatabaseAccessor();
         launcher = new Launcher(this);
         launcher.setVisible(true);
 
         listEditor = new ListEditor(this);
         listEditor.setVisible(false);
+    }
+
+    public static Controller getController() {
+        return instance;
+    }
+    public ListEditor getListEditor() {
+        return listEditor;
     }
 
     public static void handleError(String errorMessage) {

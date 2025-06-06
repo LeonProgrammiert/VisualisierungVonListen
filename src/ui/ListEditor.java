@@ -2,6 +2,7 @@ package ui;
 
 import backend.CustomObject;
 import controls.Controller;
+import ui.legos.AddNode;
 import ui.legos.CustomButton;
 
 import java.awt.*;
@@ -73,8 +74,18 @@ public class ListEditor extends JFrame{
         buttonPanel.add(Box.createHorizontalStrut(50));
 
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
+        addNodeButton.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                clickedAddNode();
+            }
+        });
         buttonPanel.add(addNodeButton);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
+        deleteNodeButton.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                clickedRemoveNode();
+            }
+        });
         buttonPanel.add(deleteNodeButton);
 
         // Add components
@@ -86,6 +97,33 @@ public class ListEditor extends JFrame{
         addComponentToGrid(container, buttonPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NORTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
         add(container);
+    }
+
+    private void clickedRemoveNode() {
+
+    }
+
+    private void clickedAddNode() {
+        String[] options = {"Start", "Nächster", "Ende"};
+
+        // Show the option dialog
+        int choice = JOptionPane.showOptionDialog(
+                null,
+                "Choose one of the following options:",
+                "Custom Options Dialog",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        // Handle the user's choice
+        if (choice >= 0) addNode(choice);
+    }
+
+    private void addNode(int position) {
+        new AddNode(this, anker, position);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
