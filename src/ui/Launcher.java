@@ -154,8 +154,12 @@ public class Launcher {
     }
 
     private static void addList() {
+        String listenName = JOptionPane.showInputDialog(null, "Wie soll die neue Liste heißen?", "Neue Liste erstellen", JOptionPane.PLAIN_MESSAGE);
 
+        if (listenName != null && !listenName.trim().isEmpty()) {
+            controller.addList(listenName.trim());
+        } else {
+            JOptionPane.showMessageDialog(null, "Die Liste braucht einen gültigen Namen.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        }
     }
-
-
 }

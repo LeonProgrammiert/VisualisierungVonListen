@@ -12,8 +12,17 @@ public class DatabaseAccessor {
     }
 
 
-    public void addList() {
+    public void addList(String name) {
         // Create empty csv-file
+        // Erstelle eine neue leere CSV-Datei im Projektordner
+        File file = new File(name + ".csv");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write("");
+            System.out.println("CSV-Datei erstellt: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Fehler beim Erstellen der Liste: " + e.getMessage());
+        }
     }
 
     public ArrayList<CustomObject> openList(File file) {

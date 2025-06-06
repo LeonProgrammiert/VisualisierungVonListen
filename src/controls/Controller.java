@@ -3,13 +3,13 @@ package controls;
 import backend.CustomObject;
 import storage.DatabaseAccessor;
 import ui.Launcher;
-import ui.ListenEditor;
-
 import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 
 public class Controller {
+
+    private String currentListName;
 
     public static void main (String[] args) {
 
@@ -42,8 +42,10 @@ public class Controller {
     }
 
 
-    public void addList() {
-        databaseAccessor.addList();
+    public void addList(String name) {
+        this.currentListName = name;
+        databaseAccessor.addList(name);
+        System.out.println("Neue Liste erstellt: " + name);
     }
 
     public void openList(File file) {
@@ -51,5 +53,4 @@ public class Controller {
 
         //ListenEditor.load(data);
     }
-
 }
