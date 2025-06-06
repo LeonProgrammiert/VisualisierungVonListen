@@ -1,33 +1,39 @@
 package ui;
 
+import backend.CustomObject;
+import controls.Controller;
+import ui.legos.CustomButton;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
-// TO-DO: 
-// - undo/redo buttons and/or keyboard shortcut
-// - button functionality
-
 public class ListEditor extends JFrame{
-    
-    public static void main(String[] args) {
-        ListEditor frame = new ListEditor();
-    }
-    
-    public ListEditor(){
-        createUI();
-    }
-    
-    public void createUI(){
 
+    private final Controller controller;
+
+    private enum eventTypes {backToLauncher, previous, current, next, add, delete}
+
+    private CustomObject anker;
+
+    public ListEditor(Controller controller) {
+        this.controller = controller;
+
+        setValues();
+        build();
+    }
+
+    private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
         setSize(1080, 720);
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
 
+    public void build(){
         Color backgroundColor = new Color(24, 26 ,28);
 
         JPanel mainPanel = new JPanel();
@@ -40,10 +46,10 @@ public class ListEditor extends JFrame{
         mainPanel.setLayout(editorLayout);
 
         // define components
-        JButton backToLauncher = createButton("Zurück zum Launcher", 12, "\u2190");
-        JButton predecessor = createButton("Vorgänger", 24, null);
-        JButton successor = createButton("Nachfolger", 24, null);        
-        JButton current = createButton("Aktuell", 24, null);
+        CustomButton backToLauncher = createButton("\u2190 Zurück zum Launcher", 12, eventTypes.backToLauncher);
+        CustomButton predecessor = createButton("Vorgänger", 24, eventTypes.previous);
+        CustomButton successor = createButton("Nachfolger", 24, eventTypes.next);
+        CustomButton current = createButton("Aktuell", 24, eventTypes.current);
 
         JLabel index = new JLabel("Indexplatzhalter");
         index.setHorizontalAlignment(JLabel.CENTER);
@@ -54,13 +60,13 @@ public class ListEditor extends JFrame{
         JPanel addDeletePanel = new JPanel();
         addDeletePanel.setBackground(backgroundColor);
         addDeletePanel.setLayout(new FlowLayout());
-        
-        JButton addNodeButton = createButton("Hinzufügen", 24, null);
+
+        CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
         addDeletePanel.add(addNodeButton);
 
         addDeletePanel.add(Box.createHorizontalStrut(50));
 
-        JButton deleteNodeButton = createButton("Löschen", 24, null);
+        CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
         addDeletePanel.add(deleteNodeButton);
 
         // add components
@@ -87,51 +93,21 @@ public class ListEditor extends JFrame{
         cont.add(comp);
     }
 
-    private JButton createButton(String buttonText, int fontSize, String unicodeIcon) {
-
-        JButton button;
-        
-        if(unicodeIcon != null){
-            button = new JButton(unicodeIcon + " " + buttonText);
-        }
-        else{
-            button = new JButton(buttonText);
-        }
-
-        button.setBackground(new Color(40, 40, 40));
-        button.setBorder(BorderFactory.createLineBorder(new Color(40, 40, 40), 2));
-        button.setOpaque(true);
-        button.setFocusable(false);
-        button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-        button.setForeground(Color.LIGHT_GRAY);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+    private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
+        CustomButton button = new CustomButton(buttonText, fontSize);
         button.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(new Color(65, 65, 65));
-                button.setBorder(BorderFactory.createLineBorder(new Color(255, 182, 193), 2));
-                button.setForeground(new Color(255, 182, 193));
-            }
-
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(new Color(40, 40, 40));
-                button.setBorder(BorderFactory.createLineBorder(new Color(40, 40, 40), 2));
-                button.setForeground(Color.LIGHT_GRAY);
-            }
-
-            public void mousePressed(MouseEvent e){
-                button.setEnabled(false);
-                button.setBackground(new Color(80, 80, 80));
-                button.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 80), 2));
-                button.setForeground(Color.DARK_GRAY);
-            }
-
-            public void mouseReleased(MouseEvent e){
-                button.setEnabled(true);
-                mouseEntered(e);
+            public void mouseClicked(MouseEvent e) {
+                switch (eventType) {
+                    case backToLauncher -> controller.backToLauncher(anker);
+                    // TODO: Implement different methods
+                }
             }
         });
-
         return button;
     }
+
+    public void openList(CustomObject anker) {
+        this.anker = anker;
+    }
+
 }

@@ -26,14 +26,16 @@ public class Controller {
 
     private final DatabaseAccessor databaseAccessor;
     private final Launcher launcher;
-
+    private final ListEditor listEditor;
 
     public Controller() {
         databaseAccessor = new DatabaseAccessor();
+
         launcher = new Launcher(this);
+        launcher.setVisible(true);
 
-
-
+        listEditor = new ListEditor(this);
+        listEditor.setVisible(false);
     }
 
     public static void handleError(String errorMessage) {
@@ -54,10 +56,14 @@ public class Controller {
             System.out.println(anker.getData());
             anker = anker.getNext();
         }
+        launcher.setVisible(false);
+        listEditor.setVisible(true);
+        listEditor.openList(anker);
+    }
 
-
-
-        //ListenEditor.load(data);
+    public void backToLauncher(CustomObject anker) {
+        launcher.setVisible(true);
+        listEditor.setVisible(false);
     }
 
 }

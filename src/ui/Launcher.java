@@ -1,5 +1,6 @@
 package ui;
 import controls.Controller;
+import ui.legos.CustomIconButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,27 +8,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-public class Launcher {
+public class Launcher extends JFrame {
+
+    private final Controller controller;
 
     enum eventTypes {add, open, export}
 
-    static Controller controller;
 
     public Launcher(Controller controller) {
-        Launcher.controller = controller;
+        this.controller = controller;
         createUI();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Launcher::createUI);
-    //Hey Swing, bitte führe diese Methode (createUI) aus – aber im richtigen GUI-Thread! + invokeLater//Übergibt Code an diesen GUI-Thread
-    }
-
-    public static void createUI() {
-        JFrame frame = new JFrame("Visualisierung von Listen"); //Neues Fenster mit Titel
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //Schließt Programm, wenn das Fenster schließt
-
-        frame.setSize(2000, 1600);
+    public void createUI() {
+        setTitle("Visualisierung von Listen");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //Schließt Programm, wenn das Fenster schließt
+        setSize(2000, 1600);
 
         // Hintergrund
         JPanel mainPanel = new JPanel();
@@ -76,58 +72,18 @@ public class Launcher {
         mainPanel.add(buttonPanel);
         mainPanel.add(Box.createVerticalGlue());
 
-        frame.add(mainPanel);
+        add(mainPanel);
         //Fügt mainPanel in das Fenster (JFrame) ein. mainPanel enthält ganzen Inhalt: Titel, Buttons, Texte
-        frame.setVisible(true);
+        setVisible(true);
         //Macht das Fenster sichtbar auf dem Bildschirm
 
     }
 
-    private static JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); //icon oben text unten
-        panel.setBackground(new Color(40, 40, 40));
-        panel.setMinimumSize(new Dimension(160, 80));
-        panel.setPreferredSize(new Dimension(160, 90)); //Wenn Platz, dann genau die maße
-        panel.setMaximumSize(new Dimension(160, 90));// nicht größer als das
-        panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        panel.setBorder(BorderFactory.createLineBorder(new Color(40, 40, 40), 1)); // erst sichtbar beim Hover (wenn rosa wird)
-        panel.setOpaque(true); //zeigt seine hintergrundfarbe an
-
-
-        JLabel iconLabel = new JLabel(icon, SwingConstants.CENTER); //erstellt neues Label das Icon anzeigt
-        iconLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
-        iconLabel.setForeground(Color.WHITE);
-        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        //Genau wie oben, aber diesmal für den Button-Text
-        JLabel textLabel = new JLabel(labelText, SwingConstants.CENTER);
-        textLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        textLabel.setForeground(Color.LIGHT_GRAY);
-        textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        panel.add(Box.createVerticalGlue()); //flexiblen, unsichtbaren Platz über dem Icon
-        panel.add(iconLabel);
-        panel.add(Box.createRigidArea(new Dimension(0, 8))); //festen Abstand
-        panel.add(textLabel);
-        panel.add(Box.createVerticalGlue());
+    private JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
+        CustomIconButton panel = new CustomIconButton(icon, labelText);
 
         // Hover-Effekt
         panel.addMouseListener(new MouseAdapter() { //Hey Panel, hör ab jetzt auf Mausbewegungen und erstelle einen zuhörer
-            public void mouseEntered(MouseEvent e) {
-                panel.setBackground(new Color(65, 65, 65));
-                panel.setBorder(BorderFactory.createLineBorder(new Color(255, 182, 193), 1));
-                textLabel.setForeground(new Color(255, 182, 193)); // ← Rosa Text beim Hover
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-                panel.setBackground(new Color(40, 40, 40));
-                panel.setBorder(BorderFactory.createLineBorder(new Color(40, 40, 40), 1));
-                textLabel.setForeground(Color.LIGHT_GRAY);
-            }
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
@@ -141,22 +97,24 @@ public class Launcher {
         return panel;
     }
 
-    private static void open() {
+    private void open() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+        String path = System.getProperty("user.dir") + "/src/saves";
+        File src = new File(path);
+
+        fileChooser.setCurrentDirectory(src);
         fileChooser.showOpenDialog(null);
         File file = fileChooser.getSelectedFile();
         controller.openList(file);
     }
 
-    private static void export() {
+    private void export() {
 
     }
 
-    private static void addList() {
+    private void addList() {
 
     }
-
-
 }
