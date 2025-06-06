@@ -15,6 +15,10 @@ public class ListEditor extends JFrame{
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
     private CustomObject anker;
 
+    private CustomButton predecessor;
+    private CustomButton successor;
+    private CustomButton current;
+
     public ListEditor(Controller controller) {
         this.controller = controller;
         setValues();
@@ -44,9 +48,9 @@ public class ListEditor extends JFrame{
 
         // define components
         CustomButton backToLauncher = createButton("\u2190 Zurück zum Launcher", 12, eventTypes.backToLauncher);
-        CustomButton predecessor = createButton("Vorgänger", 24, eventTypes.previous);
-        CustomButton successor = createButton("Nachfolger", 24, eventTypes.next);
-        CustomButton current = createButton("Aktuell", 24, eventTypes.current);
+        predecessor = createButton("Vorgänger", 24, eventTypes.previous);
+        successor = createButton("Nachfolger", 24, eventTypes.next);
+        current = createButton("Aktuell", 24, eventTypes.current);
 
         JLabel index = new JLabel("Indexplatzhalter");
         index.setHorizontalAlignment(JLabel.CENTER);
@@ -94,6 +98,8 @@ public class ListEditor extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
                     case backToLauncher -> controller.backToLauncher(anker);
+                    case next -> displayNext();
+                    case previous -> displayPrevious();
                     // TODO: Implement different methods
                 }
             }
@@ -103,5 +109,31 @@ public class ListEditor extends JFrame{
 
     public void openList(CustomObject anker) {
         this.anker = anker;
+        setData(anker);
+    }
+
+    private void setData(CustomObject currentData) {
+        String[] readableData = currentData.getData();
+        predecessor.setText(readableData[0]);
+        current.setText(readableData[1]);
+        successor.setText(readableData[2]);
+    }
+
+    private void displayNext() {
+        if (anker.getNext() != null) {
+            openList(anker.getNext());
+        }
+        else {
+            Controller.handleError("Es gibt keinen weiteren Nachfolger");
+        }
+    }
+
+    private void displayPrevious() {
+        if (anker.getPrevious() != null) {
+            openList(anker.getPrevious());
+        }
+        else {
+            Controller.handleError("Es gibt keinen weiteren Vorgänger");
+        }
     }
 }

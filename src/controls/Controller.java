@@ -26,7 +26,6 @@ public class Controller {
         new Controller();
     }
 
-
     private final DatabaseAccessor databaseAccessor;
     private final Launcher launcher;
     private final ListEditor listEditor;
@@ -44,7 +43,6 @@ public class Controller {
         System.out.println(errorMessage);
         // Später über JOptionPane ausgeben
     }
-
 
     public void addList(String name) {
         this.currentListName = name;

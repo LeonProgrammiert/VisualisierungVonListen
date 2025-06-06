@@ -5,10 +5,12 @@ import java.awt.*;
 
 public class CustomButton extends CustomPanel{
 
+    private final JLabel textLabel;
+
     public CustomButton(String buttonText, int fontSize) {
 
         // Text
-        JLabel textLabel = new JLabel(buttonText, SwingConstants.CENTER);
+        textLabel = new JLabel(buttonText, SwingConstants.CENTER);
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
         textLabel.setForeground(Color.LIGHT_GRAY);
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -19,7 +21,9 @@ public class CustomButton extends CustomPanel{
         // Format
         setLayout(new GridBagLayout());
         add(textLabel);
+    }
 
-
+    public void setText(String text){
+        textLabel.setText(text);
     }
 }
