@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CustomIconButton extends CustomPanel{
+
     public CustomIconButton(String icon, String labelText) {
 
         // Icon
         JLabel iconLabel = new JLabel(icon, SwingConstants.CENTER);
-        iconLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
+        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, 28));
         iconLabel.setForeground(Color.WHITE);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 

@@ -2,17 +2,13 @@ package storage;
 
 import backend.CustomObject;
 import controls.Controller;
+
 import java.io.*;
 
 public class DatabaseAccessor {
 
-    public DatabaseAccessor() {
-    }
-
-
     public void addList() {
         // Create empty csv-file
-        System.out.println();
     }
 
     public CustomObject openList(File file) {
@@ -33,13 +29,11 @@ public class DatabaseAccessor {
                 } else {
                     head = current; // First element becomes the head
                 }
-
                 previous = current;
             }
         } catch (IOException e) {
             Controller.handleError(e.getLocalizedMessage());
         }
-
         return head;
     }
 

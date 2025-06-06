@@ -2,8 +2,8 @@ package backend;
 
 public class CustomObject<T> {
 
-    CustomObject previous;
-    CustomObject next;
+    private CustomObject previous;
+    private CustomObject next;
 
     T data;
 

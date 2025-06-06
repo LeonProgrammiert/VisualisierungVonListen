@@ -1,12 +1,13 @@
 package ui;
-import controls.Controller;
-import ui.legos.CustomIconButton;
 
-import javax.swing.*;
-import java.awt.*;
+import ui.legos.CustomIconButton;
+import controls.Controller;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 import java.io.File;
+import java.awt.*;
 
 public class Launcher extends JFrame {
 
@@ -14,21 +15,23 @@ public class Launcher extends JFrame {
 
     enum eventTypes {add, open, export}
 
-
     public Launcher(Controller controller) {
         this.controller = controller;
-        createUI();
+        setValues();
+        build();
     }
 
-    public void createUI() {
+    public void setValues() {
         setTitle("Visualisierung von Listen");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //Schließt Programm, wenn das Fenster schließt
         setSize(2000, 1600);
+    }
 
+    public void build() {
         // Hintergrund
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBackground(new Color(24, 26, 28));
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS)); //alle container untereinander
+        JPanel container = new JPanel();
+        container.setBackground(new Color(24, 26, 28));
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //alle container untereinander
 
         // Titel & Untertitel
         JLabel title = new JLabel("Willkommen bei den friedlichen Koalas");
@@ -49,7 +52,7 @@ public class Launcher extends JFrame {
         // Container für alle Buttons (untereinander, zentriert)
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(mainPanel.getBackground());
+        buttonPanel.setBackground(container.getBackground());
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Buttons einfügen
@@ -60,26 +63,25 @@ public class Launcher extends JFrame {
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         buttonPanel.add(createIconButton("\uD83D\uDCE4", "Exportieren", eventTypes.export));
 
-        //
+        // Add to container
+        container.add(Box.createVerticalGlue());        // flexibler Platzfüller, der überschüssigen Raum verteilt. Alles vertikal mittig
+        container.add(title);
+        container.add(Box.createRigidArea(new Dimension(0, 10)));
+        container.add(subtitle1);
+        container.add(Box.createRigidArea(new Dimension(0, 30))); //fester platzhalter
+        container.add(subtitle2);
+        container.add(Box.createRigidArea(new Dimension(0, 50)));
+        container.add(buttonPanel);
+        container.add(Box.createVerticalGlue());
 
-        mainPanel.add(Box.createVerticalGlue());        // flexibler Platzfüller, der überschüssigen Raum verteilt. Alles vertikal mittig
-        mainPanel.add(title);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(subtitle1);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 30))); //fester platzhalter
-        mainPanel.add(subtitle2);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 50)));
-        mainPanel.add(buttonPanel);
-        mainPanel.add(Box.createVerticalGlue());
-
-        add(mainPanel);
+        add(container);
         //Fügt mainPanel in das Fenster (JFrame) ein. mainPanel enthält ganzen Inhalt: Titel, Buttons, Texte
         setVisible(true);
         //Macht das Fenster sichtbar auf dem Bildschirm
-
     }
 
     private JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
+
         CustomIconButton panel = new CustomIconButton(icon, labelText);
 
         // Hover-Effekt
@@ -93,7 +95,6 @@ public class Launcher extends JFrame {
                 }
             }
         });
-
         return panel;
     }
 

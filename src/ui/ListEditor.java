@@ -12,14 +12,11 @@ import java.awt.event.MouseAdapter;
 public class ListEditor extends JFrame{
 
     private final Controller controller;
-
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
-
     private CustomObject anker;
 
     public ListEditor(Controller controller) {
         this.controller = controller;
-
         setValues();
         build();
     }
@@ -36,14 +33,14 @@ public class ListEditor extends JFrame{
     public void build(){
         Color backgroundColor = new Color(24, 26 ,28);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBackground(backgroundColor);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        JPanel container = new JPanel();
+        container.setBackground(backgroundColor);
+        container.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
         GridBagLayout editorLayout = new GridBagLayout();
         editorLayout.columnWeights = new double[]{1, 2, 1};
         editorLayout.rowWeights = new double[]{1, 5, 0, 1};
-        mainPanel.setLayout(editorLayout);
+        container.setLayout(editorLayout);
 
         // define components
         CustomButton backToLauncher = createButton("\u2190 Zurück zum Launcher", 12, eventTypes.backToLauncher);
@@ -57,27 +54,25 @@ public class ListEditor extends JFrame{
         index.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 
         // SubPanel for grouping the add and delete button
-        JPanel addDeletePanel = new JPanel();
-        addDeletePanel.setBackground(backgroundColor);
-        addDeletePanel.setLayout(new FlowLayout());
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(backgroundColor);
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.add(Box.createHorizontalStrut(50));
 
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
-        addDeletePanel.add(addNodeButton);
-
-        addDeletePanel.add(Box.createHorizontalStrut(50));
-
+        buttonPanel.add(addNodeButton);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
-        addDeletePanel.add(deleteNodeButton);
+        buttonPanel.add(deleteNodeButton);
 
-        // add components
-        addComponentToGrid(mainPanel, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
-        addComponentToGrid(mainPanel, predecessor, editorLayout,    0, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
-        addComponentToGrid(mainPanel, successor, editorLayout,      2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
-        addComponentToGrid(mainPanel, current, editorLayout,        1, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
-        addComponentToGrid(mainPanel, index, editorLayout,          0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
-        addComponentToGrid(mainPanel, addDeletePanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NORTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        // Add components
+        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, predecessor, editorLayout,    0, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, successor, editorLayout,      2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
+        addComponentToGrid(container, current, editorLayout,        1, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, index, editorLayout,          0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, buttonPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NORTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
-        add(mainPanel);
+        add(container);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
@@ -109,5 +104,4 @@ public class ListEditor extends JFrame{
     public void openList(CustomObject anker) {
         this.anker = anker;
     }
-
 }

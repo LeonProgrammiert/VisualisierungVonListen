@@ -1,19 +1,18 @@
 package ui.legos;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
+import java.awt.*;
 
 public class CustomMouseListener extends MouseAdapter {
 
-    private JPanel panel;
-    private JLabel label;
+    private final JPanel panel;
+    private final JLabel label;
 
     public CustomMouseListener(JPanel component, JLabel label) {
         this.panel = component;
         this.label = label;
-
     }
     public void mouseEntered(MouseEvent e) {
         panel.setBackground(new Color(65, 65, 65));
