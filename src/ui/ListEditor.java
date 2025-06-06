@@ -8,6 +8,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.io.File;
 
 public class ListEditor extends JFrame{
 
@@ -18,6 +19,9 @@ public class ListEditor extends JFrame{
     private CustomButton predecessor;
     private CustomButton successor;
     private CustomButton current;
+
+    private File clickSound;
+    private File errorSound;
 
     public ListEditor(Controller controller) {
         this.controller = controller;
@@ -32,6 +36,11 @@ public class ListEditor extends JFrame{
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        System.out.println(System.getProperty("user.dir"));
+
+        clickSound = new File(System.getProperty("user.dir") + "/src/assets/clickSound.wav");
+        errorSound = new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
     }
 
     public void build(){
@@ -121,18 +130,22 @@ public class ListEditor extends JFrame{
 
     private void displayNext() {
         if (anker.getNext() != null) {
+            controller.playSound(clickSound);
             openList(anker.getNext());
         }
         else {
+            controller.playSound(errorSound);
             Controller.handleError("Es gibt keinen weiteren Nachfolger");
         }
     }
 
     private void displayPrevious() {
         if (anker.getPrevious() != null) {
+            controller.playSound(clickSound);
             openList(anker.getPrevious());
         }
         else {
+            controller.playSound(errorSound);
             Controller.handleError("Es gibt keinen weiteren Vorgänger");
         }
     }

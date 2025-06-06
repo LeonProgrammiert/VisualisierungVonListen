@@ -6,9 +6,10 @@ import backend.CustomObject;
 import ui.ListEditor;
 import ui.Launcher;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 
 public class Controller {
 
@@ -61,5 +62,22 @@ public class Controller {
     public void backToLauncher(CustomObject anker) {
         launcher.setVisible(true);
         listEditor.setVisible(false);
+    }
+
+    public void playSound(File soundFile) {
+        new Thread(() -> {
+            try {
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.start();
+
+                // Wait for the clip to finish playing
+                Thread.sleep(clip.getMicrosecondLength() / 1000);
+            } catch (UnsupportedAudioFileException | IOException | InterruptedException |
+                     LineUnavailableException e) {
+                handleError(e.getMessage());
+            }
+        }).start();
     }
 }
