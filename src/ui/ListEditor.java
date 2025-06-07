@@ -145,12 +145,11 @@ public class ListEditor extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
                     case backToLauncher -> controller.backToLauncher(anker);
-                    case next -> displayNext();
-                    case previous -> displayPrevious();
-                    // TODO: Implement different methods
+                    case next -> displayObjet(anker.getNext());
+                    case previous -> displayObjet(anker.getPrevious());
+                    // TODO: Implement different method
                 }
-            }
-        });
+            }});
         return button;
     }
 
@@ -173,25 +172,12 @@ public class ListEditor extends JFrame{
         }
     }
 
-    private void displayNext() {
-        if (anker.getNext() != null) {
+    private void displayObjet(CustomObject newObject) {
+        if (newObject != null) {
             controller.playSound(clickSound);
-            openList(anker.getNext());
-        }
-        else {
+            openList(newObject);
+        } else {
             controller.playSound(errorSound);
-            Controller.handleError("Es gibt keinen weiteren Nachfolger");
-        }
-    }
-
-    private void displayPrevious() {
-        if (anker.getPrevious() != null) {
-            controller.playSound(clickSound);
-            openList(anker.getPrevious());
-        }
-        else {
-            controller.playSound(errorSound);
-            Controller.handleError("Es gibt keinen weiteren Vorgänger");
         }
     }
 }
