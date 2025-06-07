@@ -5,13 +5,13 @@ import controls.Controller;
 
 import javax.swing.*;
 
-public class AddNode extends JDialog {
+public class AddNode<T> extends JDialog {
 
     private final JTextField textField = new JTextField(20);
     private final JButton saveButton = new JButton("Speichern");
-    private final CustomObject current;
+    private final CustomObject<T> current;
 
-    public AddNode(JFrame parent, CustomObject current, int position) {
+    public AddNode(JFrame parent, CustomObject<T> current, int position) {
         super(parent, "Neue Daten hinzufügen", true);
         this.current = current;
 
@@ -31,7 +31,6 @@ public class AddNode extends JDialog {
 
             switch (position) {
                 case 0 -> insertAtStart(newData);
-                case 1 -> insertAfterCurrent(newData);
                 case 2 -> insertAtEnd(newData);
                 default -> insertAfterCurrent(newData);
             }
@@ -45,8 +44,8 @@ public class AddNode extends JDialog {
         setVisible(true);
     }
 
-    private void insertAfterCurrent(CustomObject obj) {
-        CustomObject next = current.getNext();
+    private void insertAfterCurrent(CustomObject<T> obj) {
+        CustomObject<T> next = current.getNext();
 
         current.setNext(obj);
         obj.setPrevious(current);
@@ -57,8 +56,8 @@ public class AddNode extends JDialog {
         }
     }
 
-    private void insertAtEnd(CustomObject obj) {
-        CustomObject last = current;
+    private void insertAtEnd(CustomObject<T> obj) {
+        CustomObject<T> last = current;
         while (last.getNext() != null) {
             last = last.getNext();
         }
@@ -67,8 +66,8 @@ public class AddNode extends JDialog {
         obj.setPrevious(last);
     }
 
-    private void insertAtStart(CustomObject obj) {
-        CustomObject first = current;
+    private void insertAtStart(CustomObject<T> obj) {
+        CustomObject<T> first = current;
         while (first.getPrevious() != null) {
             first = first.getPrevious();
         }

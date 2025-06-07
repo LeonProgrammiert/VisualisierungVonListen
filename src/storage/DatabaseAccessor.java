@@ -5,7 +5,7 @@ import controls.Controller;
 
 import java.io.*;
 
-public class DatabaseAccessor {
+public class DatabaseAccessor<T> {
 
     private final String source = "src/saves/";
 
@@ -22,24 +22,23 @@ public class DatabaseAccessor {
         }
     }
 
-    public CustomObject openList(File file) {
-        CustomObject head = null;
-        CustomObject previous = null;
+    public CustomObject<T> openList(File file) {
+        CustomObject<T> head = null;
+        CustomObject<T> previous = null;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.readLine(); // Skip metadata line
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] elements = line.split(";");
-                CustomObject current = new CustomObject(elements[1]);
+                CustomObject<T> current = new CustomObject(line);
 
                 if (previous != null) {
                     previous.setNext(current);
-                    current.setPrevious(previous);
                 } else {
                     head = current; // First element becomes the head
                 }
+                current.setPrevious(previous);
                 previous = current;
             }
         } catch (IOException e) {
