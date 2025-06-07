@@ -123,7 +123,7 @@ public class ListEditor extends JFrame{
     }
 
     private void addNode(int position) {
-        new AddNode(this, anker, position);
+        new AddNode(anker, position);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
@@ -160,10 +160,17 @@ public class ListEditor extends JFrame{
     }
 
     private void setData(CustomObject currentData) {
-        String[] readableData = currentData.getData();
-        predecessor.setText(readableData[0]);
-        current.setText(readableData[1]);
-        successor.setText(readableData[2]);
+        if (anker != null) {
+            String[] readableData = currentData.getData();
+            predecessor.setText(readableData[0]);
+            current.setText(readableData[1]);
+            successor.setText(readableData[2]);
+            setVisible(true);
+        }
+        else {
+            // -10 means it's a new list
+            addNode(-10);
+        }
     }
 
     private void displayNext() {

@@ -4,32 +4,49 @@ import backend.CustomObject;
 import controls.Controller;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class AddNode<T> extends JDialog {
+public class AddNode<T> extends JFrame {
 
-    private final JTextField textField = new JTextField(20);
-    private final JButton saveButton = new JButton("Speichern");
+    private JTextField textField;
     private final CustomObject<T> current;
 
-    public AddNode(JFrame parent, CustomObject<T> current, int position) {
-        super(parent, "Neue Daten hinzufügen", true);
+    public AddNode(CustomObject<T> current, int position) {
         this.current = current;
-
-        build(parent, position);
+        build(position);
     }
 
-    private void build(JFrame parent, int position) {
-        setSize(300, 200);
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+    private void build(int position) {
+        setTitle("Neue Daten hinzufügen");
+        setSize(600, 200);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        add(textField);
-        add(Box.createVerticalStrut(10));
-        add(saveButton);
+        gbc.insets = new Insets(10, 10, 10, 10); // Padding around components
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(new Label("Neue Daten:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        textField = new JTextField(30); // Optional: set preferred column width
+        add(textField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        JButton saveButton = new JButton("Speichern");
+        add(saveButton, gbc);
 
         saveButton.addActionListener(e -> {
             CustomObject newData = new CustomObject(textField.getText());
 
             switch (position) {
+                case -10 -> insertAsFirst(newData);
                 case 0 -> insertAtStart(newData);
                 case 2 -> insertAtEnd(newData);
                 default -> insertAfterCurrent(newData);
@@ -40,8 +57,14 @@ public class AddNode<T> extends JDialog {
         });
 
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(null); // Center on screen
         setVisible(true);
+    }
+
+
+    private void insertAsFirst(CustomObject<T> obj) {
+        obj.setPrevious(null);
+        obj.setNext(null);
     }
 
     private void insertAfterCurrent(CustomObject<T> obj) {

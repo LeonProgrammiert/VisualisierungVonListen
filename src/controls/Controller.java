@@ -60,13 +60,14 @@ public class Controller {
         this.currentListName = name;
         databaseAccessor.addList(name);
         System.out.println("Neue Liste erstellt: " + name);
+        String path = System.getProperty("user.dir") + "/src/saves/" + name + ".csv";
+        openList(new File(path));
     }
 
     public void openList(File file) {
         CustomObject anker = databaseAccessor.openList(file);
 
         launcher.setVisible(false);
-        listEditor.setVisible(true);
         listEditor.openList(anker);
     }
 
