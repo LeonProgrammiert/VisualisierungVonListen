@@ -23,11 +23,12 @@ public class DatabaseAccessor {
     }
 
     public CustomObject openList(File file) {
-        CustomObject head = null;
+        CustomObject first = null;
         CustomObject previous = null;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            reader.readLine(); // Skip metadata line
+            // Skip metadata line
+            reader.readLine();
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -38,14 +39,14 @@ public class DatabaseAccessor {
                     previous.setNext(current);
                     current.setPrevious(previous);
                 } else {
-                    head = current; // First element becomes the head
+                    first = current; // The current is the first element
                 }
                 previous = current;
             }
         } catch (IOException e) {
             Controller.handleError(e.getLocalizedMessage());
         }
-        return head;
+        return first;
     }
 }
 
