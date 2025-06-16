@@ -40,9 +40,9 @@ public class CustomObject<T> {
 
     public String[] getData() {
         String[] displayableData = new String[3];
-        displayableData[0] = previous != null ? previous.getElement() : "NaN";
-        displayableData[1] = data != null ? getElement() : "NaN";
-        displayableData[2] = next != null ? next.getElement() : "NaN";
+        displayableData[0] = previous != null ? previous.getElement() : "N/A";
+        displayableData[1] = data != null ? getElement() : "N/A";
+        displayableData[2] = next != null ? next.getElement() : "N/A";
 
         return displayableData;
     }

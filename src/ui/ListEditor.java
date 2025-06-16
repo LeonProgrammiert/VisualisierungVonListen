@@ -74,18 +74,8 @@ public class ListEditor extends JFrame{
         buttonPanel.add(Box.createHorizontalStrut(50));
 
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
-        addNodeButton.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                clickedAddNode();
-            }
-        });
         buttonPanel.add(addNodeButton);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
-        deleteNodeButton.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                clickedRemoveNode();
-            }
-        });
         buttonPanel.add(deleteNodeButton);
 
         // Add components
@@ -100,7 +90,7 @@ public class ListEditor extends JFrame{
     }
 
     private void clickedRemoveNode() {
-
+        // TODO: implement
     }
 
     private void clickedAddNode() {
@@ -147,7 +137,8 @@ public class ListEditor extends JFrame{
                     case backToLauncher -> controller.backToLauncher(anker);
                     case next -> displayObjet(anker.getNext());
                     case previous -> displayObjet(anker.getPrevious());
-                    // TODO: Implement different method
+                    case add -> clickedAddNode();
+                    case delete -> clickedRemoveNode();
                 }
             }});
         return button;
