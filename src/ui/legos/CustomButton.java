@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class CustomButton extends CustomPanel{
 
-    private final JLabel textLabel;
+    protected JLabel textLabel;
 
     public CustomButton(String buttonText, int fontSize) {
 
