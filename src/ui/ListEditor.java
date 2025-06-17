@@ -1,8 +1,8 @@
 package ui;
 
-import backend.CustomObject;
+import backend.ListElement;
 import controls.Controller;
-import ui.legos.AddNode;
+import ui.legos.AddElementPopUp;
 import ui.legos.CustomButton;
 
 import java.awt.*;
@@ -15,7 +15,7 @@ public class ListEditor extends JFrame{
 
     private final Controller controller;
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
-    private CustomObject anker;
+    private ListElement anker;
 
     private CustomButton predecessor;
     private CustomButton successor;
@@ -113,7 +113,7 @@ public class ListEditor extends JFrame{
     }
 
     private void addNode(int position) {
-        new AddNode(anker, position);
+        new AddElementPopUp(anker, position);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
@@ -144,12 +144,12 @@ public class ListEditor extends JFrame{
         return button;
     }
 
-    public void openList(CustomObject anker) {
+    public void openList(ListElement anker) {
         this.anker = anker;
         setData(anker);
     }
 
-    private void setData(CustomObject currentData) {
+    private void setData(ListElement currentData) {
         if (anker != null) {
             String[] readableData = currentData.getData();
             predecessor.setText(readableData[0]);
@@ -163,7 +163,7 @@ public class ListEditor extends JFrame{
         }
     }
 
-    private void displayObjet(CustomObject newObject) {
+    private void displayObjet(ListElement newObject) {
         if (newObject != null) {
             controller.playSound(clickSound);
             openList(newObject);

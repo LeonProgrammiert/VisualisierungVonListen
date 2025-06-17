@@ -2,30 +2,30 @@ package backend;
 
 import controls.Controller;
 
-public class CustomObject<T> {
+public class ListElement<T> {
 
-    private CustomObject<T> previous;
-    private CustomObject<T> next;
+    private ListElement<T> previous;
+    private ListElement<T> next;
 
     private final T data;
 
-    public CustomObject(T data) {
+    public ListElement(T data) {
         this.data = data;
     }
 
-    public void setPrevious(CustomObject<T> previous) {
+    public void setPrevious(ListElement<T> previous) {
         this.previous = previous;
     }
 
-    public void setNext(CustomObject<T> next) {
+    public void setNext(ListElement<T> next) {
         this.next = next;
     }
 
-    public CustomObject<T> getPrevious() {
+    public ListElement<T> getPrevious() {
         return previous;
     }
 
-    public CustomObject<T> getNext() {
+    public ListElement<T> getNext() {
         return next;
     }
 

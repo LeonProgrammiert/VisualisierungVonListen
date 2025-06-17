@@ -1,6 +1,6 @@
 package controls;
 
-import backend.CustomObject;
+import backend.ListElement;
 import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
@@ -64,13 +64,13 @@ public class Controller {
     }
 
     public void openList(File file) {
-        CustomObject anker = databaseAccessor.openList(file);
+        ListElement anker = databaseAccessor.openList(file);
 
         launcher.setVisible(false);
         listEditor.openList(anker);
     }
 
-    public void backToLauncher(CustomObject anker) {
+    public void backToLauncher(ListElement anker) {
         launcher.setVisible(true);
         listEditor.setVisible(false);
     }
