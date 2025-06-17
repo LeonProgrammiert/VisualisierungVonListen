@@ -19,8 +19,10 @@ public class CustomIconButton extends CustomButton {
 
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Format
+        // Layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        // Format
         add(Box.createVerticalGlue()); // Flexibler Abstand oben
         add(iconLabel);
         add(Box.createRigidArea(new Dimension(0, 8))); // Fester Abstand
