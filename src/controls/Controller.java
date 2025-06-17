@@ -2,13 +2,11 @@ package controls;
 
 import backend.CustomObject;
 import storage.DatabaseAccessor;
-import backend.CustomObject;
 import ui.ListEditor;
 import ui.Launcher;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
 
 public class Controller {
 

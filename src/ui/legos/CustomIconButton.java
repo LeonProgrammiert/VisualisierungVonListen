@@ -3,9 +3,13 @@ package ui.legos;
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomIconButton extends CustomPanel{
+public class CustomIconButton extends CustomButton {
+
 
     public CustomIconButton(String icon, String labelText) {
+        super(labelText, 13);
+
+        removeAll(); // Remove all components
 
         // Icon
         JLabel iconLabel = new JLabel(icon, SwingConstants.CENTER);
@@ -13,21 +17,14 @@ public class CustomIconButton extends CustomPanel{
         iconLabel.setForeground(Color.WHITE);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        //Genau wie oben, aber diesmal für den Button-Text
-        // Text
-        JLabel textLabel = new JLabel(labelText, SwingConstants.CENTER);
-        textLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        textLabel.setForeground(Color.LIGHT_GRAY);
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Add Hover
-        addMouseListener(new CustomMouseListener(this, textLabel));
-
         // Format
-        add(Box.createVerticalGlue()); //flexiblen, unsichtbaren Platz über dem Icon
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(Box.createVerticalGlue()); // Flexibler Abstand oben
         add(iconLabel);
-        add(Box.createRigidArea(new Dimension(0, 8))); //festen Abstand
+        add(Box.createRigidArea(new Dimension(0, 8))); // Fester Abstand
         add(textLabel);
-        add(Box.createVerticalGlue());
+        add(Box.createVerticalGlue()); // Flexibler Abstand unten
     }
 }
