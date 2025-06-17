@@ -7,15 +7,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
 import java.io.File;
-import java.awt.*;
+
 
 public class Launcher extends JFrame {
 
     private final Controller controller;
 
-    enum eventTypes {add, open, export}
+    enum eventTypes {ADD, OPEN, EXPORT}
 
     public Launcher(Controller controller) {
         this.controller = controller;
@@ -27,15 +26,29 @@ public class Launcher extends JFrame {
         setTitle("Visualisierung von Listen");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //Schließt Programm, wenn das Fenster schließt
         setSize(2000, 1600);
+        setLocationRelativeTo(null);
     }
 
     public void build() {
-        // Hintergrund
         JPanel container = new JPanel();
         container.setBackground(new Color(24, 26, 28));
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //alle container untereinander
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
-        // Titel & Untertitel
+        container.add(Box.createVerticalGlue());
+        container.add(buildTitlePanel());
+        container.add(Box.createRigidArea(new Dimension(0, 50)));
+        container.add(buildButtonPanel());
+        container.add(Box.createVerticalGlue());
+
+        add(container);
+        setVisible(true);
+    }
+
+    private JPanel buildTitlePanel() {
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+        titlePanel.setBackground(new Color(24, 26, 28));
+
         JLabel title = new JLabel("Willkommen bei den friedlichen Koalas");
         title.setFont(new Font("SansSerif", Font.BOLD, 24));
         title.setForeground(Color.WHITE);
@@ -51,66 +64,57 @@ public class Launcher extends JFrame {
         subtitle2.setForeground(new Color(255, 182, 193));
         subtitle2.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Container für alle Buttons (untereinander, zentriert)
+        titlePanel.add(title);
+        titlePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        titlePanel.add(subtitle1);
+        titlePanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        titlePanel.add(subtitle2);
+
+        return titlePanel;
+    }
+
+    private JPanel buildButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(container.getBackground());
+        buttonPanel.setBackground(new Color(24, 26, 28));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Buttons einfügen
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20))); //wie margin in css, abstand zwischen den buttons
-        buttonPanel.add(createIconButton("+", "Neue Liste", eventTypes.add)); // button besteht aus Icon+Text, wird per Methode createIconButton(...) gebaut
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen", eventTypes.open));
+        buttonPanel.add(createIconButton("+", "Neue Liste", eventTypes.ADD));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        buttonPanel.add(createIconButton("\uD83D\uDCE4", "Exportieren", eventTypes.export));
+        buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen", eventTypes.OPEN));
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        buttonPanel.add(createIconButton("\uD83D\uDCE4", "Exportieren", eventTypes.EXPORT));
 
-        // Add to container
-        container.add(Box.createVerticalGlue());        // flexibler Platzfüller, der überschüssigen Raum verteilt. Alles vertikal mittig
-        container.add(title);
-        container.add(Box.createRigidArea(new Dimension(0, 10)));
-        container.add(subtitle1);
-        container.add(Box.createRigidArea(new Dimension(0, 30))); //fester platzhalter
-        container.add(subtitle2);
-        container.add(Box.createRigidArea(new Dimension(0, 50)));
-        container.add(buttonPanel);
-        container.add(Box.createVerticalGlue());
-
-        add(container);
-        //Fügt mainPanel in das Fenster (JFrame) ein. mainPanel enthält ganzen Inhalt: Titel, Buttons, Texte
-        setVisible(true);
-        //Macht das Fenster sichtbar auf dem Bildschirm
+        return buttonPanel;
     }
 
     private JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
-
         CustomIconButton panel = new CustomIconButton(icon, labelText);
 
-        // Hover-Effekt
-        panel.addMouseListener(new MouseAdapter() { //Hey Panel, hör ab jetzt auf Mausbewegungen und erstelle einen zuhörer
+        // Add actions when button is clicked
+        panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
-                    case open -> open();
-                    case export -> export();
-                    case add -> addList();
+                    case OPEN -> open();
+                    case EXPORT -> export();
+                    case ADD -> addList();
                 }
             }
         });
-
         return panel;
     }
 
     private void open() {
+        // Configure file chooser
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        String path = System.getProperty("user.dir") + "/src/saves";
-        File src = new File(path);
-
-        fileChooser.setCurrentDirectory(src);
-        fileChooser.showOpenDialog(null);
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir") + "/src/saves"));
+        fileChooser.showOpenDialog(this);
+        // Get selected file
         File file = fileChooser.getSelectedFile();
+        // Open file
         controller.openList(file);
     }
 
@@ -119,12 +123,30 @@ public class Launcher extends JFrame {
     }
 
     private void addList() {
-        String listenName = JOptionPane.showInputDialog(null, "Wie soll die neue Liste heißen?", "Neue Liste erstellen", JOptionPane.PLAIN_MESSAGE);
+        // Configure OptionPane
+        String listenName = JOptionPane.showInputDialog(
+                null,
+                "Wie soll die neue Liste heißen?",
+                "Neue Liste erstellen",
+                JOptionPane.PLAIN_MESSAGE
+        );
 
-        if (listenName != null && !listenName.trim().isEmpty()) {
-            controller.addList(listenName.trim());
+        // User cancelled or closed the dialog – do nothing
+        if (listenName == null) {
+            return;
+        }
+
+        // Mange inputs
+        listenName = listenName.trim();
+        if (!listenName.isEmpty()) {
+            controller.addList(listenName);
         } else {
-            JOptionPane.showMessageDialog(null, "Die Liste braucht einen gültigen Namen.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Die Liste braucht einen gültigen Namen.",
+                    "Fehler",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 }

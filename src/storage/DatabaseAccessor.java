@@ -27,7 +27,8 @@ public class DatabaseAccessor<T> {
         CustomObject<T> previous = null;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            reader.readLine(); // Skip metadata line
+            // Skip metadata line
+            reader.readLine();
 
             String line;
             while ((line = reader.readLine()) != null) {
