@@ -3,7 +3,7 @@ package ui.legos;
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomButton extends CustomPanel{
+public class CustomButton extends CustomPanel {
 
     protected JLabel textLabel;
 
