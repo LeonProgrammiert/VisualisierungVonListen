@@ -47,42 +47,38 @@ public class ListEditor extends JFrame{
     public void build(){
         Color backgroundColor = new Color(24, 26 ,28);
 
-        // Create container
         JPanel container = new JPanel();
         container.setBackground(backgroundColor);
         container.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // Create layout
         GridBagLayout editorLayout = new GridBagLayout();
         editorLayout.columnWeights = new double[]{1, 2, 1};
         editorLayout.rowWeights = new double[]{1, 5, 0, 1};
         container.setLayout(editorLayout);
 
-        // Define components
+        // define components
         CustomButton backToLauncher = createButton("\u2190 Zurück zum Launcher", 12, eventTypes.backToLauncher);
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
         current = createButton("Aktuell", 24, eventTypes.current);
 
-        // Label for index of te list
         JLabel index = new JLabel("Indexplatzhalter");
         index.setHorizontalAlignment(JLabel.CENTER);
         index.setForeground(Color.WHITE);
         index.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 
-        // SubPanel for the add and delete button
+        // SubPanel for grouping the add and delete button
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(backgroundColor);
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(Box.createHorizontalStrut(50));
 
-        // Add and delete button
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
         buttonPanel.add(addNodeButton);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
         buttonPanel.add(deleteNodeButton);
 
-        // Add components to container
+        // Add components
         addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, predecessor, editorLayout,    0, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, successor, editorLayout,      2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
@@ -121,10 +117,6 @@ public class ListEditor extends JFrame{
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
-        /*
-        This method adds the components "comp" to the container "cont" with specified attributes
-         */
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = fill;
         gbc.gridx = x;
