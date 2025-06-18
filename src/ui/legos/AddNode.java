@@ -1,6 +1,6 @@
 package ui.legos;
 
-import backend.CustomObject;
+import backend.ListElement;
 import controls.Controller;
 
 import javax.swing.*;
@@ -9,9 +9,9 @@ import java.awt.*;
 public class AddNode<T> extends JFrame {
 
     private JTextField textField;
-    private final CustomObject<T> current;
+    private final ListElement<T> current;
 
-    public AddNode(CustomObject<T> current, int position) {
+    public AddNode(ListElement<T> current, int position) {
         this.current = current;
         build(position);
     }
@@ -43,7 +43,7 @@ public class AddNode<T> extends JFrame {
         add(saveButton, gbc);
 
         saveButton.addActionListener(e -> {
-            CustomObject newData = new CustomObject(textField.getText());
+            ListElement newData = new ListElement(textField.getText());
 
             switch (position) {
                 case -10 -> insertAsFirst(newData);
@@ -62,13 +62,13 @@ public class AddNode<T> extends JFrame {
     }
 
 
-    private void insertAsFirst(CustomObject<T> obj) {
+    private void insertAsFirst(ListElement<T> obj) {
         obj.setPrevious(null);
         obj.setNext(null);
     }
 
-    private void insertAfterCurrent(CustomObject<T> obj) {
-        CustomObject<T> next = current.getNext();
+    private void insertAfterCurrent(ListElement<T> obj) {
+        ListElement<T> next = current.getNext();
 
         current.setNext(obj);
         obj.setPrevious(current);
@@ -79,8 +79,8 @@ public class AddNode<T> extends JFrame {
         }
     }
 
-    private void insertAtEnd(CustomObject<T> obj) {
-        CustomObject<T> last = current;
+    private void insertAtEnd(ListElement<T> obj) {
+        ListElement<T> last = current;
         while (last.getNext() != null) {
             last = last.getNext();
         }
@@ -89,8 +89,8 @@ public class AddNode<T> extends JFrame {
         obj.setPrevious(last);
     }
 
-    private void insertAtStart(CustomObject<T> obj) {
-        CustomObject<T> first = current;
+    private void insertAtStart(ListElement<T> obj) {
+        ListElement<T> first = current;
         while (first.getPrevious() != null) {
             first = first.getPrevious();
         }

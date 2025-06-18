@@ -1,8 +1,7 @@
 package controls;
 
-import backend.CustomObject;
+import backend.ListElement;
 import storage.DatabaseAccessor;
-import backend.CustomObject;
 import ui.ListEditor;
 import ui.Launcher;
 
@@ -66,14 +65,14 @@ public class Controller {
 
     public void openList(File file) {
         // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
-        CustomObject anker = databaseAccessor.openList(file); // Daten aus CSV laden
+        ListElement anker = databaseAccessor.openList(file); // Daten aus CSV laden
 
         launcher.setVisible(false);
         listEditor.setVisible(true);
         listEditor.openList(anker);
     }
 
-    public void backToLauncher(CustomObject anker) { //anker für später zb. export oder speicherfunktionen
+    public void backToLauncher(ListElement anker) { //anker für später zb. export oder speicherfunktionen
         launcher.setVisible(true);
         listEditor.setVisible(false);
     }
