@@ -37,7 +37,6 @@ public class Controller {
         databaseAccessor = new DatabaseAccessor(); //Zugriff auf Speicher
         instance = this;
 
-        databaseAccessor = new DatabaseAccessor();
         launcher = new Launcher(this);
         launcher.setVisible(true);
 

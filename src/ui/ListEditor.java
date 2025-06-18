@@ -4,6 +4,7 @@ import backend.CustomObject;
 import controls.Controller;
 import ui.legos.AddNode;
 import ui.legos.CustomButton;
+import ui.legos.UndoRedoButton;
 
 import java.awt.*;
 import javax.swing.*;
@@ -92,6 +93,21 @@ public class ListEditor extends JFrame{
         addComponentToGrid(container, index, editorLayout,          0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, buttonPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NORTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
+        //Redo und unDo
+        JPanel undoRedoPanel = new JPanel();
+        undoRedoPanel.setBackground(new Color(24, 26, 28));
+        undoRedoPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0)); // rechtsbündig, mit 10px Abstand
+
+        UndoRedoButton undo = new UndoRedoButton("↺", "Undo changes");
+        UndoRedoButton redo = new UndoRedoButton("↻", "Redo changes");
+
+        undoRedoPanel.add(undo);
+        undoRedoPanel.add(redo);
+
+        addComponentToGrid(container, undoRedoPanel, editorLayout, 1, 4, 1, 1, GridBagConstraints.NONE,
+                new Insets(10, 10, 30, 10),
+                GridBagConstraints.SOUTH
+        );
         add(container);
     }
 
