@@ -29,7 +29,7 @@ public class UndoRedoButton extends JPanel {
         JLabel iconLabel = new JLabel(symbol, SwingConstants.CENTER);
         iconLabel.setFont(new Font("SansSerif", Font.PLAIN, 34));
         iconLabel.setForeground(Color.LIGHT_GRAY);
-        iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); // top, left, bottom, right
+        iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
         iconLabel.setVerticalAlignment(SwingConstants.CENTER);
         iconLabel.setToolTipText(tooltip);
