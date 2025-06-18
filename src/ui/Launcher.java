@@ -12,7 +12,7 @@ import java.io.File;
 
 public class Launcher extends JFrame {
 
-    private final Controller controller; //verweis auf Controller, um addList() oder openList() aufzurufen.
+    private final Controller controller;
 
     enum eventTypes {ADD, OPEN, EXPORT}
 
@@ -21,15 +21,14 @@ public class Launcher extends JFrame {
         setValues();
         build();
     }
-    //stellt die Grundeinstellungen des Fensters ein
+
     public void setValues() {
         setTitle("Visualisierung von Listen");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Schließt Programm, wenn das Fenster schließt
-        setSize(2000, 1600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //Schließt Programm, wenn das Fenster schließt
+        setSize(1080, 720);
         setLocationRelativeTo(null);
     }
 
-    //baut die komplette Oberfläche zusammen: Titelbereich + Button-Bereich + Layout
     public void build() {
         JPanel container = new JPanel();
         container.setBackground(new Color(24, 26, 28));
@@ -45,7 +44,6 @@ public class Launcher extends JFrame {
         setVisible(true);
     }
 
-    //erstellt Panel mit 3 Textzeilen: Titel, Untertitel, Anweisung.
     private JPanel buildTitlePanel() {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
@@ -75,7 +73,6 @@ public class Launcher extends JFrame {
         return titlePanel;
     }
 
-    //erstellt Button Menü mit den 3 Events
     private JPanel buildButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -92,7 +89,6 @@ public class Launcher extends JFrame {
         return buttonPanel;
     }
 
-    //baut einzelnen Button mit Icon und Text und verbindet mit passenden Aktion per Klick.
     private JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
         CustomIconButton panel = new CustomIconButton(icon, labelText);
 
