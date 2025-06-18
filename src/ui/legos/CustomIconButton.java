@@ -3,7 +3,6 @@ package ui.legos;
 import javax.swing.*;
 import java.awt.*;
 
-//visuelle Buttons im Launcher
 public class CustomIconButton extends CustomButton {
 
 
@@ -20,10 +19,8 @@ public class CustomIconButton extends CustomButton {
 
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Layout
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         // Format
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(Box.createVerticalGlue()); // Flexibler Abstand oben
         add(iconLabel);
         add(Box.createRigidArea(new Dimension(0, 8))); // Fester Abstand

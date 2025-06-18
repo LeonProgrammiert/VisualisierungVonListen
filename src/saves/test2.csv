@@ -1,8 +1,8 @@
-previous;current;next
-null;Hallo;ich;
-Hallo;ich;bin
-ich;bin;dualer
-bin;dualer;Student
-dualer;Student;fuer
-Student;fuer;Informatik
-fuer;Informatik;null
+data
+Hallo
+ich
+bin
+dualer
+Student
+fuer
+Informatik

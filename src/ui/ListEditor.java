@@ -2,13 +2,15 @@ package ui;
 
 import backend.CustomObject;
 import controls.Controller;
+import ui.legos.AddNode;
 import ui.legos.CustomButton;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
-//GUI zur Bearbeitung der Liste
+import java.io.File;
+
 public class ListEditor extends JFrame{
 
     private final Controller controller;
@@ -18,6 +20,9 @@ public class ListEditor extends JFrame{
     private CustomButton predecessor;
     private CustomButton successor;
     private CustomButton current;
+
+    private File clickSound;
+    private File errorSound;
 
     public ListEditor(Controller controller) {
         this.controller = controller;
@@ -29,10 +34,15 @@ public class ListEditor extends JFrame{
     private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
-        setSize(2000, 1600);
+        setSize(1080, 720);
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        System.out.println(System.getProperty("user.dir"));
+
+        clickSound = new File(System.getProperty("user.dir") + "/src/assets/clickSound.wav");
+        errorSound = new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
     }
 
     //baut die Benutzeroberfläche
@@ -74,7 +84,7 @@ public class ListEditor extends JFrame{
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
         buttonPanel.add(deleteNodeButton);
 
-        // Add components to container
+        // Add components
         addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, predecessor, editorLayout,    0, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, successor, editorLayout,      2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
@@ -85,19 +95,34 @@ public class ListEditor extends JFrame{
         add(container);
     }
 
-    private void addComponentToGrid(
-            Container cont,      // Das Panel in das etwas einfügen willst
-            Component comp,      // Die Komponente, wie ein Button oder Label
-            GridBagLayout layout,// Das verwendete Layout (hier: GridBagLayout)
-            int x,               // Spalte
-            int y,               // Zeile
-            int width,           // Wie viele Spalten breit
-            int height,          // Wie viele Zeilen hoch
-            int fill,            // Füllverhalten
-            Insets padding,      // Außenabstand der Komponente (oben, links, unten, rechts)
-            int anchor           // Ausrichtung innerhalb der Zelle
-    ) {
+    private void clickedRemoveNode() {
+        // TODO: implement
+    }
 
+    private void clickedAddNode() {
+        String[] options = {"Start", "Nächster", "Ende"};
+
+        // Show the option dialog
+        int choice = JOptionPane.showOptionDialog(
+                null,
+                "Choose one of the following options:",
+                "Custom Options Dialog",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        // Handle the user's choice
+        if (choice >= 0) addNode(choice);
+    }
+
+    private void addNode(int position) {
+        new AddNode(anker, position);
+    }
+
+    private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = fill;
         gbc.gridx = x;
@@ -117,18 +142,14 @@ public class ListEditor extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
                     case backToLauncher -> controller.backToLauncher(anker);
-                    case next -> displayNext();
-                    case previous -> displayPrevious();
-                    // TODO: Implement different methods
+                    case next -> displayObjet(anker.getNext());
+                    case previous -> displayObjet(anker.getPrevious());
+                    case add -> clickedAddNode();
+                    case delete -> clickedRemoveNode();
                 }
-            }
-        });
+            }});
         return button;
     }
-
-
-
-
 
 
     //speichert den aktuellen Knoten der Liste und zeigt auch sofort im gui an
@@ -139,29 +160,25 @@ public class ListEditor extends JFrame{
 
     //holt Vorgänger, Aktuell, Nachfolger aus dem Knoten und zeigt sie auf den Buttons an.
     private void setData(CustomObject currentData) {
-        String[] readableData = currentData.getData();
-        predecessor.setText(readableData[0]);
-        current.setText(readableData[1]);
-        successor.setText(readableData[2]);
-    }
-
-    //wenn möglich nächste Listenelement anzeigem
-    private void displayNext() {
-        if (anker.getNext() != null) {
-            openList(anker.getNext());
+        if (anker != null) {
+            String[] readableData = currentData.getData();
+            predecessor.setText(readableData[0]);
+            current.setText(readableData[1]);
+            successor.setText(readableData[2]);
+            setVisible(true);
         }
         else {
-            Controller.handleError("Es gibt keinen weiteren Nachfolger");
+            // -10 means it's a new list
+            addNode(-10);
         }
     }
 
-    //wenn möglich vorherige Listenelement anzeigen
-    private void displayPrevious() {
-        if (anker.getPrevious() != null) {
-            openList(anker.getPrevious());
-        }
-        else {
-            Controller.handleError("Es gibt keinen weiteren Vorgänger");
+    private void displayObjet(CustomObject newObject) {
+        if (newObject != null) {
+            controller.playSound(clickSound);
+            openList(newObject);
+        } else {
+            controller.playSound(errorSound);
         }
     }
 }

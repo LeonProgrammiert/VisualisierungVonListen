@@ -5,48 +5,47 @@ import controls.Controller;
 
 import java.io.*;
 
+public class DatabaseAccessor<T> {
 // CSV-Dateien erstellen/lesen, aus Zeilen Liste bauen
-public class DatabaseAccessor {
 
     private final String source = "src/saves/";
 
     public void addList(String name) {
+        // Create empty csv-file
         // Erstelle eine neue leere CSV-Datei im Projektordner
         File file = new File(source + name + ".csv");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(""); //schreibt eine leere datei
+            writer.write("");
             System.out.println("CSV-Datei erstellt: " + file.getAbsolutePath());
         } catch (IOException e) {
             System.err.println("Fehler beim Erstellen der Liste: " + e.getMessage());
         }
     }
-    //liest eine vorhandene CSV-Datei und baut eine verkettete Liste auf
-    public CustomObject openList(File file) {
-        CustomObject first = null;
-        CustomObject previous = null;
+
+    public CustomObject<T> openList(File file) {
+        CustomObject<T> head = null;
+        CustomObject<T> previous = null;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            // Skip metadata line
-            reader.readLine();
+            reader.readLine(); // Skip metadata line
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] elements = line.split(";");//Liest Zeilen einzeln und jede Zeile wird mit ";" in mehrere Teile getrennt.
-                CustomObject current = new CustomObject(elements[1]);  //Erzeugt neues CustomObject mit Wert aus zweiten Spalte.
+                CustomObject<T> current = new CustomObject(line);
 
                 if (previous != null) {
                     previous.setNext(current);
-                    current.setPrevious(previous);
                 } else {
-                    first = current; // The current is the first element
+                    head = current; // First element becomes the head
                 }
+                current.setPrevious(previous);
                 previous = current;
             }
         } catch (IOException e) {
             Controller.handleError(e.getLocalizedMessage());
         }
-        return first;
+        return head;
     }
 }
 
