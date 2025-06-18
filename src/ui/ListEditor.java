@@ -89,8 +89,8 @@ public class ListEditor extends JFrame{
 
         JPanel undoRedoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         undoRedoPanel.setBackground(new Color(24, 26, 28));
-        undoRedoPanel.add(new UndoRedoButton("↺", "Undo changes"));
-        undoRedoPanel.add(new UndoRedoButton("↻", "Redo changes"));
+        undoRedoPanel.add(new UndoRedoButton("↺", "rückgängig"));
+        undoRedoPanel.add(new UndoRedoButton("↻", "wiederherstellen"));
 
         actionPanel.add(buttonPanel);
         actionPanel.add(Box.createRigidArea(new Dimension(0, 10)));
