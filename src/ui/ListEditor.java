@@ -1,9 +1,11 @@
 package ui;
 
-import backend.CustomObject;
+import backend.ListElement;
 import controls.Controller;
-import ui.legos.AddNode;
+import ui.legos.AddElementPopUp;
 import ui.legos.CustomButton;
+import ui.legos.UndoRedoButton;
+
 
 import java.awt.*;
 import javax.swing.*;
@@ -11,10 +13,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.io.File;
 
-public class ListEditor extends JFrame{
+public class ListEditor extends JFrame {
 
     private final Controller controller;
+
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
+
     private ListElement anker;
 
     private CustomButton predecessor;
@@ -44,8 +48,8 @@ public class ListEditor extends JFrame{
         errorSound = new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
     }
 
-    public void build(){
-        Color backgroundColor = new Color(24, 26 ,28);
+    public void build() {
+        Color backgroundColor = new Color(24, 26, 28);
 
         JPanel container = new JPanel();
         container.setBackground(backgroundColor);
@@ -93,10 +97,10 @@ public class ListEditor extends JFrame{
 
         // Add components
         addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
-        addComponentToGrid(container, predecessor, editorLayout,    0, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
-        addComponentToGrid(container, successor, editorLayout,      2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
-        addComponentToGrid(container, current, editorLayout,        1, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
-        addComponentToGrid(container, index, editorLayout,          0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, successor, editorLayout, 2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
+        addComponentToGrid(container, current, editorLayout, 1, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, index, editorLayout, 0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
         add(container);
@@ -129,7 +133,7 @@ public class ListEditor extends JFrame{
         new AddElementPopUp(anker, position);
     }
 
-    private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
+    private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = fill;
         gbc.gridx = x;
@@ -153,7 +157,8 @@ public class ListEditor extends JFrame{
                     case add -> clickedAddNode();
                     case delete -> clickedRemoveNode();
                 }
-            }});
+            }
+        });
         return button;
     }
 
@@ -169,8 +174,7 @@ public class ListEditor extends JFrame{
             current.setText(readableData[1]);
             successor.setText(readableData[2]);
             setVisible(true);
-        }
-        else {
+        } else {
             // -10 means it's a new list
             addNode(-10);
         }
