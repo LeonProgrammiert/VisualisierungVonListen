@@ -64,6 +64,7 @@ public class Controller {
     }
 
     public void openList(File file) {
+        // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
         ListElement anker = databaseAccessor.openList(file);
 
         launcher.setVisible(false);
