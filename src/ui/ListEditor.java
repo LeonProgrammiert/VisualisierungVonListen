@@ -35,7 +35,7 @@ public class ListEditor extends JFrame{
     private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
-        setSize(1080, 720);
+        setSize(1400, 1000);
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -73,17 +73,29 @@ public class ListEditor extends JFrame{
         index.setForeground(Color.WHITE);
         index.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 
-        // SubPanel for the add and delete button
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(backgroundColor);
-        buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.add(Box.createHorizontalStrut(50));
+        // Gemeinsames Panel für Hinzufügen/Löschen + Undo/Redo
+        JPanel actionPanel = new JPanel();
+        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
+        actionPanel.setBackground(new Color(24, 26, 28));
 
-        // Add and delete button
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        buttonPanel.setBackground(new Color(24, 26, 28));
+
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
-        buttonPanel.add(addNodeButton);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
+
+        buttonPanel.add(addNodeButton);
         buttonPanel.add(deleteNodeButton);
+
+        JPanel undoRedoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        undoRedoPanel.setBackground(new Color(24, 26, 28));
+        undoRedoPanel.add(new UndoRedoButton("↺", "Undo changes"));
+        undoRedoPanel.add(new UndoRedoButton("↻", "Redo changes"));
+
+        actionPanel.add(buttonPanel);
+        actionPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        actionPanel.add(undoRedoPanel);
+
 
         // Add components
         addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
@@ -91,23 +103,8 @@ public class ListEditor extends JFrame{
         addComponentToGrid(container, successor, editorLayout,      2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
         addComponentToGrid(container, current, editorLayout,        1, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, index, editorLayout,          0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
-        addComponentToGrid(container, buttonPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NORTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
-        //Redo und unDo
-        JPanel undoRedoPanel = new JPanel();
-        undoRedoPanel.setBackground(new Color(24, 26, 28));
-        undoRedoPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0)); // rechtsbündig, mit 10px Abstand
-
-        UndoRedoButton undo = new UndoRedoButton("↺", "Undo changes");
-        UndoRedoButton redo = new UndoRedoButton("↻", "Redo changes");
-
-        undoRedoPanel.add(undo);
-        undoRedoPanel.add(redo);
-
-        addComponentToGrid(container, undoRedoPanel, editorLayout, 1, 4, 1, 1, GridBagConstraints.NONE,
-                new Insets(10, 10, 30, 10),
-                GridBagConstraints.SOUTH
-        );
         add(container);
     }
 
