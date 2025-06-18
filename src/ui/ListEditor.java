@@ -37,7 +37,7 @@ public class ListEditor extends JFrame {
     private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
-        setSize(1080, 720);
+        setSize(1400, 1000);
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
