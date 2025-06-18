@@ -8,7 +8,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
-
+//GUI zur Bearbeitung der Liste
 public class ListEditor extends JFrame{
 
     private final Controller controller;
@@ -25,15 +25,17 @@ public class ListEditor extends JFrame{
         build();
     }
 
+    //stellt die Grundeinstellungen des Fensters ein
     private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
-        setSize(1080, 720);
+        setSize(2000, 1600);
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    //baut die Benutzeroberfläche
     public void build(){
         Color backgroundColor = new Color(24, 26 ,28);
 
@@ -44,8 +46,8 @@ public class ListEditor extends JFrame{
 
         // Create layout
         GridBagLayout editorLayout = new GridBagLayout();
-        editorLayout.columnWeights = new double[]{1, 2, 1};
-        editorLayout.rowWeights = new double[]{1, 5, 0, 1};
+        editorLayout.columnWeights = new double[]{1, 2, 1}; //3 spalten 1:2:1
+        editorLayout.rowWeights = new double[]{1, 5, 0, 1}; // 4 zeilen mit gewichtung
         container.setLayout(editorLayout);
 
         // Define components
@@ -83,10 +85,18 @@ public class ListEditor extends JFrame{
         add(container);
     }
 
-    private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
-        /*
-        This method adds the components "comp" to the container "cont" with specified attributes
-         */
+    private void addComponentToGrid(
+            Container cont,      // Das Panel in das etwas einfügen willst
+            Component comp,      // Die Komponente, wie ein Button oder Label
+            GridBagLayout layout,// Das verwendete Layout (hier: GridBagLayout)
+            int x,               // Spalte
+            int y,               // Zeile
+            int width,           // Wie viele Spalten breit
+            int height,          // Wie viele Zeilen hoch
+            int fill,            // Füllverhalten
+            Insets padding,      // Außenabstand der Komponente (oben, links, unten, rechts)
+            int anchor           // Ausrichtung innerhalb der Zelle
+    ) {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = fill;
@@ -100,6 +110,7 @@ public class ListEditor extends JFrame{
         cont.add(comp);
     }
 
+    //erstellt Button und verknüpft ihn mit der richtigen Funktion
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
         button.addMouseListener(new MouseAdapter() {
@@ -115,11 +126,18 @@ public class ListEditor extends JFrame{
         return button;
     }
 
+
+
+
+
+
+    //speichert den aktuellen Knoten der Liste und zeigt auch sofort im gui an
     public void openList(CustomObject anker) {
         this.anker = anker;
         setData(anker);
     }
 
+    //holt Vorgänger, Aktuell, Nachfolger aus dem Knoten und zeigt sie auf den Buttons an.
     private void setData(CustomObject currentData) {
         String[] readableData = currentData.getData();
         predecessor.setText(readableData[0]);
@@ -127,6 +145,7 @@ public class ListEditor extends JFrame{
         successor.setText(readableData[2]);
     }
 
+    //wenn möglich nächste Listenelement anzeigem
     private void displayNext() {
         if (anker.getNext() != null) {
             openList(anker.getNext());
@@ -136,6 +155,7 @@ public class ListEditor extends JFrame{
         }
     }
 
+    //wenn möglich vorherige Listenelement anzeigen
     private void displayPrevious() {
         if (anker.getPrevious() != null) {
             openList(anker.getPrevious());

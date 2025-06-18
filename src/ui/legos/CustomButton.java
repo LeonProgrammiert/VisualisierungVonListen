@@ -3,6 +3,7 @@ package ui.legos;
 import javax.swing.*;
 import java.awt.*;
 
+// individuell formatierter Button mit Text, auf dem Hover-Farbe und Größe konfigurierbar sind.
 public class CustomButton extends CustomPanel{
 
     protected JLabel textLabel;

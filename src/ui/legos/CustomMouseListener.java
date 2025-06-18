@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.awt.*;
 
+//Diese Klasse sorgt für den Hover-Effekt
 public class CustomMouseListener extends MouseAdapter {
 
     private final JPanel panel;
