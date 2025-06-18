@@ -1,14 +1,17 @@
 package storage;
 
-import backend.CustomObject;
+import backend.ListElement;
 import controls.Controller;
 
 import java.io.*;
 
 public class DatabaseAccessor<T> {
-// CSV-Dateien erstellen/lesen, aus Zeilen Liste bauen
 
     private final String source = "src/saves/";
+
+    public void saveList(ListElement first) {
+
+    }
 
     public void addList(String name) {
         // Create empty csv-file
@@ -23,16 +26,16 @@ public class DatabaseAccessor<T> {
         }
     }
 
-    public CustomObject<T> openList(File file) {
-        CustomObject<T> head = null;
-        CustomObject<T> previous = null;
+    public ListElement<T> openList(File file) {
+        ListElement<T> head = null;
+        ListElement<T> previous = null;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.readLine(); // Skip metadata line
 
             String line;
             while ((line = reader.readLine()) != null) {
-                CustomObject<T> current = new CustomObject(line);
+                ListElement<T> current = new ListElement(line);
 
                 if (previous != null) {
                     previous.setNext(current);

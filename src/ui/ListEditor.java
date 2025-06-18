@@ -4,7 +4,6 @@ import backend.CustomObject;
 import controls.Controller;
 import ui.legos.AddNode;
 import ui.legos.CustomButton;
-import ui.legos.UndoRedoButton;
 
 import java.awt.*;
 import javax.swing.*;
@@ -16,7 +15,7 @@ public class ListEditor extends JFrame{
 
     private final Controller controller;
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
-    private CustomObject anker;
+    private ListElement anker;
 
     private CustomButton predecessor;
     private CustomButton successor;
@@ -31,11 +30,10 @@ public class ListEditor extends JFrame{
         build();
     }
 
-    //stellt die Grundeinstellungen des Fensters ein
     private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
-        setSize(1400, 1000);
+        setSize(1080, 720);
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -46,28 +44,24 @@ public class ListEditor extends JFrame{
         errorSound = new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
     }
 
-    //baut die Benutzeroberfläche
     public void build(){
         Color backgroundColor = new Color(24, 26 ,28);
 
-        // Create container
         JPanel container = new JPanel();
         container.setBackground(backgroundColor);
         container.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // Create layout
         GridBagLayout editorLayout = new GridBagLayout();
-        editorLayout.columnWeights = new double[]{1, 2, 1}; //3 spalten 1:2:1
-        editorLayout.rowWeights = new double[]{1, 5, 0, 1}; // 4 zeilen mit gewichtung
+        editorLayout.columnWeights = new double[]{1, 2, 1};
+        editorLayout.rowWeights = new double[]{1, 5, 0, 1};
         container.setLayout(editorLayout);
 
-        // Define components
+        // define components
         CustomButton backToLauncher = createButton("\u2190 Zurück zum Launcher", 12, eventTypes.backToLauncher);
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
         current = createButton("Aktuell", 24, eventTypes.current);
 
-        // Label for index of te list
         JLabel index = new JLabel("Indexplatzhalter");
         index.setHorizontalAlignment(JLabel.CENTER);
         index.setForeground(Color.WHITE);
@@ -132,7 +126,7 @@ public class ListEditor extends JFrame{
     }
 
     private void addNode(int position) {
-        new AddNode(anker, position);
+        new AddElementPopUp(anker, position);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor){
@@ -148,7 +142,6 @@ public class ListEditor extends JFrame{
         cont.add(comp);
     }
 
-    //erstellt Button und verknüpft ihn mit der richtigen Funktion
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
         button.addMouseListener(new MouseAdapter() {
@@ -164,15 +157,12 @@ public class ListEditor extends JFrame{
         return button;
     }
 
-
-    //speichert den aktuellen Knoten der Liste und zeigt auch sofort im gui an
-    public void openList(CustomObject anker) {
+    public void openList(ListElement anker) {
         this.anker = anker;
         setData(anker);
     }
 
-    //holt Vorgänger, Aktuell, Nachfolger aus dem Knoten und zeigt sie auf den Buttons an.
-    private void setData(CustomObject currentData) {
+    private void setData(ListElement currentData) {
         if (anker != null) {
             String[] readableData = currentData.getData();
             predecessor.setText(readableData[0]);
@@ -186,7 +176,7 @@ public class ListEditor extends JFrame{
         }
     }
 
-    private void displayObjet(CustomObject newObject) {
+    private void displayObjet(ListElement newObject) {
         if (newObject != null) {
             controller.playSound(clickSound);
             openList(newObject);
