@@ -25,7 +25,7 @@ public class Launcher extends JFrame {
     public void setValues() {
         setTitle("Visualisierung von Listen");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //Schließt Programm, wenn das Fenster schließt
-        setSize(2000, 1600);
+        setSize(1080, 720);
         setLocationRelativeTo(null);
     }
 
