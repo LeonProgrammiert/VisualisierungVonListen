@@ -1,7 +1,9 @@
 package controls;
 
-import storage.DatabaseAccessor;
+import backend.ListEvent;
 import backend.ListElement;
+import backend.StackManager;
+import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
 
@@ -17,6 +19,7 @@ public class Controller {
     private final DatabaseAccessor databaseAccessor;
     private final Launcher launcher;
     private final ListEditor listEditor;
+    private final StackManager stackManager;
 
     public static void main (String[] args) {
 
@@ -33,8 +36,10 @@ public class Controller {
     private static Controller instance;
 
     public Controller() {
-        databaseAccessor = new DatabaseAccessor(); //Zugriff auf Speicher
         instance = this;
+
+        databaseAccessor = new DatabaseAccessor();
+        stackManager = new StackManager(this);
 
         launcher = new Launcher(this);
         launcher.setVisible(true);
@@ -46,6 +51,7 @@ public class Controller {
     public static Controller getController() {
         return instance;
     }
+
     public ListEditor getListEditor() {
         return listEditor;
     }
@@ -56,20 +62,25 @@ public class Controller {
     }
 
     public void addList(String name) {
+        // Creates a new list
         this.currentListName = name;
         databaseAccessor.addList(name);
-        System.out.println("Neue Liste erstellt: " + name);
         String path = System.getProperty("user.dir") + "/src/saves/" + name + ".csv";
         openList(new File(path));
     }
 
     public void openList(File file) {
-        // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
-        ListElement anker = databaseAccessor.openList(file);
+        // Opens the list contained within the file
 
+        // Initialize the stacks every time a new list is opened
+        stackManager.initialize();
+
+        // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
+        ListElement firstElement = databaseAccessor.openList(file);
+
+        // Opens the list in the ListEditor
         launcher.setVisible(false);
-        listEditor.setVisible(true);
-        listEditor.openList(anker);
+        listEditor.openList(firstElement);
     }
 
     public void backToLauncher(ListElement anker) {
@@ -92,5 +103,16 @@ public class Controller {
                 handleError(e.getMessage());
             }
         }).start();
+    }
+
+    public void push(ListEvent event) {
+        stackManager.push(event);
+    }
+
+    public void pull(ListEvent event) {
+        // Pulls the previous state of the list and updates the stacks
+        ListElement oldState = stackManager.pull(event);
+        // Displays the previous state in the editor
+        listEditor.openList(oldState);
     }
 }

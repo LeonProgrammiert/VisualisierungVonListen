@@ -1,5 +1,6 @@
 package ui;
 
+import backend.ListEvent;
 import backend.ListElement;
 import controls.Controller;
 import ui.legos.AddElementPopUp;
@@ -18,9 +19,11 @@ public class ListEditor extends JFrame {
 
     private final Controller controller;
 
+
+
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
 
-    private ListElement anker;
+    private ListElement currentListElement;
 
     private CustomButton predecessor;
     private CustomButton successor;
@@ -28,6 +31,9 @@ public class ListEditor extends JFrame {
 
     private File clickSound;
     private File errorSound;
+
+    private UndoRedoButton undoButton;
+    private UndoRedoButton redoButton;
 
     public ListEditor(Controller controller) {
         this.controller = controller;
@@ -93,8 +99,11 @@ public class ListEditor extends JFrame {
 
         JPanel undoRedoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         undoRedoPanel.setBackground(new Color(24, 26, 28));
-        undoRedoPanel.add(new UndoRedoButton("↺", "rückgängig"));
-        undoRedoPanel.add(new UndoRedoButton("↻", "wiederherstellen"));
+
+        undoButton = new UndoRedoButton("↺", "rückgängig", ListEvent.events.undo);
+        undoRedoPanel.add(undoButton);
+        redoButton = new UndoRedoButton("↻", "wiederherstellen", ListEvent.events.redo);
+        undoRedoPanel.add(redoButton);
 
         actionPanel.add(buttonPanel);
         actionPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -157,20 +166,30 @@ public class ListEditor extends JFrame {
                 null,
                 "Choose one of the following options:",
                 "Custom Options Dialog",
-                JOptionPane.INFORMATION_MESSAGE,
-
                 JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
                 null,
                 options,
                 options[0]
         );
 
-        // Handle the user's choice
-        if (choice >= 0) addNode(choice);
+        if (choice < 0) return;
+
+        AddElementPopUp.positions pos = switch (choice) {
+            case 0 -> AddElementPopUp.positions.atStart;
+            case 2 -> AddElementPopUp.positions.atEnd;
+            default -> AddElementPopUp.positions.asNext;
+        };
+        addNode(pos);
     }
 
-    private void addNode(int position) {
-        new AddElementPopUp(anker, position);
+    public void setUndoRedoButtonAvailability(boolean undoAvailability, boolean redoAvailability) {
+        undoButton.setAvailable(undoAvailability);
+        redoButton.setAvailable(redoAvailability);
+    }
+
+    private void addNode(AddElementPopUp.positions position) {
+        new AddElementPopUp(currentListElement, position);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor) {
@@ -192,9 +211,9 @@ public class ListEditor extends JFrame {
         button.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
-                    case backToLauncher -> controller.backToLauncher(anker);
-                    case next -> displayObjet(anker.getNext());
-                    case previous -> displayObjet(anker.getPrevious());
+                    case backToLauncher -> controller.backToLauncher(currentListElement);
+                    case next -> displayObjet(currentListElement.getNext());
+                    case previous -> displayObjet(currentListElement.getPrevious());
                     case add -> clickedAddNode();
                     case delete -> clickedRemoveNode();
                 }
@@ -203,33 +222,34 @@ public class ListEditor extends JFrame {
         return button;
     }
 
-
-    //speichert den aktuellen Knoten der Liste und zeigt auch sofort im gui an
-    public void openList(ListElement anker) {
-        this.anker = anker;
-        setData(anker);
+    public void openList(ListElement currentListElement) {
+        this.currentListElement = currentListElement;
+        setData(currentListElement);
     }
 
-    //holt Vorgänger, Aktuell, Nachfolger aus dem Knoten und zeigt sie auf den Buttons an.
-    private void setData(ListElement currentData) {
-        if (anker != null) {
-            String[] readableData = currentData.getData();
+    private void setData(ListElement newData) {
+        this.currentListElement = newData;
+        if (currentListElement != null) {
+            String[] readableData = newData.getData();
             predecessor.setText(readableData[0]);
             current.setText(readableData[1]);
             successor.setText(readableData[2]);
             setVisible(true);
         } else {
-            // -10 means it's a new list
-            addNode(-10);
+            addNode(AddElementPopUp.positions.firstElement);
         }
     }
 
     private void displayObjet(ListElement newObject) {
         if (newObject != null) {
             controller.playSound(clickSound);
-            openList(newObject);
+            setData(newObject);
         } else {
             controller.playSound(errorSound);
         }
+    }
+
+    public ListElement getCurrentListElement() {
+        return currentListElement;
     }
 }

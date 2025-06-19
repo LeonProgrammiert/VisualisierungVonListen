@@ -1,22 +1,27 @@
 package ui.legos;
 
+import backend.ListEvent;
 import backend.ListElement;
 import controls.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AddElementPopUp<T> extends JFrame {
+
+    public enum positions {firstElement, atStart, atEnd, asNext}
 
     private JTextField textField;
     private final ListElement<T> current;
 
-    public AddElementPopUp(ListElement<T> current, int position) {
+    public AddElementPopUp(ListElement<T> current, positions position) {
         this.current = current;
         build(position);
     }
 
-    private void build(int position) {
+    private void build(positions position) {
         setTitle("Neue Daten hinzufügen");
         setSize(600, 200);
         setLayout(new GridBagLayout());
@@ -42,18 +47,22 @@ public class AddElementPopUp<T> extends JFrame {
         JButton saveButton = new JButton("Speichern");
         add(saveButton, gbc);
 
-        saveButton.addActionListener(e -> {
-            ListElement newData = new ListElement(textField.getText());
+        // Could add an ActionListener but in future versions
+        // We are going to use the custom button
+        saveButton.addMouseListener(new MouseAdapter() {
+           @Override
+           public void mouseClicked(MouseEvent e) {
+                // Save previous state
+                Controller.getController().push(new ListEvent<T>(current.deepCopy(), ListEvent.events.add));
 
-            switch (position) {
-                case -10 -> insertAsFirst(newData);
-                case 0 -> insertAtStart(newData);
-                case 2 -> insertAtEnd(newData);
-                default -> insertAfterCurrent(newData);
-            }
+                // Inserts new data
+                ListElement newData = new ListElement(textField.getText());
+                insertData(position, newData);
 
-            Controller.getController().getListEditor().openList(newData);
-            dispose();
+                // Displays new data
+                Controller.getController().getListEditor().openList(newData);
+                dispose();
+           }
         });
 
         pack();
@@ -61,8 +70,17 @@ public class AddElementPopUp<T> extends JFrame {
         setVisible(true);
     }
 
+    private void insertData(positions position, ListElement<T> newData) {
+        switch (position) {
+            case atStart -> insertAtStart(newData);
+            case atEnd -> insertAtEnd(newData);
+            case asNext -> insertAfterCurrent(newData);
+            case firstElement -> insertAsFirstElementOfList(newData);
+        }
+    }
 
-    private void insertAsFirst(ListElement<T> obj) {
+
+    private void insertAsFirstElementOfList(ListElement<T> obj) {
         obj.setPrevious(null);
         obj.setNext(null);
     }
@@ -79,23 +97,17 @@ public class AddElementPopUp<T> extends JFrame {
         }
     }
 
-    private void insertAtEnd(ListElement<T> obj) {
-        ListElement<T> last = current;
-        while (last.getNext() != null) {
-            last = last.getNext();
-        }
+    private void insertAtEnd(ListElement<T> newLast) {
+        ListElement<T> previouslast = newLast.getTail();
 
-        last.setNext(obj);
-        obj.setPrevious(last);
+        previouslast.setNext(newLast);
+        newLast.setPrevious(previouslast);
     }
 
-    private void insertAtStart(ListElement<T> obj) {
-        ListElement<T> first = current;
-        while (first.getPrevious() != null) {
-            first = first.getPrevious();
-        }
+    private void insertAtStart(ListElement<T> newFirst) {
+        ListElement<T> previousFirst = newFirst.getFirst();
 
-        obj.setNext(first);
-        first.setPrevious(obj);
+        newFirst.setNext(previousFirst);
+        previousFirst.setPrevious(newFirst);
     }
 }
