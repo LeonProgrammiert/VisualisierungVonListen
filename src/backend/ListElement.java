@@ -7,7 +7,7 @@ public class ListElement<T> {
     private ListElement<T> previous;
     private ListElement<T> next;
 
-    private final T data;
+    private T data;
 
     public ListElement(T data) {
         this.data = data;
@@ -47,4 +47,19 @@ public class ListElement<T> {
 
         return displayableData;
     }
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public void remove() {
+        if (previous != null) {
+            previous.setNext(next);
+        }
+        if (next != null) {
+            next.setPrevious(previous);
+        }
+        this.previous = null;
+        this.next = null;
+    }
+
 }

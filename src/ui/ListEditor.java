@@ -4,6 +4,7 @@ import backend.ListElement;
 import controls.Controller;
 import ui.legos.AddElementPopUp;
 import ui.legos.CustomButton;
+import ui.legos.DeleteDialog;
 import ui.legos.UndoRedoButton;
 
 
@@ -50,8 +51,8 @@ public class ListEditor extends JFrame {
     }
 
     //baut die Benutzeroberfläche
-    public void build(){
-        Color backgroundColor = new Color(24, 26 ,28);
+    public void build() {
+        Color backgroundColor = new Color(24, 26, 28);
 
         // Create container
         JPanel container = new JPanel();
@@ -112,7 +113,40 @@ public class ListEditor extends JFrame {
     }
 
     private void clickedRemoveNode() {
-        // TODO: implement
+        DeleteDialog dialog = new DeleteDialog(this, new DeleteDialog.DeleteActionListener() {
+            @Override
+            public void onDeleteCurrent() {
+                if (anker != null) {
+                    ListElement vorher = anker.getPrevious();
+                    ListElement nachher = anker.getNext();
+                    anker.remove(); // funktioniert nur, wenn du remove() noch ergänzt
+
+                    if (nachher != null) {
+                        displayObjet(nachher);
+                    } else if (vorher != null) {
+                        displayObjet(vorher);
+                    } else {
+                        anker = null;
+                        setData(new ListElement<>("")); // ACHTUNG: Nur wenn du Konstruktor für leeres Element hast
+                    }
+                }
+            }
+
+            @Override
+            public void onDeleteAll() {
+                if (anker != null) {
+                    ListElement<String> current = anker;
+                    while (current != null) {
+                        current.setData(""); // muss in ListElement existieren
+                        current = current.getNext();
+                    }
+                    displayObjet(anker);
+                    controller.backToLauncher(anker);
+                }
+            }
+        });
+
+        dialog.setVisible(true);
     }
 
     private void clickedAddNode() {
@@ -123,8 +157,9 @@ public class ListEditor extends JFrame {
                 null,
                 "Choose one of the following options:",
                 "Custom Options Dialog",
-                JOptionPane.DEFAULT_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
+
+                JOptionPane.DEFAULT_OPTION,
                 null,
                 options,
                 options[0]
