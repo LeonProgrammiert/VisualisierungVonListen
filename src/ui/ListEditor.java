@@ -19,8 +19,6 @@ public class ListEditor extends JFrame {
 
     private final Controller controller;
 
-
-
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
 
     private ListElement currentListElement;
@@ -125,34 +123,41 @@ public class ListEditor extends JFrame {
         DeleteDialog dialog = new DeleteDialog(this, new DeleteDialog.DeleteActionListener() {
             @Override
             public void onDeleteCurrent() {
-                if (anker != null) {
-                    ListElement vorher = anker.getPrevious();
-                    ListElement nachher = anker.getNext();
-                    anker.remove(); // funktioniert nur, wenn du remove() noch ergänzt
+                if (currentListElement != null) {
+                    ListElement vorher = currentListElement.getPrevious();
+                    ListElement nachher = currentListElement.getNext();
+                    currentListElement.remove();
 
                     if (nachher != null) {
                         displayObjet(nachher);
                     } else if (vorher != null) {
                         displayObjet(vorher);
                     } else {
-                        anker = null;
-                        setData(new ListElement<>("")); // ACHTUNG: Nur wenn du Konstruktor für leeres Element hast
+                        currentListElement = null;
+                        setData(new ListElement<>(""));
                     }
                 }
             }
 
             @Override
             public void onDeleteAll() {
-                if (anker != null) {
-                    ListElement<String> current = anker;
-                    while (current != null) {
-                        current.setData(""); // muss in ListElement existieren
-                        current = current.getNext();
+                if (currentListElement != null) {
+                    ListElement<String> first = currentListElement.getFirst();
+
+                    while (first != null) {
+                        ListElement<String> next = first.getNext();
+                        first.setPrevious(null);
+                        first.setNext(null);
+                        first = next;
                     }
-                    displayObjet(anker);
-                    controller.backToLauncher(anker);
+
+                    currentListElement = null;
+                    clearData();
+                    controller.backToLauncher(null);
                 }
+                System.out.println("erfolgreich gelöscht"); // Vorrübergehend, bis speichern möglich
             }
+
         });
 
         dialog.setVisible(true);
@@ -251,5 +256,11 @@ public class ListEditor extends JFrame {
 
     public ListElement getCurrentListElement() {
         return currentListElement;
+    }
+
+    public void clearData() {
+        predecessor.setText("");
+        current.setText("");
+        successor.setText("");
     }
 }

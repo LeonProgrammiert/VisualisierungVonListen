@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class CustomIconButton extends CustomButton {
 
-
     public CustomIconButton(String icon, String labelText) {
         super(labelText, 13);
 

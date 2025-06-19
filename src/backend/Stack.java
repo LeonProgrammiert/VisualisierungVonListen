@@ -33,10 +33,8 @@ public class Stack <T>{
         return null;
     }
 
-
     public boolean isAvailable() {
         // Stack is available, if it is not empty
         return !stack.isEmpty();
     }
-
 }

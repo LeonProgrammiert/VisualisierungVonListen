@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import javax.swing.*;
 import java.awt.*;
 
+//Dialogfenster zum Löschen eines Elements oder der gesamten Liste.
 public class DeleteDialog extends JDialog {
 
     public interface DeleteActionListener {
@@ -12,6 +13,10 @@ public class DeleteDialog extends JDialog {
         void onDeleteAll();
     }
 
+    /*
+     parent = Das übergeordnete Fenster,
+     listener= Listener für die Reaktionen auf die Button-Aktionen
+     */
     public DeleteDialog(JFrame parent, DeleteActionListener listener) {
         super(parent, "Element löschen", true);
         setLayout(new BorderLayout());
@@ -28,7 +33,7 @@ public class DeleteDialog extends JDialog {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 15));
         buttonPanel.setBackground(new Color(24, 26, 28));
 
-        // Hilfsmethode für Button-Styling
+        // erstelle die Buttons mit Hover-Effekt
         JButton cancelButton = createStyledButton("Abbrechen");
         cancelButton.addActionListener(e -> dispose());
 
@@ -60,7 +65,8 @@ public class DeleteDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private JButton createStyledButton(String text) {
+    //einheitliche JButton mit Hover-Effekt.
+    public static JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("SansSerif", Font.PLAIN, 14));
         button.setBackground(new Color(55, 55, 55)); // heller als Hintergrund

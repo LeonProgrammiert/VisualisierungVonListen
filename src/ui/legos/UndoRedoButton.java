@@ -20,7 +20,6 @@ public class UndoRedoButton extends JPanel {
 
     private Color currentColor = unavailableColor;
 
-
     public UndoRedoButton(String symbol, String tooltip, ListEvent.events event) {
         setLayout(new GridBagLayout());
         setOpaque(false);

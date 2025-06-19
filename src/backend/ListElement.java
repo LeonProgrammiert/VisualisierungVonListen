@@ -64,7 +64,6 @@ public class ListElement<T> {
         return tail;
     }
 
-
     public ListElement<T> deepCopy() {
         // Returns a deep copy of the list
 
@@ -108,5 +107,4 @@ public class ListElement<T> {
         this.previous = null;
         this.next = null;
     }
-
 }

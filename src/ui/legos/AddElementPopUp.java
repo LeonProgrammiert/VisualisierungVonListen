@@ -79,7 +79,6 @@ public class AddElementPopUp<T> extends JFrame {
         }
     }
 
-
     private void insertAsFirstElementOfList(ListElement<T> obj) {
         obj.setPrevious(null);
         obj.setNext(null);

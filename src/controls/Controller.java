@@ -70,8 +70,6 @@ public class Controller {
     }
 
     public void openList(File file) {
-        // Opens the list contained within the file
-
         // Initialize the stacks every time a new list is opened
         stackManager.initialize();
 
