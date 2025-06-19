@@ -27,7 +27,7 @@ public class DatabaseAccessor<T> {
     }
 
     public ListElement<T> openList(File file) {
-        ListElement<T> head = null;
+        ListElement<T> firstElement = null;
         ListElement<T> previous = null;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -40,7 +40,7 @@ public class DatabaseAccessor<T> {
                 if (previous != null) {
                     previous.setNext(current);
                 } else {
-                    head = current; // First element becomes the head
+                    firstElement = current; // Sets the first element of the list
                 }
                 current.setPrevious(previous);
                 previous = current;
@@ -48,7 +48,7 @@ public class DatabaseAccessor<T> {
         } catch (IOException e) {
             Controller.handleError(e.getLocalizedMessage());
         }
-        return head;
+        return firstElement;
     }
 }
 

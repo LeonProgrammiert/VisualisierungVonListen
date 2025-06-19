@@ -46,4 +46,51 @@ public class ListElement<T> {
 
         return displayableData;
     }
+
+    public ListElement<T> getFirst() {
+        ListElement<T> first = this;
+        while (first.getPrevious() != null) {
+            first = first.getPrevious();
+        }
+        return first;
+    }
+
+    public ListElement<T> getTail() {
+        ListElement<T> tail = this;
+        while (tail.getNext() != null) {
+            tail = tail.getNext();
+        }
+        return tail;
+    }
+
+
+    public ListElement<T> deepCopy() {
+        // Returns a deep copy of the list
+
+        // Handle empty list
+        if (getFirst() == null) {
+            return null;
+        }
+
+        // Copy the first node
+        ListElement<T> original = getFirst();
+        ListElement<T> newFirst = new ListElement<>(original.data);
+        newFirst.previous = null;
+
+        ListElement<T> currOriginal = original.next;
+        ListElement<T> currCopy = newFirst;
+
+        // Copy the rest of the nodes
+        while (currOriginal != null) {
+            ListElement<T> newNode = new ListElement<>(currOriginal.data);
+            currCopy.next = newNode;
+            newNode.previous = currCopy;
+
+            currCopy = newNode;
+            currOriginal = currOriginal.next;
+        }
+
+        return newFirst;
+    }
+
 }
