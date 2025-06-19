@@ -1,6 +1,6 @@
 package ui.legos;
 
-import backend.Event;
+import backend.ListEvent;
 import backend.ListElement;
 import controls.Controller;
 
@@ -53,7 +53,7 @@ public class AddElementPopUp<T> extends JFrame {
            @Override
            public void mouseClicked(MouseEvent e) {
                 // Save previous state
-                Controller.getController().push(new Event<T>(current.deepCopy(), Event.events.add));
+                Controller.getController().push(new ListEvent<T>(current.deepCopy(), ListEvent.events.add));
 
                 // Inserts new data
                 ListElement newData = new ListElement(textField.getText());

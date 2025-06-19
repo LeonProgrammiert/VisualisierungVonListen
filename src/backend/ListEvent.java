@@ -1,13 +1,13 @@
 package backend;
 
-public class Event <T> {
+public class ListEvent<T> {
 
     public enum events {add, remove, undo, redo}
 
     private final ListElement<T> listCopy;
     private final events event;
 
-    public Event(ListElement<T> listCopy, events event) {
+    public ListEvent(ListElement<T> listCopy, events event) {
         this.event = event;
         this.listCopy = listCopy;
     }

@@ -1,6 +1,6 @@
 package ui;
 
-import backend.Event;
+import backend.ListEvent;
 import backend.ListElement;
 import controls.Controller;
 import ui.legos.AddElementPopUp;
@@ -94,9 +94,9 @@ public class ListEditor extends JFrame {
         JPanel undoRedoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         undoRedoPanel.setBackground(new Color(24, 26, 28));
 
-        undoButton = new UndoRedoButton("↺", "rückgängig", Event.events.undo);
+        undoButton = new UndoRedoButton("↺", "rückgängig", ListEvent.events.undo);
         undoRedoPanel.add(undoButton);
-        redoButton = new UndoRedoButton("↻", "wiederherstellen", Event.events.redo);
+        redoButton = new UndoRedoButton("↻", "wiederherstellen", ListEvent.events.redo);
         undoRedoPanel.add(redoButton);
 
         actionPanel.add(buttonPanel);

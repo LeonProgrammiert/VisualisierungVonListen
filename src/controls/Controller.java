@@ -1,6 +1,6 @@
 package controls;
 
-import backend.Event;
+import backend.ListEvent;
 import backend.ListElement;
 import backend.StackManager;
 import storage.DatabaseAccessor;
@@ -105,11 +105,11 @@ public class Controller {
         }).start();
     }
 
-    public void push(Event event) {
+    public void push(ListEvent event) {
         stackManager.push(event);
     }
 
-    public void pull(Event event) {
+    public void pull(ListEvent event) {
         // Pulls the previous state of the list and updates the stacks
         ListElement oldState = stackManager.pull(event);
         // Displays the previous state in the editor

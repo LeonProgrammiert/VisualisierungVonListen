@@ -19,14 +19,14 @@ public class StackManager<T> {
         redoStack = new Stack<>(this);
     }
 
-    public void push(Event<T> event) {
+    public void push(ListEvent<T> event) {
         // Method for add and remove
 
         // Gets the eventType
-        Event.events eventType = event.getEvent();
+        ListEvent.events eventType = event.getEvent();
 
         // Checks for unwanted eventTypes
-        if (eventType == Event.events.undo || eventType == Event.events.redo) {
+        if (eventType == ListEvent.events.undo || eventType == ListEvent.events.redo) {
             throw new RuntimeException("Wrong event type given to push");
         }
 
@@ -37,10 +37,10 @@ public class StackManager<T> {
         updateButtons();
     }
 
-    public ListElement<T> pull(Event<T> event) {
+    public ListElement<T> pull(ListEvent<T> event) {
         // Method for redo and undo
 
-        Event<T> prevState;
+        ListEvent<T> prevState;
         switch (event.getEvent()) {
             case undo:
                 // Gets the previous state and deletes it from the undo-Stack

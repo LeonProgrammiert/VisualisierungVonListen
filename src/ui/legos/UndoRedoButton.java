@@ -1,6 +1,6 @@
 package ui.legos;
 
-import backend.Event;
+import backend.ListEvent;
 import backend.ListElement;
 import controls.Controller;
 
@@ -21,7 +21,7 @@ public class UndoRedoButton extends JPanel {
     private Color currentColor = unavailableColor;
 
 
-    public UndoRedoButton(String symbol, String tooltip, Event.events event) {
+    public UndoRedoButton(String symbol, String tooltip, ListEvent.events event) {
         setLayout(new GridBagLayout());
         setOpaque(false);
 
@@ -57,7 +57,7 @@ public class UndoRedoButton extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 // Gets the currently displayed list element, makes a deep copy and sends it as event to the Controller
                 ListElement listCopy = Controller.getController().getListEditor().getCurrentListElement().deepCopy();
-                Controller.getController().pull(new Event(listCopy, event));
+                Controller.getController().pull(new ListEvent(listCopy, event));
             }
             public void mouseEntered(MouseEvent e) {
                 // Highlights the button if available

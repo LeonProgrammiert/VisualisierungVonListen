@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Stack <T>{
 
-    ArrayList<Event<T>> stack;
+    ArrayList<ListEvent<T>> stack;
 
     StackManager<T> stackManager;
 
@@ -13,12 +13,12 @@ public class Stack <T>{
         this.stackManager = stackManager;
     }
 
-    public void push(Event<T> newEvent) {
+    public void push(ListEvent<T> newEvent) {
         // Add another event to the stack.
         stack.add(newEvent);
     }
 
-    private Event<T> pop() {
+    private ListEvent<T> pop() {
         // Return the last event of the stack.
          if (!stack.isEmpty()) {
             return stack.removeLast();
@@ -26,7 +26,7 @@ public class Stack <T>{
          return null;
     }
 
-    public Event<T> previousState() {
+    public ListEvent<T> previousState() {
         if (isAvailable()) {
             return pop();
         }
