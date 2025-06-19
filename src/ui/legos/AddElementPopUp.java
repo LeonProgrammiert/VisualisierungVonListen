@@ -6,12 +6,12 @@ import controls.Controller;
 import javax.swing.*;
 import java.awt.*;
 
-public class AddNode<T> extends JFrame {
+public class AddElementPopUp<T> extends JFrame {
 
     private JTextField textField;
     private final ListElement<T> current;
 
-    public AddNode(ListElement<T> current, int position) {
+    public AddElementPopUp(ListElement<T> current, int position) {
         this.current = current;
         build(position);
     }

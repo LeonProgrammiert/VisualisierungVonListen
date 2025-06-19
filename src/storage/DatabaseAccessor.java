@@ -6,9 +6,12 @@ import controls.Controller;
 import java.io.*;
 
 public class DatabaseAccessor<T> {
-// CSV-Dateien erstellen/lesen, aus Zeilen Liste bauen
 
     private final String source = "src/saves/";
+
+    public void saveList(ListElement first) {
+
+    }
 
     public void addList(String name) {
         // Create empty csv-file

@@ -31,7 +31,7 @@ public class ListElement<T> {
 
     public String getElement() {
         try {
-            return data.toString(); //um den Inhalt des Knotens T data als lesbaren Text darzustellen
+            return data.toString();
         } catch (Exception e) {
             Controller.handleError("Der Typ kann nicht in einen String umgewandelt werden!");
             return "Error";

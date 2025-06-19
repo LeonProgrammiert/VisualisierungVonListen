@@ -1,7 +1,7 @@
 package controls;
 
-import backend.ListElement;
 import storage.DatabaseAccessor;
+import backend.ListElement;
 import ui.ListEditor;
 import ui.Launcher;
 
@@ -65,14 +65,14 @@ public class Controller {
 
     public void openList(File file) {
         // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
-        ListElement anker = databaseAccessor.openList(file); // Daten aus CSV laden
+        ListElement anker = databaseAccessor.openList(file);
 
         launcher.setVisible(false);
         listEditor.setVisible(true);
         listEditor.openList(anker);
     }
 
-    public void backToLauncher(ListElement anker) { //anker für später zb. export oder speicherfunktionen
+    public void backToLauncher(ListElement anker) {
         launcher.setVisible(true);
         listEditor.setVisible(false);
     }
