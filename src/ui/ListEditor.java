@@ -36,11 +36,9 @@ public class ListEditor extends JFrame {
     private UndoRedoButton undoButton;
     private UndoRedoButton redoButton;
 
-    private final StackManager stackManager;
 
     public ListEditor(Controller controller) {
         this.controller = controller;
-        this.stackManager = controller.getStackManager(); // der zentrale StackManager
         setValues();
         build();
         setVisible(true);
@@ -119,54 +117,9 @@ public class ListEditor extends JFrame {
         DeleteDialog dialog = new DeleteDialog(this);
         dialog.setVisible(true);
     }
-    public void onDeleteAll() {
-        if (currentListElement != null) {
-            ListElement<String> first = currentListElement.getFirst();
 
-            while (first != null) {
-                ListElement<String> next = first.getNext();
-                first.setPrevious(null);
-                first.setNext(null);
-                first = next;
-            }
-
-            currentListElement = null;
-            clearData();
-            controller.backToLauncher(null);
-        }
-    }
-    public void onDeleteCurrent() {
-        if (currentListElement != null) {
-            ListElement vorher = currentListElement.getPrevious();
-            ListElement nachher = currentListElement.getNext();
-
-            // Backup für Undo
-            ListElement backup = currentListElement.deepCopy();
-            System.out.println("[LOG] Backup für Undo erstellt: " + backup.getElement());
-
-
-            // Event speichern
-            stackManager.push(new ListEvent(backup, ListEvent.events.remove));
-            System.out.println("[LOG] Event in Stack gespeichert: remove");
-
-            currentListElement.remove();
-
-            if (nachher != null) {
-                displayObjet(nachher);
-            } else if (vorher != null) {
-                displayObjet(vorher);
-            } else {
-                currentListElement = null;
-                clearData();
-            }
-        }
-    }
     public void backToLauncher() {
         controller.backToLauncher(currentListElement);
-    }
-
-    public void addNodeAtStart() {
-        addNode(AddElementPopUp.positions.atStart);
     }
 
     private void clickedAddNode() {
@@ -239,7 +192,11 @@ public class ListEditor extends JFrame {
 
     public void openList(ListElement currentListElement) {
         this.currentListElement = currentListElement;
-        setData(currentListElement);
+        if (currentListElement == null) {
+            addNode(AddElementPopUp.positions.firstElement);
+        } else {
+            setData(currentListElement);
+        }
     }
 
     private void setData(ListElement newData) {

@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class CustomButton extends CustomPanel {
@@ -11,7 +13,13 @@ public class CustomButton extends CustomPanel {
     private java.util.List<ActionListener> actionListeners = new ArrayList<>();
     protected JLabel textLabel;
 
+    private final Border emptyBorder;
+    private final Border unhighlightedBorder;
+
     public CustomButton(String buttonText, int fontSize) {
+        // Initialize
+        emptyBorder = new EmptyBorder(5, 5, 5, 5);
+        unhighlightedBorder = BorderFactory.createLineBorder(new Color(40, 40, 40), 1);
 
         // Text
         textLabel = new JLabel(buttonText, SwingConstants.CENTER);
@@ -19,11 +27,13 @@ public class CustomButton extends CustomPanel {
         textLabel.setForeground(Color.LIGHT_GRAY);
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Format
+        setLayout(new GridBagLayout());
+        setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, emptyBorder));
+
         // Mange click events and add hover effect
         addMouseListener(new CustomMouseListener(this, textLabel));
 
-        // Format
-        setLayout(new GridBagLayout());
         add(textLabel);
     }
 

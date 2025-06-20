@@ -16,6 +16,8 @@ import java.io.IOException;
 public class Controller {
 
     private String currentListName;
+    private File currentListFile;
+
     private final DatabaseAccessor databaseAccessor;
     private final Launcher launcher;
     private final ListEditor listEditor;
@@ -64,14 +66,22 @@ public class Controller {
     public void addList(String name) {
         // Creates a new list
         this.currentListName = name;
-        databaseAccessor.addList(name);
-        String path = System.getProperty("user.dir") + "/src/saves/" + name + ".csv";
-        openList(new File(path));
+        boolean check = databaseAccessor.addList(name);
+        if (check) {
+            String path = System.getProperty("user.dir") + "/src/saves/" + name + ".csv";
+            initializeStacks();
+            openList(new File(path));
+        }
+    }
+
+    public void initializeStacks() {
+        // Initialize the stacks every time a new list is opened
+        stackManager.initialize();
     }
 
     public void openList(File file) {
-        // Initialize the stacks every time a new list is opened
-        stackManager.initialize();
+        currentListName = file.getName().replaceFirst("[.][^.]+$", "");
+        currentListFile = file;
 
         // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
         ListElement firstElement = databaseAccessor.openList(file);
@@ -113,12 +123,15 @@ public class Controller {
 
         // Prüft, ob ein Zustand vorhanden ist
         if (oldState == null) {
+            handleError("Es gibt keinen vorherigen Zustand");
+            /*
             JOptionPane.showMessageDialog(
                     listEditor,
                     "Es gibt keinen vorherigen Zustand.",
                     "Aktion nicht möglich",
                     JOptionPane.INFORMATION_MESSAGE
             );
+             */
             return;
         }
 
@@ -126,7 +139,8 @@ public class Controller {
         listEditor.openList(oldState);
 
     }
-    public StackManager getStackManager() {
-        return stackManager;
+
+    public File getCurrentListFile() {
+        return currentListFile;
     }
 }

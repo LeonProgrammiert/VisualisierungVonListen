@@ -115,6 +115,7 @@ public class Launcher extends JFrame {
 
         // Prevent NullPointerException, if no file is selected
         if (file != null) {
+            controller.initializeStacks();
             controller.openList(file);
         }
     }
@@ -126,7 +127,9 @@ public class Launcher extends JFrame {
     private void addList() {
         String listenName = JOptionPane.showInputDialog(null, "Wie soll die neue Liste heißen?", "Neue Liste erstellen", JOptionPane.PLAIN_MESSAGE);
 
-        if (listenName != null && !listenName.trim().isEmpty()) {
+        if (listenName == null) return;
+
+        if (!listenName.trim().isEmpty()) {
             controller.addList(listenName.trim());
         } else {
             JOptionPane.showMessageDialog(null, "Die Liste braucht einen gültigen Namen.", "Fehler", JOptionPane.ERROR_MESSAGE);

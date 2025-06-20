@@ -1,5 +1,8 @@
 package ui.legos;
 
+import backend.ListElement;
+import backend.ListEvent;
+import controls.Controller;
 import ui.ListEditor;
 
 import javax.swing.*;
@@ -7,10 +10,15 @@ import java.awt.*;
 
 public class DeleteDialog extends JDialog {
 
+    private ListEditor listEditor;
+
     public DeleteDialog(ListEditor editor) {
         super(editor, "Element löschen", true);
+
+        this.listEditor = editor;
+
         setLayout(new BorderLayout());
-        setSize(800, 200);
+        setSize(400, 150);
         setLocationRelativeTo(editor);
         getContentPane().setBackground(new Color(24, 26, 28));
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -27,35 +35,70 @@ public class DeleteDialog extends JDialog {
         cancelButton.addActionListener(e -> dispose());
 
         CustomButton deleteCurrent = new CustomButton("Nur aktuelles Element", 14);
-        deleteCurrent.addActionListener(e -> {
-            dispose();
-            editor.onDeleteCurrent();
-
-            if (editor.getCurrentListElement() == null) {
-                showEmptyListOptions(editor);
-            }
-        });
+        deleteCurrent.addActionListener(e -> deleteSingleElement());
 
         CustomButton deleteAll = new CustomButton("Komplette Liste", 14);
-        deleteAll.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(
-                    DeleteDialog.this,
-                    "Bist du sicher, dass du die gesamte Liste löschen willst?",
-                    "Sicher?",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE
-            );
-            if (confirm == JOptionPane.YES_OPTION) {
-                dispose();
-                editor.onDeleteAll(); // löscht wirklich alles
-                showEmptyListOptions(editor);
-            }
-        });
+        deleteAll.addActionListener(e -> clickedDeleteWholeList());
 
         buttonPanel.add(cancelButton);
         buttonPanel.add(deleteCurrent);
         buttonPanel.add(deleteAll);
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void clickedDeleteWholeList() {
+        int confirm = JOptionPane.showConfirmDialog(
+                DeleteDialog.this,
+                "Bist du sicher, dass du die gesamte Liste löschen willst?",
+                "Sicher?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        if (confirm == JOptionPane.YES_OPTION) {
+            dispose();
+            deleteWholeList();
+            showEmptyListOptions(listEditor);
+        }
+    }
+
+    private void deleteWholeList() {
+        // löscht wirklich alles
+        ListElement currentListElement = listEditor.getCurrentListElement();
+
+        if (currentListElement != null) {
+            ListElement<String> first = currentListElement.getFirst();
+
+            while (first != null) {
+                ListElement<String> next = first.getNext();
+                first.setPrevious(null);
+                first.setNext(null);
+                first = next;
+            }
+
+            currentListElement = null;
+            //TODO: Save the new list state in csv-file
+
+        }
+    }
+
+    private void deleteSingleElement() {
+        // Get current Element
+        ListElement current = listEditor.getCurrentListElement();
+
+        // Push deep copy of current to the stack
+        Controller.getController().push(new ListEvent(current.deepCopy(), ListEvent.events.remove));
+
+        // Define next element to display
+        ListElement nextToDisplay = remove(current);
+
+        // Display the next element or show emptyListOptions
+        dispose();
+        //TODO: Save the new list state in csv-file
+        if (nextToDisplay != null) {
+            listEditor.openList(nextToDisplay);
+        } else {
+            showEmptyListOptions(listEditor);
+        }
     }
 
     private void showEmptyListOptions(ListEditor editor) {
@@ -74,7 +117,28 @@ public class DeleteDialog extends JDialog {
         if (choice == 0) {
             editor.backToLauncher();
         } else if (choice == 1) {
-            editor.addNodeAtStart();
+            Controller.getController().openList(Controller.getController().getCurrentListFile());
         }
+    }
+
+    public <T> ListElement<T> remove(ListElement<T> current) {
+        // Get the previous and next
+        ListElement<T> previous = current.getPrevious();
+        ListElement<T> next = current.getNext();
+
+        // Update the list
+        if (previous != null) {
+            previous.setNext(next);
+        }
+        if (next != null) {
+            next.setPrevious(previous);
+        }
+        current.setPrevious(null);
+        current.setNext(null);
+
+        // Get the next element to display
+        if (previous != null) {
+            return previous;
+        } else return next;
     }
 }

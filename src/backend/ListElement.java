@@ -97,14 +97,4 @@ public class ListElement<T> {
         this.data = data;
     }
 
-    public void remove() {
-        if (previous != null) {
-            previous.setNext(next);
-        }
-        if (next != null) {
-            next.setPrevious(previous);
-        }
-        this.previous = null;
-        this.next = null;
-    }
 }

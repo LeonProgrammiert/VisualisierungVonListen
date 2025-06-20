@@ -53,7 +53,9 @@ public class AddElementPopUp<T> extends JFrame {
            @Override
            public void mouseClicked(MouseEvent e) {
                 // Save previous state
-                Controller.getController().push(new ListEvent<T>(current.deepCopy(), ListEvent.events.add));
+               if (current != null) {
+                    Controller.getController().push(new ListEvent<T>(current.deepCopy(), ListEvent.events.add));
+               }
 
                 // Inserts new data
                 ListElement newData = new ListElement(textField.getText());

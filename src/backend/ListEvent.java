@@ -17,7 +17,7 @@ public class ListEvent<T> {
         this.listCopy = listCopy;
     }
 
-    public ListElement<T> getCopy() {
+    public ListElement<T> getListCopy() {
         return listCopy;
     }
 
