@@ -56,8 +56,10 @@ public class UndoRedoButton extends JPanel {
         iconLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 // Gets the currently displayed list element, makes a deep copy and sends it as event to the Controller
-                ListElement listCopy = Controller.getController().getListEditor().getCurrentListElement().deepCopy();
-                Controller.getController().pull(new ListEvent(listCopy, event));
+                if (isAvailable) {
+                    ListElement listCopy = Controller.getController().getListEditor().getCurrentListElement().deepCopy();
+                    Controller.getController().pull(new ListEvent(listCopy, event));
+                }
             }
             public void mouseEntered(MouseEvent e) {
                 // Highlights the button if available

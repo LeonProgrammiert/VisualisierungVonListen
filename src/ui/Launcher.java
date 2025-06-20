@@ -82,11 +82,13 @@ public class Launcher extends JFrame {
     }
 
     private JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
+        CustomIconButton button = new CustomIconButton(icon, labelText);
 
-        CustomIconButton panel = new CustomIconButton(icon, labelText);
+        // Set size
+        button.setNewSize(160, 80);
 
-        // Hover-Effekt
-        panel.addMouseListener(new MouseAdapter() { //Hey Panel, hör ab jetzt auf Mausbewegungen und erstelle einen zuhörer
+        // Actions that happen when button is clicked
+        button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
@@ -97,7 +99,7 @@ public class Launcher extends JFrame {
             }
         });
 
-        return panel;
+        return button;
     }
 
     private void open() {
@@ -110,7 +112,11 @@ public class Launcher extends JFrame {
         fileChooser.setCurrentDirectory(src);
         fileChooser.showOpenDialog(null);
         File file = fileChooser.getSelectedFile();
-        controller.openList(file);
+
+        // Prevent NullPointerException, if no file is selected
+        if (file != null) {
+            controller.openList(file);
+        }
     }
 
     private void export() {

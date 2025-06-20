@@ -10,6 +10,8 @@ import ui.legos.UndoRedoButton;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.io.File;
@@ -38,11 +40,11 @@ public class ListEditor extends JFrame {
         this.controller = controller;
         setValues();
         build();
+        setVisible(true);
     }
 
     private void setValues() {
         setTitle("List-Editor");
-        setVisible(true);
         setSize(1400, 1000);
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
@@ -67,7 +69,7 @@ public class ListEditor extends JFrame {
         container.setLayout(editorLayout);
 
         // define components
-        CustomButton backToLauncher = createButton("\u2190 Zurück zum Launcher", 12, eventTypes.backToLauncher);
+        CustomButton backToLauncher = createButton("← Zurück zum Launcher", 12, eventTypes.backToLauncher);
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
         current = createButton("Aktuell", 24, eventTypes.current);
@@ -79,30 +81,19 @@ public class ListEditor extends JFrame {
 
         // Gemeinsames Panel für Hinzufügen/Löschen + Undo/Redo
         JPanel actionPanel = new JPanel();
-        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
+        actionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         actionPanel.setBackground(new Color(24, 26, 28));
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        buttonPanel.setBackground(new Color(24, 26, 28));
 
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
 
-        buttonPanel.add(addNodeButton);
-        buttonPanel.add(deleteNodeButton);
-
-        JPanel undoRedoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        undoRedoPanel.setBackground(new Color(24, 26, 28));
-
         undoButton = new UndoRedoButton("↺", "rückgängig", ListEvent.events.undo);
-        undoRedoPanel.add(undoButton);
         redoButton = new UndoRedoButton("↻", "wiederherstellen", ListEvent.events.redo);
-        undoRedoPanel.add(redoButton);
 
-        actionPanel.add(buttonPanel);
-        actionPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        actionPanel.add(undoRedoPanel);
-
+        actionPanel.add(undoButton);
+        actionPanel.add(addNodeButton);
+        actionPanel.add(deleteNodeButton);
+        actionPanel.add(redoButton);
 
         // Add components
         addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
@@ -110,7 +101,7 @@ public class ListEditor extends JFrame {
         addComponentToGrid(container, successor, editorLayout, 2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
         addComponentToGrid(container, current, editorLayout, 1, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, index, editorLayout, 0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
-        addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
         add(container);
     }
@@ -168,6 +159,12 @@ public class ListEditor extends JFrame {
 
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
+        // Add padding
+        button.setBorder(new EmptyBorder(5,5,5,5));
+
+        // Set size
+        button.setNewSize(160,80);
+
         button.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {

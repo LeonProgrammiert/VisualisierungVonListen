@@ -7,6 +7,10 @@ public class CustomButton extends CustomPanel {
 
     protected JLabel textLabel;
 
+    public CustomButton(String text) {
+        setBackground(new Color(255, 40, 40));
+    }
+
     public CustomButton(String buttonText, int fontSize) {
 
         // Text
@@ -25,5 +29,15 @@ public class CustomButton extends CustomPanel {
 
     public void setText(String text){
         textLabel.setText(text);
+    }
+
+    public void setNewSize(Dimension size) {
+        setPreferredSize(size);
+        setMinimumSize(size);
+        setMaximumSize(size);
+    }
+
+    public void setNewSize(int width, int height) {
+        setNewSize(new Dimension(width, height));
     }
 }
