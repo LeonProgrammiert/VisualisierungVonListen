@@ -10,7 +10,7 @@ public class DeleteDialog extends JDialog {
     public DeleteDialog(ListEditor editor) {
         super(editor, "Element löschen", true);
         setLayout(new BorderLayout());
-        setSize(500, 160);
+        setSize(800, 200);
         setLocationRelativeTo(editor);
         getContentPane().setBackground(new Color(24, 26, 28));
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
