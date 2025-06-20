@@ -1,15 +1,14 @@
 package ui.legos;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class CustomButton extends CustomPanel {
-    private java.util.List<ActionListener> actionListeners = new ArrayList<>();
 
+    private java.util.List<ActionListener> actionListeners = new ArrayList<>();
     protected JLabel textLabel;
 
     public CustomButton(String buttonText, int fontSize) {
@@ -26,7 +25,6 @@ public class CustomButton extends CustomPanel {
         // Format
         setLayout(new GridBagLayout());
         add(textLabel);
-
     }
 
     public void setText(String text){
@@ -42,5 +40,15 @@ public class CustomButton extends CustomPanel {
         for (ActionListener l : actionListeners) {
             l.actionPerformed(evt);
         }
+    }
+
+    public void setNewSize(Dimension size) {
+        setPreferredSize(size);
+        setMinimumSize(size);
+        setMaximumSize(size);
+    }
+
+    public void setNewSize(int width, int height) {
+        setNewSize(new Dimension(width, height));
     }
 }
