@@ -110,7 +110,23 @@ public class Controller {
     public void pull(ListEvent event) {
         // Pulls the previous state of the list and updates the stacks
         ListElement oldState = stackManager.pull(event);
+
+        // Prüft, ob ein Zustand vorhanden ist
+        if (oldState == null) {
+            JOptionPane.showMessageDialog(
+                    listEditor,
+                    "Es gibt keinen vorherigen Zustand.",
+                    "Aktion nicht möglich",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+
         // Displays the previous state in the editor
         listEditor.openList(oldState);
+
+    }
+    public StackManager getStackManager() {
+        return stackManager;
     }
 }

@@ -9,7 +9,7 @@ public class ExitDialog extends JDialog {
         void onSave();
         void onDiscard();
     }
-
+    /*
     public ExitDialog(JFrame parent, ExitListener listener) {
         super(parent, "Änderungen speichern?", true);
         setLayout(new BorderLayout());
@@ -25,16 +25,15 @@ public class ExitDialog extends JDialog {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 15));
         buttonPanel.setBackground(new Color(24, 26, 28));
 
-        JButton cancel = DeleteDialog.createStyledButton("Abbrechen");
+        CustomButton cancel = new CustomButton("Abbrechen", 14);
         cancel.addActionListener(e -> dispose());
 
-        JButton discard = DeleteDialog.createStyledButton("Nein");
+        CustomButton discard = new CustomButton("Nein", 14);
         discard.addActionListener(e -> {
             dispose();
             listener.onDiscard();
         });
-
-        JButton save = DeleteDialog.createStyledButton("Ja");
+        CustomButton save = new CustomButton("Ja", 14);
         save.addActionListener(e -> {
             dispose();
             listener.onSave();
@@ -46,4 +45,5 @@ public class ExitDialog extends JDialog {
 
         add(buttonPanel, BorderLayout.SOUTH);
     }
+    */
 }

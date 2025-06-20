@@ -2,6 +2,7 @@ package ui;
 
 import backend.ListEvent;
 import backend.ListElement;
+import backend.StackManager;
 import controls.Controller;
 import ui.legos.AddElementPopUp;
 import ui.legos.CustomButton;
@@ -33,8 +34,11 @@ public class ListEditor extends JFrame {
     private UndoRedoButton undoButton;
     private UndoRedoButton redoButton;
 
+    private final StackManager stackManager;
+
     public ListEditor(Controller controller) {
         this.controller = controller;
+        this.stackManager = controller.getStackManager(); // der zentrale StackManager
         setValues();
         build();
     }
@@ -120,47 +124,57 @@ public class ListEditor extends JFrame {
     }
 
     private void clickedRemoveNode() {
-        DeleteDialog dialog = new DeleteDialog(this, new DeleteDialog.DeleteActionListener() {
-            @Override
-            public void onDeleteCurrent() {
-                if (currentListElement != null) {
-                    ListElement vorher = currentListElement.getPrevious();
-                    ListElement nachher = currentListElement.getNext();
-                    currentListElement.remove();
-
-                    if (nachher != null) {
-                        displayObjet(nachher);
-                    } else if (vorher != null) {
-                        displayObjet(vorher);
-                    } else {
-                        currentListElement = null;
-                        setData(new ListElement<>(""));
-                    }
-                }
-            }
-
-            @Override
-            public void onDeleteAll() {
-                if (currentListElement != null) {
-                    ListElement<String> first = currentListElement.getFirst();
-
-                    while (first != null) {
-                        ListElement<String> next = first.getNext();
-                        first.setPrevious(null);
-                        first.setNext(null);
-                        first = next;
-                    }
-
-                    currentListElement = null;
-                    clearData();
-                    controller.backToLauncher(null);
-                }
-                System.out.println("erfolgreich gelöscht"); // Vorrübergehend, bis speichern möglich
-            }
-
-        });
-
+        DeleteDialog dialog = new DeleteDialog(this);
         dialog.setVisible(true);
+    }
+    public void onDeleteAll() {
+        if (currentListElement != null) {
+            ListElement<String> first = currentListElement.getFirst();
+
+            while (first != null) {
+                ListElement<String> next = first.getNext();
+                first.setPrevious(null);
+                first.setNext(null);
+                first = next;
+            }
+
+            currentListElement = null;
+            clearData();
+            controller.backToLauncher(null);
+        }
+    }
+    public void onDeleteCurrent() {
+        if (currentListElement != null) {
+            ListElement vorher = currentListElement.getPrevious();
+            ListElement nachher = currentListElement.getNext();
+
+            // Backup für Undo
+            ListElement backup = currentListElement.deepCopy();
+            System.out.println("[LOG] Backup für Undo erstellt: " + backup.getElement());
+
+
+            // Event speichern
+            stackManager.push(new ListEvent(backup, ListEvent.events.remove));
+            System.out.println("[LOG] Event in Stack gespeichert: remove");
+
+            currentListElement.remove();
+
+            if (nachher != null) {
+                displayObjet(nachher);
+            } else if (vorher != null) {
+                displayObjet(vorher);
+            } else {
+                currentListElement = null;
+                clearData();
+            }
+        }
+    }
+    public void backToLauncher() {
+        controller.backToLauncher(currentListElement);
+    }
+
+    public void addNodeAtStart() {
+        addNode(AddElementPopUp.positions.atStart);
     }
 
     private void clickedAddNode() {
@@ -193,7 +207,7 @@ public class ListEditor extends JFrame {
         redoButton.setAvailable(redoAvailability);
     }
 
-    private void addNode(AddElementPopUp.positions position) {
+    public void addNode(AddElementPopUp.positions position) {
         new AddElementPopUp(currentListElement, position);
     }
 
@@ -233,16 +247,34 @@ public class ListEditor extends JFrame {
     }
 
     private void setData(ListElement newData) {
-        this.currentListElement = newData;
-        if (currentListElement != null) {
-            String[] readableData = newData.getData();
-            predecessor.setText(readableData[0]);
-            current.setText(readableData[1]);
-            successor.setText(readableData[2]);
-            setVisible(true);
-        } else {
-            addNode(AddElementPopUp.positions.firstElement);
+        System.out.println("[LOG] setData() aufgerufen mit: " + (newData != null ? newData.getElement() : "null"));
+
+        if (newData == null) {
+            clearData();
+            currentListElement = null;
+            System.out.println("[LOG] Kein Element vorhanden – Anzeige geleert.");
+            return;
         }
+
+        currentListElement = newData;
+        String[] readableData = newData.getData();
+
+        System.out.println("[LOG] Anzeige wird aktualisiert:");
+        System.out.println("       Vorgänger: " + readableData[0]);
+        System.out.println("       Aktuell:   " + readableData[1]);
+        System.out.println("       Nachfolger:" + readableData[2]);
+
+        predecessor.setText(readableData[0]);
+        current.setText(readableData[1]);
+        successor.setText(readableData[2]);
+
+        if (!isVisible()) {
+            System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
+            setVisible(true);
+        }
+
+        revalidate();
+        repaint();
     }
 
     private void displayObjet(ListElement newObject) {

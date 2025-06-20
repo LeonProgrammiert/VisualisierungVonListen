@@ -7,6 +7,11 @@ public class ListEvent<T> {
     private final ListElement<T> listCopy;
     private final events event;
 
+    // Konstruktor nur für undo/redo ohne Daten
+    public ListEvent(events event) {
+        this.event = event;
+        this.listCopy = null;
+    }
     public ListEvent(ListElement<T> listCopy, events event) {
         this.event = event;
         this.listCopy = listCopy;

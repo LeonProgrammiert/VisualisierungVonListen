@@ -6,6 +6,7 @@ public class StackManager<T> {
 
     private Stack<T> undoStack;
     private Stack<T> redoStack;
+    private static StackManager instance;
 
     private final Controller controller;
 
@@ -46,13 +47,15 @@ public class StackManager<T> {
                 // Gets the previous state and deletes it from the undo-Stack
                 prevState = undoStack.previousState();
                 // Pushes the previous state to the redo-Stack
-                redoStack.push(event);
+                if (prevState != null)
+                    redoStack.push(new ListEvent<>(prevState.getCopy(), ListEvent.events.redo));
                 break;
             case redo:
                 // Gets the previous state and deletes it from the redo-Stack
                 prevState = redoStack.previousState();
                 // Pushes the previous state to the undo-Stack
-                undoStack.push(event);
+                if (prevState != null)
+                    undoStack.push(new ListEvent<>(prevState.getCopy(), ListEvent.events.undo)); // dito
                 break;
             default:
                 throw new RuntimeException("Wrong event type given to pull");
@@ -60,10 +63,9 @@ public class StackManager<T> {
 
         // Updates the availability of the buttons
         updateButtons();
-
         // Returns the previous state or null
-        //TODO: Return the element of the current index
-        return prevState.getCopy();
+        return (prevState != null) ? prevState.getCopy() : null;
+
     }
 
     private void updateButtons() {
@@ -72,5 +74,12 @@ public class StackManager<T> {
                 undoStack.isAvailable(),
                 redoStack.isAvailable()
         );
+    }
+
+    public static StackManager getInstance() {
+        if (instance == null) {
+            instance = new StackManager(Controller.getController());
+        }
+        return instance;
     }
 }

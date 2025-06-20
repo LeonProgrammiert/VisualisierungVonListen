@@ -1,27 +1,17 @@
 package ui.legos;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.border.Border;
+
+import ui.ListEditor;
+
 import javax.swing.*;
 import java.awt.*;
 
-//Dialogfenster zum Löschen eines Elements oder der gesamten Liste.
 public class DeleteDialog extends JDialog {
 
-    public interface DeleteActionListener {
-        void onDeleteCurrent();
-        void onDeleteAll();
-    }
-
-    /*
-     parent = Das übergeordnete Fenster,
-     listener= Listener für die Reaktionen auf die Button-Aktionen
-     */
-    public DeleteDialog(JFrame parent, DeleteActionListener listener) {
-        super(parent, "Element löschen", true);
+    public DeleteDialog(ListEditor editor) {
+        super(editor, "Element löschen", true);
         setLayout(new BorderLayout());
         setSize(500, 160);
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(editor);
         getContentPane().setBackground(new Color(24, 26, 28));
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -33,17 +23,20 @@ public class DeleteDialog extends JDialog {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 15));
         buttonPanel.setBackground(new Color(24, 26, 28));
 
-        // erstelle die Buttons mit Hover-Effekt
-        JButton cancelButton = createStyledButton("Abbrechen");
+        CustomButton cancelButton = new CustomButton("Abbrechen", 14);
         cancelButton.addActionListener(e -> dispose());
 
-        JButton deleteCurrent = createStyledButton("Nur aktuelles Element");
+        CustomButton deleteCurrent = new CustomButton("Nur aktuelles Element", 14);
         deleteCurrent.addActionListener(e -> {
             dispose();
-            listener.onDeleteCurrent();
+            editor.onDeleteCurrent();
+
+            if (editor.getCurrentListElement() == null) {
+                showEmptyListOptions(editor);
+            }
         });
 
-        JButton deleteAll = createStyledButton("Komplette Liste");
+        CustomButton deleteAll = new CustomButton("Komplette Liste", 14);
         deleteAll.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(
                     DeleteDialog.this,
@@ -52,10 +45,10 @@ public class DeleteDialog extends JDialog {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE
             );
-
             if (confirm == JOptionPane.YES_OPTION) {
                 dispose();
-                listener.onDeleteAll();
+                editor.onDeleteAll(); // löscht wirklich alles
+                showEmptyListOptions(editor);
             }
         });
 
@@ -65,45 +58,23 @@ public class DeleteDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    //einheitliche JButton mit Hover-Effekt.
-    public static JButton createStyledButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        button.setBackground(new Color(55, 55, 55)); // heller als Hintergrund
-        button.setForeground(new Color(230, 230, 230)); // heller Text
-        button.setFocusPainted(false);
-        button.setOpaque(true); // WICHTIG: Macht Hintergrund sichtbar
+    private void showEmptyListOptions(ListEditor editor) {
+        String[] options = {"Zurück zum Launcher", "Neues Element hinzufügen"};
+        int choice = JOptionPane.showOptionDialog(
+                editor,
+                "Die Liste ist jetzt leer. Was möchtest du tun?",
+                "Aktion nach dem Löschen",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
 
-
-        // Statische äußere Border (unsichtbar, reserviert Platz für Linie)
-        Border fixedLine = BorderFactory.createLineBorder(new Color(55, 55, 55), 1);
-        Border padding = BorderFactory.createEmptyBorder(8, 16, 8, 16); // gleichmäßiges Padding
-        button.setBorder(BorderFactory.createCompoundBorder(fixedLine, padding));
-
-        // Hover-Effekt
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(new Color(75, 75, 75)); // heller beim Hover
-                button.setForeground(new Color(255, 182, 193)); // Rosa Text
-                button.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(255, 182, 193), 1),
-                        padding
-                ));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(new Color(55, 55, 55)); // zurück zur Grundfarbe
-                button.setForeground(new Color(230, 230, 230)); // heller Text
-                button.setBorder(BorderFactory.createCompoundBorder(
-                        fixedLine,
-                        padding
-                ));
-            }
-        });
-
-        return button;
+        if (choice == 0) {
+            editor.backToLauncher();
+        } else if (choice == 1) {
+            editor.addNodeAtStart();
+        }
     }
-
 }
