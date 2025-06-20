@@ -7,10 +7,6 @@ public class CustomButton extends CustomPanel {
 
     protected JLabel textLabel;
 
-    public CustomButton(String text) {
-        setBackground(new Color(255, 40, 40));
-    }
-
     public CustomButton(String buttonText, int fontSize) {
 
         // Text
