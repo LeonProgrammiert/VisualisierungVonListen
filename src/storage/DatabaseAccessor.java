@@ -10,8 +10,9 @@ public class DatabaseAccessor<T> {
 
     private final String source = "src/saves/";
 
-    public void saveList(ListElement first) {
-
+    public void saveList(ListElement<T> first) {
+        FileWriter fw;
+        String src = source;
     }
 
     public boolean addList(String name) {

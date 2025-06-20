@@ -2,29 +2,24 @@ package ui;
 
 import backend.ListEvent;
 import backend.ListElement;
-import backend.StackManager;
 import controls.Controller;
 import ui.legos.AddElementPopUp;
 import ui.legos.CustomButton;
 import ui.legos.DeleteDialog;
 import ui.legos.UndoRedoButton;
 
-
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
 import java.io.File;
 
-public class ListEditor extends JFrame {
+public class ListEditor <T> extends JFrame {
 
     private final Controller controller;
 
     private enum eventTypes {backToLauncher, previous, current, next, add, delete}
 
-    private ListElement currentListElement;
+    private ListElement<T> currentListElement;
 
     private CustomButton predecessor;
     private CustomButton successor;
@@ -103,12 +98,12 @@ public class ListEditor extends JFrame {
         actionPanel.add(redoButton);
 
         // Add components
-        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
-        addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
-        addComponentToGrid(container, successor, editorLayout, 2, 1, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
-        addComponentToGrid(container, current, editorLayout, 1, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
-        addComponentToGrid(container, index, editorLayout, 0, 2, 3, 1, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
-        addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, successor, editorLayout, 2, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
+        addComponentToGrid(container, current, editorLayout, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, index, editorLayout, 0, 2, 3, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
+        addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
         add(container);
     }
@@ -153,16 +148,16 @@ public class ListEditor extends JFrame {
     }
 
     public void addNode(AddElementPopUp.positions position) {
-        new AddElementPopUp(currentListElement, position);
+        new AddElementPopUp<T>(currentListElement, position);
     }
 
-    private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int height, int fill, Insets padding, int anchor) {
+    private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int fill, Insets padding, int anchor) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = fill;
         gbc.gridx = x;
         gbc.gridy = y;
         gbc.gridwidth = width;
-        gbc.gridheight = height;
+        gbc.gridheight = 1;
         gbc.insets = padding;
         gbc.anchor = anchor;
         layout.setConstraints(comp, gbc);
@@ -190,7 +185,7 @@ public class ListEditor extends JFrame {
         return button;
     }
 
-    public void openList(ListElement currentListElement) {
+    public void openList(ListElement<T> currentListElement) {
         this.currentListElement = currentListElement;
         if (currentListElement == null) {
             addNode(AddElementPopUp.positions.firstElement);
@@ -199,7 +194,7 @@ public class ListEditor extends JFrame {
         }
     }
 
-    private void setData(ListElement newData) {
+    private void setData(ListElement<T> newData) {
         System.out.println("[LOG] setData() aufgerufen mit: " + (newData != null ? newData.getElement() : "null"));
 
         if (newData == null) {
@@ -230,7 +225,7 @@ public class ListEditor extends JFrame {
         repaint();
     }
 
-    private void displayObjet(ListElement newObject) {
+    private void displayObjet(ListElement<T> newObject) {
         if (newObject != null) {
             controller.playSound(clickSound);
             setData(newObject);
@@ -239,7 +234,7 @@ public class ListEditor extends JFrame {
         }
     }
 
-    public ListElement getCurrentListElement() {
+    public ListElement<T> getCurrentListElement() {
         return currentListElement;
     }
 

@@ -54,11 +54,11 @@ public class AddElementPopUp<T> extends JFrame {
            public void mouseClicked(MouseEvent e) {
                 // Save previous state
                if (current != null) {
-                    Controller.getController().push(new ListEvent<T>(current.deepCopy(), ListEvent.events.add));
+                    Controller.getController().push(new ListEvent<>(current.deepCopy(), ListEvent.events.add));
                }
 
                 // Inserts new data
-                ListElement newData = new ListElement(textField.getText());
+                ListElement<T> newData = new ListElement(textField.getText());
                 insertData(position, newData);
 
                 // Displays new data
@@ -99,10 +99,10 @@ public class AddElementPopUp<T> extends JFrame {
     }
 
     private void insertAtEnd(ListElement<T> newLast) {
-        ListElement<T> previouslast = newLast.getTail();
+        ListElement<T> previousLast = newLast.getTail();
 
-        previouslast.setNext(newLast);
-        newLast.setPrevious(previouslast);
+        previousLast.setNext(newLast);
+        newLast.setPrevious(previousLast);
     }
 
     private void insertAtStart(ListElement<T> newFirst) {

@@ -13,15 +13,15 @@ import java.io.File;
 import java.io.IOException;
 
 //  verbindet UI, Daten und Logik
-public class Controller {
+public class Controller <T>{
 
     private String currentListName;
     private File currentListFile;
 
-    private final DatabaseAccessor databaseAccessor;
+    private final DatabaseAccessor<T> databaseAccessor;
     private final Launcher launcher;
-    private final ListEditor listEditor;
-    private final StackManager stackManager;
+    private final ListEditor<T> listEditor;
+    private final StackManager<T> stackManager;
 
     public static void main (String[] args) {
 
@@ -32,7 +32,7 @@ public class Controller {
             throw new RuntimeException(e);
         }
 
-        new Controller(); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
+        new Controller<>(); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
     }
 
     private static Controller instance;
@@ -40,13 +40,13 @@ public class Controller {
     public Controller() {
         instance = this;
 
-        databaseAccessor = new DatabaseAccessor();
-        stackManager = new StackManager(this);
+        databaseAccessor = new DatabaseAccessor<>();
+        stackManager = new StackManager<>(this);
 
         launcher = new Launcher(this);
         launcher.setVisible(true);
 
-        listEditor = new ListEditor(this);
+        listEditor = new ListEditor<>(this);
         listEditor.setVisible(false);
     }
 
@@ -54,7 +54,7 @@ public class Controller {
         return instance;
     }
 
-    public ListEditor getListEditor() {
+    public ListEditor<T> getListEditor() {
         return listEditor;
     }
 
@@ -84,14 +84,14 @@ public class Controller {
         currentListFile = file;
 
         // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
-        ListElement firstElement = databaseAccessor.openList(file);
+        ListElement<T> firstElement = databaseAccessor.openList(file);
 
         // Opens the list in the ListEditor
         launcher.setVisible(false);
         listEditor.openList(firstElement);
     }
 
-    public void backToLauncher(ListElement anker) {
+    public void backToLauncher(ListElement<T> anker) {
         launcher.setVisible(true);
         listEditor.setVisible(false);
     }
@@ -113,13 +113,13 @@ public class Controller {
         }).start();
     }
 
-    public void push(ListEvent event) {
+    public void push(ListEvent<T> event) {
         stackManager.push(event);
     }
 
-    public void pull(ListEvent event) {
+    public void pull(ListEvent<T> event) {
         // Pulls the previous state of the list and updates the stacks
-        ListElement oldState = stackManager.pull(event);
+        ListElement<T> oldState = stackManager.pull(event);
 
         // Prüft, ob ein Zustand vorhanden ist
         if (oldState == null) {

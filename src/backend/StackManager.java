@@ -6,7 +6,6 @@ public class StackManager<T> {
 
     private Stack<T> undoStack;
     private Stack<T> redoStack;
-    private static StackManager instance;
 
     private final Controller controller;
 
@@ -24,7 +23,7 @@ public class StackManager<T> {
         // Method for add and remove
 
         // Gets the eventType
-        ListEvent.events eventType = event.getEvent();
+        ListEvent.events eventType = event.event();
 
         // Checks for unwanted eventTypes
         if (eventType == ListEvent.events.undo || eventType == ListEvent.events.redo) {
@@ -42,20 +41,20 @@ public class StackManager<T> {
         // Method for redo and undo
 
         ListEvent<T> prevState;
-        switch (event.getEvent()) {
+        switch (event.event()) {
             case undo:
                 // Gets the previous state and deletes it from the undo-Stack
                 prevState = undoStack.previousState();
                 // Pushes the previous state to the redo-Stack
                 if (prevState != null)
-                    redoStack.push(new ListEvent<>(event.getListCopy(), ListEvent.events.redo));
+                    redoStack.push(new ListEvent<>(event.listCopy(), ListEvent.events.redo));
                 break;
             case redo:
                 // Gets the previous state and deletes it from the redo-Stack
                 prevState = redoStack.previousState();
                 // Pushes the previous state to the undo-Stack
                 if (prevState != null)
-                    undoStack.push(new ListEvent<>(event.getListCopy(), ListEvent.events.undo)); // dito
+                    undoStack.push(new ListEvent<>(event.listCopy(), ListEvent.events.undo)); // dito
                 break;
             default:
                 throw new RuntimeException("Wrong event type given to pull");
@@ -64,7 +63,7 @@ public class StackManager<T> {
         // Updates the availability of the buttons
         updateButtons();
         // Returns the previous state or null
-        return (prevState != null) ? prevState.getListCopy() : null;
+        return (prevState != null) ? prevState.listCopy() : null;
 
     }
 
@@ -74,12 +73,5 @@ public class StackManager<T> {
                 undoStack.isAvailable(),
                 redoStack.isAvailable()
         );
-    }
-
-    public static StackManager getInstance() {
-        if (instance == null) {
-            instance = new StackManager(Controller.getController());
-        }
-        return instance;
     }
 }

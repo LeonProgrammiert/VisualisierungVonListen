@@ -10,16 +10,13 @@ import java.awt.*;
 
 public class CustomButton extends CustomPanel {
 
-    private java.util.List<ActionListener> actionListeners = new ArrayList<>();
+    private final java.util.List<ActionListener> actionListeners = new ArrayList<>();
     protected JLabel textLabel;
-
-    private final Border emptyBorder;
-    private final Border unhighlightedBorder;
 
     public CustomButton(String buttonText, int fontSize) {
         // Initialize
-        emptyBorder = new EmptyBorder(5, 5, 5, 5);
-        unhighlightedBorder = BorderFactory.createLineBorder(new Color(40, 40, 40), 1);
+        Border emptyBorder = new EmptyBorder(5, 5, 5, 5);
+        Border unhighlightedBorder = BorderFactory.createLineBorder(new Color(40, 40, 40), 1);
 
         // Text
         textLabel = new JLabel(buttonText, SwingConstants.CENTER);
