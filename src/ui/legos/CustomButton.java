@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class CustomButton extends CustomPanel {
-    private java.util.List<ActionListener> listeners = new ArrayList<>();
+    private java.util.List<ActionListener> actionListeners = new ArrayList<>();
 
     protected JLabel textLabel;
 
@@ -20,15 +20,9 @@ public class CustomButton extends CustomPanel {
         textLabel.setForeground(Color.LIGHT_GRAY);
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Add Hover
+        // Mange click events and add hover effect
         addMouseListener(new CustomMouseListener(this, textLabel));
 
-       //Click Event
-        addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                fireActionEvent();
-            }
-        });
         // Format
         setLayout(new GridBagLayout());
         add(textLabel);
@@ -40,12 +34,12 @@ public class CustomButton extends CustomPanel {
     }
 
     public void addActionListener(ActionListener listener) {
-        listeners.add(listener);
+        actionListeners.add(listener);
     }
 
-    private void fireActionEvent() {
+    public void fireActionEvent() {
         ActionEvent evt = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getName());
-        for (ActionListener l : listeners) {
+        for (ActionListener l : actionListeners) {
             l.actionPerformed(evt);
         }
     }

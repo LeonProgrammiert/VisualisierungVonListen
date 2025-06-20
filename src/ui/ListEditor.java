@@ -227,15 +227,13 @@ public class ListEditor extends JFrame {
     //erstellt Button und verknüpft ihn mit der richtigen Funktion
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
-        button.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                switch (eventType) {
-                    case backToLauncher -> controller.backToLauncher(currentListElement);
-                    case next -> displayObjet(currentListElement.getNext());
-                    case previous -> displayObjet(currentListElement.getPrevious());
-                    case add -> clickedAddNode();
-                    case delete -> clickedRemoveNode();
-                }
+        button.addActionListener(e -> {
+            switch (eventType) {
+                case backToLauncher -> controller.backToLauncher(currentListElement);
+                case next -> displayObjet(currentListElement.getNext());
+                case previous -> displayObjet(currentListElement.getPrevious());
+                case add -> clickedAddNode();
+                case delete -> clickedRemoveNode();
             }
         });
         return button;
