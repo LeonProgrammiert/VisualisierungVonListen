@@ -170,20 +170,18 @@ public class AddDialog<T> extends CustomDialog<T> {
         obj.setPrevious(current);
 
         obj.setNext(next);
-        if (next != null) {
-            next.setPrevious(obj);
-        }
+        if (next != null) next.setPrevious(obj);
     }
 
     private void insertAtEnd(ListElement<T> newLast) {
-        ListElement<T> previousLast = newLast.getTail();
+        ListElement<T> previousLast = current.getTail();
 
         previousLast.setNext(newLast);
         newLast.setPrevious(previousLast);
     }
 
     private void insertAtStart(ListElement<T> newFirst) {
-        ListElement<T> previousFirst = newFirst.getFirst();
+        ListElement<T> previousFirst = current.getFirst();
 
         newFirst.setNext(previousFirst);
         previousFirst.setPrevious(newFirst);
