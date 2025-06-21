@@ -1,5 +1,7 @@
 package ui.legos;
 
+import ui.style.GUIStyle;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,12 +13,7 @@ public class CustomIconButton extends CustomButton {
         removeAll(); // Remove all components
 
         // Icon
-        JLabel iconLabel = new JLabel(icon, SwingConstants.CENTER);
-        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, 28));
-        iconLabel.setForeground(Color.WHITE);
-        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel iconLabel = GUIStyle.getStyledLabel(icon, 28);
 
         // Layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

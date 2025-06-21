@@ -11,8 +11,8 @@ public class GUIStyle {
 
     private static final Color white = Color.WHITE;
     private static final Color pink = new Color(255, 182, 193);
-
     private static final Color grayBackground = new Color(24, 26, 28);
+    private static final Color grayButton = new Color(40,40,40);
 
 
     // JLabels
@@ -46,6 +46,23 @@ public class GUIStyle {
         return getFont(fontSize, fontStyle);
     }
 
+    public static Color getWhiteColor() {
+        return white;
+    }
 
+    public static Color getPinkColor() {
+        return pink;
+    }
 
+    public static Color getGrayColor() {
+        return grayBackground;
+    }
+
+    public static Color getGrayButtonColor() {
+        return grayButton;
+    }
+
+    public static Color getGrayButtonHighlightedColor() {
+        return new Color(65, 65, 65);
+    }
 }

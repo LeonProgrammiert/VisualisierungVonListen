@@ -8,6 +8,7 @@ import ui.dialogs.AddDialog;
 import ui.legos.CustomButton;
 import ui.dialogs.DeleteDialog;
 import ui.legos.UndoRedoButton;
+import ui.style.GUIStyle;
 
 import java.awt.*;
 import javax.swing.*;
@@ -57,7 +58,7 @@ public class ListEditor <T> extends JFrame {
 
     //baut die Benutzeroberfläche
     public void build() {
-        Color backgroundColor = new Color(24, 26, 28);
+        Color backgroundColor = GUIStyle.getGrayColor();
 
         // Create container
         JPanel container = new JPanel();
@@ -77,15 +78,13 @@ public class ListEditor <T> extends JFrame {
         current = createButton("Aktuell", 24, eventTypes.current);
 
         // Label for index of te list
-        JLabel index = new JLabel("Indexplatzhalter");
-        index.setHorizontalAlignment(JLabel.CENTER);
-        index.setForeground(Color.WHITE);
-        index.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+        JLabel index = GUIStyle.getStyledLabel("Indexplatzhalter", 24);
 
         // Gemeinsames Panel für Hinzufügen/Löschen + Undo/Redo
         JPanel actionPanel = new JPanel();
         actionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         actionPanel.setBackground(new Color(24, 26, 28));
+        actionPanel.setOpaque(false);
 
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
@@ -110,7 +109,7 @@ public class ListEditor <T> extends JFrame {
     }
 
     private void clickedRemoveNode() {
-        DeleteDialog dialog = new DeleteDialog(this);
+        DeleteDialog<T> dialog = new DeleteDialog<>(this);
         dialog.setVisible(true);
     }
 
@@ -125,10 +124,6 @@ public class ListEditor <T> extends JFrame {
     public void setUndoRedoButtonAvailability(boolean undoAvailability, boolean redoAvailability) {
         undoButton.setAvailable(undoAvailability);
         redoButton.setAvailable(redoAvailability);
-    }
-
-    public void addNode(AddElementPositions position) {
-        new AddDialog<>(this, currentListElement, position);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int fill, Insets padding, int anchor) {
@@ -153,6 +148,7 @@ public class ListEditor <T> extends JFrame {
         // Set size
         button.setNewSize(160,80);
 
+        // Add click action
         button.addActionListener(e -> {
             switch (eventType) {
                 case backToLauncher -> controller.backToLauncher(currentListElement);

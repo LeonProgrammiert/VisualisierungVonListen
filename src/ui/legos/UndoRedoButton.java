@@ -3,6 +3,7 @@ package ui.legos;
 import backend.ListEvent;
 import backend.ListElement;
 import controls.Controller;
+import ui.style.GUIStyle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +16,6 @@ public class UndoRedoButton extends JPanel {
     private boolean isAvailable;
 
     private final Color unavailableColor = new Color(70, 70, 70);
-    private final Color availableColor = Color.WHITE;
-    private final Color highlightColor = new Color(255, 182, 193);
-
     private Color currentColor = unavailableColor;
 
     public UndoRedoButton(String symbol, String tooltip, ListEvent.events event) {
@@ -31,7 +29,7 @@ public class UndoRedoButton extends JPanel {
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(40, 40, 40));
+                g2.setColor(GUIStyle.getGrayButtonColor());
                 g2.fillOval(0, 0, getWidth(), getHeight());
                 g2.dispose();
             }
@@ -41,11 +39,8 @@ public class UndoRedoButton extends JPanel {
         circlePanel.setLayout(new BorderLayout());
 
         // Symbol im Kreis
-        iconLabel = new JLabel(symbol, SwingConstants.CENTER);
-        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, 34));
-        iconLabel.setForeground(currentColor);
+        iconLabel = GUIStyle.getStyledLabel(symbol, 34, currentColor);
         iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-        iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
         iconLabel.setVerticalAlignment(SwingConstants.CENTER);
         iconLabel.setToolTipText(tooltip);
 
@@ -63,7 +58,7 @@ public class UndoRedoButton extends JPanel {
 
             public void mouseEntered(MouseEvent e) {
                 // Highlights the button if available
-                if (isAvailable) iconLabel.setForeground(highlightColor);
+                if (isAvailable) iconLabel.setForeground(GUIStyle.getPinkColor());
             }
 
             public void mouseExited(MouseEvent e) {
@@ -79,7 +74,7 @@ public class UndoRedoButton extends JPanel {
         this.isAvailable = isAvailable;
 
         // Update Color
-        currentColor = isAvailable ? availableColor : unavailableColor;
+        currentColor = isAvailable ? GUIStyle.getWhiteColor() : unavailableColor;
         iconLabel.setForeground(currentColor);
     }
 }

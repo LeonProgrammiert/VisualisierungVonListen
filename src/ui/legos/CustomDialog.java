@@ -23,7 +23,7 @@ public abstract class CustomDialog<T> extends JDialog {
         setLayout(new BorderLayout());
         setSize(400, 200);
         setLocationRelativeTo(listEditor);
-        getContentPane().setBackground(new Color(24,26,28));
+        getContentPane().setBackground(GUIStyle.getGrayColor());
     }
 
     private void build(String message) {

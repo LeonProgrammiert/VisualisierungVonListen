@@ -7,9 +7,9 @@ public class StackManager<T> {
     private Stack<T> undoStack;
     private Stack<T> redoStack;
 
-    private final Controller controller;
+    private final Controller<T> controller;
 
-    public StackManager(Controller controller) {
+    public StackManager(Controller<T> controller) {
         this.controller = controller;
         initialize();
     }

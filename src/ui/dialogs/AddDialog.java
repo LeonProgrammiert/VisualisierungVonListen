@@ -13,6 +13,7 @@ import ui.ListEditor;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.function.Function;
 
 public class AddDialog<T> extends CustomDialog<T> {
 
@@ -135,7 +136,7 @@ public class AddDialog<T> extends CustomDialog<T> {
         insertData(position, newData);
 
         // Displays new data
-        Controller.getController().getListEditor().openList(newData);
+        listEditor.openList(newData);
         dispose();
     }
 

@@ -1,14 +1,14 @@
 package ui.dialogs;
 
-import controls.Controller;
-import ui.ListEditor;
 import ui.legos.CustomButton;
 import ui.legos.CustomDialog;
 import ui.legos.CustomPanel;
+import controls.Controller;
 import ui.style.GUIStyle;
+import ui.ListEditor;
 
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.*;
 import java.awt.*;
 
 public class NewListDialog<T> extends CustomDialog<T> {
@@ -23,10 +23,11 @@ public class NewListDialog<T> extends CustomDialog<T> {
 
     @Override
     public CustomPanel getOptionPanel() {
-        CustomPanel panel = new CustomPanel();
-        panel.setBackground(new Color(24,26,28));
-        panel.setBorder(new EmptyBorder(5,5,5,5));
-        panel.setLayout(new GridBagLayout());
+        CustomPanel container = new CustomPanel();
+        container.setBackground(GUIStyle.getGrayColor());
+        container.setBorder(new EmptyBorder(5,5,5,5));
+        container.setLayout(new GridBagLayout());
+
         GridBagConstraints gbc = new GridBagConstraints();
 
         // ---------- Line 0: text field ----------
@@ -41,18 +42,17 @@ public class NewListDialog<T> extends CustomDialog<T> {
         nameField.setFont(GUIStyle.getFont(18));
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setToolTipText("Listenname");
-        panel.add(nameField, gbc);
+        container.add(nameField, gbc);
 
-        // ---------- Line 1: button panel ----------
+        // ---------- Line 1: button container ----------
         gbc.gridy = 1;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
-
         JPanel buttonPanel = getButtonPanel(nameField);
-        panel.add(buttonPanel, gbc);
+        container.add(buttonPanel, gbc);
 
-        return panel;
+        return container;
     }
 
     private JPanel getButtonPanel(JTextField nameField) {

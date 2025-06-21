@@ -63,5 +63,3 @@ public class DatabaseAccessor<T> {
         return firstElement;
     }
 }
-
-

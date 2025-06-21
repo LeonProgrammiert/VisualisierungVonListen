@@ -7,6 +7,7 @@ import ui.ListEditor;
 import ui.legos.CustomButton;
 import ui.legos.CustomDialog;
 import ui.legos.CustomPanel;
+import ui.style.GUIStyle;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -21,25 +22,29 @@ public class DeleteDialog<T> extends CustomDialog<T> {
 
     @Override
     public CustomPanel getOptionPanel() {
-        CustomPanel buttonPanel = new CustomPanel();
-        buttonPanel.setBorder(new EmptyBorder(5,5,5,5));
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        CustomPanel container = new CustomPanel();
+        container.setBorder(new EmptyBorder(5,5,5,5));
+        container.setLayout(new FlowLayout(FlowLayout.CENTER));
+        container.setBackground(GUIStyle.getGrayColor());
 
-        buttonPanel.setBackground(new Color(24, 26, 28));
-
+        // Cancel button
         CustomButton cancelButton = new CustomButton("Abbrechen", 14);
         cancelButton.addActionListener(e -> dispose());
 
+        // Current element
         CustomButton deleteCurrent = new CustomButton("Nur aktuelles Element", 14);
         deleteCurrent.addActionListener(e -> deleteSingleElement());
 
+        // Whole list
         CustomButton deleteAll = new CustomButton("Komplette Liste", 14);
         deleteAll.addActionListener(e -> clickedDeleteWholeList());
 
-        buttonPanel.add(cancelButton);
-        buttonPanel.add(deleteCurrent);
-        buttonPanel.add(deleteAll);
-        return buttonPanel;
+        // Add components
+        container.add(cancelButton);
+        container.add(deleteCurrent);
+        container.add(deleteAll);
+
+        return container;
     }
 
     private void clickedDeleteWholeList() {

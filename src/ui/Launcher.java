@@ -3,6 +3,7 @@ package ui;
 import ui.dialogs.NewListDialog;
 import ui.legos.CustomIconButton;
 import controls.Controller;
+import ui.style.GUIStyle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,24 +33,13 @@ public class Launcher<T> extends JFrame {
     public void build() {
         // Hintergrund
         JPanel container = new JPanel();
-        container.setBackground(new Color(24, 26, 28));
+        container.setBackground(GUIStyle.getGrayColor());
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //alle container untereinander
 
         // Titel & Untertitel
-        JLabel title = new JLabel("Willkommen bei den friedlichen Koalas");
-        title.setFont(new Font("SansSerif", Font.BOLD, 24));
-        title.setForeground(Color.WHITE);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel subtitle1 = new JLabel("Hier wird deine Liste visualisiert");
-        subtitle1.setFont(new Font("SansSerif", Font.BOLD, 19));
-        subtitle1.setForeground(Color.WHITE);
-        subtitle1.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel subtitle2 = new JLabel("Erstelle oder öffne eine Liste");
-        subtitle2.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        subtitle2.setForeground(new Color(255, 182, 193));
-        subtitle2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel title = GUIStyle.getStyledLabel("Willkommen bei den friedlichen Koalas", 24);
+        JLabel subtitle1 = GUIStyle.getStyledLabel("Hier wird deine Liste visualisiert", 19);
+        JLabel subtitle2 = GUIStyle.getStyledLabel("Erstelle oder öffne eine Liste", 14, GUIStyle.getPinkColor());
 
         // Container für alle Buttons (untereinander, zentriert)
         JPanel buttonPanel = new JPanel();
@@ -76,15 +66,15 @@ public class Launcher<T> extends JFrame {
         container.add(buttonPanel);
         container.add(Box.createVerticalGlue());
 
-        add(container);
         //Fügt mainPanel in das Fenster (JFrame) ein. mainPanel enthält ganzen Inhalt: Titel, Buttons, Texte
-        setVisible(true);
+        add(container);
         //Macht das Fenster sichtbar auf dem Bildschirm
+        setVisible(true);
     }
 
     private JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
         CustomIconButton button = new CustomIconButton(icon, labelText);
-
+        button.setForeground(GUIStyle.getWhiteColor());
         // Set size
         button.setNewSize(160, 80);
 
@@ -99,7 +89,6 @@ public class Launcher<T> extends JFrame {
                 }
             }
         });
-
         return button;
     }
 
@@ -127,18 +116,5 @@ public class Launcher<T> extends JFrame {
 
     private void addList() {
         new NewListDialog<>(null, controller); // No listEditor needed
-
-        /*
-        String listenName = JOptionPane.showInputDialog(null, "Wie soll die neue Liste heißen?", "Neue Liste erstellen", JOptionPane.PLAIN_MESSAGE);
-
-        if (listenName == null) return;
-
-        if (!listenName.trim().isEmpty()) {
-            controller.addList(listenName.trim());
-        } else {
-            JOptionPane.showMessageDialog(null, "Die Liste braucht einen gültigen Namen.", "Fehler", JOptionPane.ERROR_MESSAGE);
-        }
-
-         */
     }
 }

@@ -13,13 +13,13 @@ import java.io.File;
 import java.io.IOException;
 
 //  verbindet UI, Daten und Logik
-public class Controller <T>{
+public class Controller <T> {
 
     private String currentListName;
     private File currentListFile;
 
     private final DatabaseAccessor<T> databaseAccessor;
-    private final Launcher launcher;
+    private final Launcher<T> launcher;
     private final ListEditor<T> listEditor;
     private final StackManager<T> stackManager;
 

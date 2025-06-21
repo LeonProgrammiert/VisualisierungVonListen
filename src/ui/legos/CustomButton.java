@@ -1,5 +1,7 @@
 package ui.legos;
 
+import ui.style.GUIStyle;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -19,10 +21,7 @@ public class CustomButton extends CustomPanel {
         Border unhighlightedBorder = BorderFactory.createLineBorder(new Color(40, 40, 40), 1);
 
         // Text
-        textLabel = new JLabel(buttonText, SwingConstants.CENTER);
-        textLabel.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
-        textLabel.setForeground(Color.LIGHT_GRAY);
-        textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        textLabel = GUIStyle.getStyledLabel(buttonText, fontSize);
 
         // Format
         setLayout(new GridBagLayout());
