@@ -1,5 +1,6 @@
 package ui;
 
+import ui.dialogs.NewListDialog;
 import ui.legos.CustomIconButton;
 import controls.Controller;
 
@@ -9,13 +10,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-public class Launcher extends JFrame {
+public class Launcher<T> extends JFrame {
 
-    private final Controller controller;
+    private final Controller<T> controller;
 
     enum eventTypes {add, open, export}
 
-    public Launcher(Controller controller) {
+    public Launcher(Controller<T> controller) {
         this.controller = controller;
         setValues();
         build();
@@ -125,6 +126,9 @@ public class Launcher extends JFrame {
     }
 
     private void addList() {
+        new NewListDialog<>(null, controller); // No listEditor needed
+
+        /*
         String listenName = JOptionPane.showInputDialog(null, "Wie soll die neue Liste heißen?", "Neue Liste erstellen", JOptionPane.PLAIN_MESSAGE);
 
         if (listenName == null) return;
@@ -134,5 +138,7 @@ public class Launcher extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Die Liste braucht einen gültigen Namen.", "Fehler", JOptionPane.ERROR_MESSAGE);
         }
+
+         */
     }
 }
