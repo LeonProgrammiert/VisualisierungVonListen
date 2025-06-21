@@ -2,10 +2,11 @@ package ui;
 
 import backend.ListEvent;
 import backend.ListElement;
+import backend.enumerations.AddElementPositions;
 import controls.Controller;
-import ui.legos.AddElementPopUp;
+import ui.dialogs.AddDialog;
 import ui.legos.CustomButton;
-import ui.legos.DeleteDialog;
+import ui.dialogs.DeleteDialog;
 import ui.legos.UndoRedoButton;
 
 import java.awt.*;
@@ -118,28 +119,7 @@ public class ListEditor <T> extends JFrame {
     }
 
     private void clickedAddNode() {
-        String[] options = {"Start", "Nächster", "Ende"};
-
-        // Show the option dialog
-        int choice = JOptionPane.showOptionDialog(
-                null,
-                "Choose one of the following options:",
-                "Custom Options Dialog",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
-
-        if (choice < 0) return;
-
-        AddElementPopUp.positions pos = switch (choice) {
-            case 0 -> AddElementPopUp.positions.atStart;
-            case 2 -> AddElementPopUp.positions.atEnd;
-            default -> AddElementPopUp.positions.asNext;
-        };
-        addNode(pos);
+        new AddDialog<>(this, currentListElement);
     }
 
     public void setUndoRedoButtonAvailability(boolean undoAvailability, boolean redoAvailability) {
@@ -147,8 +127,8 @@ public class ListEditor <T> extends JFrame {
         redoButton.setAvailable(redoAvailability);
     }
 
-    public void addNode(AddElementPopUp.positions position) {
-        new AddElementPopUp<T>(currentListElement, position);
+    public void addNode(AddElementPositions position) {
+        new AddDialog<>(this, currentListElement, position);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int fill, Insets padding, int anchor) {
@@ -188,7 +168,7 @@ public class ListEditor <T> extends JFrame {
     public void openList(ListElement<T> currentListElement) {
         this.currentListElement = currentListElement;
         if (currentListElement == null) {
-            addNode(AddElementPopUp.positions.firstElement);
+            new AddDialog<>(this, null, AddElementPositions.firstElement);
         } else {
             setData(currentListElement);
         }

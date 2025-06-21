@@ -9,7 +9,6 @@ public class CustomPanel extends JPanel {
         setLayout(new GridBagLayout());
         setBackground(new Color(40, 40, 40));
 
-        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setBorder(BorderFactory.createLineBorder(new Color(40, 40, 40), 1)); // erst sichtbar beim Hover (wenn rosa wird)
         setOpaque(true);
     }

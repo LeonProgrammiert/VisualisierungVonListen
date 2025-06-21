@@ -27,6 +27,7 @@ public class CustomButton extends CustomPanel {
         // Format
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, emptyBorder));
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         // Mange click events and add hover effect
         addMouseListener(new CustomMouseListener(this, textLabel));

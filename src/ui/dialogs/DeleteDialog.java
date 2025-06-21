@@ -1,34 +1,30 @@
-package ui.legos;
+package ui.dialogs;
 
 import backend.ListElement;
 import backend.ListEvent;
 import controls.Controller;
 import ui.ListEditor;
+import ui.legos.CustomButton;
+import ui.legos.CustomDialog;
+import ui.legos.CustomPanel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class DeleteDialog extends JDialog {
+public class DeleteDialog<T> extends CustomDialog<T> {
 
-    private ListEditor listEditor;
+    public DeleteDialog(ListEditor<T> listEditor) {
+        super(listEditor, "Element löschen", "Was möchtest du löschen?");
+        super.setSize(getWidth(), 130);
+    }
 
-    public DeleteDialog(ListEditor editor) {
-        super(editor, "Element löschen", true);
+    @Override
+    public CustomPanel getOptionPanel() {
+        CustomPanel buttonPanel = new CustomPanel();
+        buttonPanel.setBorder(new EmptyBorder(5,5,5,5));
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        this.listEditor = editor;
-
-        setLayout(new BorderLayout());
-        setSize(400, 150);
-        setLocationRelativeTo(editor);
-        getContentPane().setBackground(new Color(24, 26, 28));
-        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        JLabel message = new JLabel("Was möchtest du löschen?", SwingConstants.CENTER);
-        message.setForeground(Color.WHITE);
-        message.setFont(new Font("SansSerif", Font.PLAIN, 18));
-        add(message, BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 15));
         buttonPanel.setBackground(new Color(24, 26, 28));
 
         CustomButton cancelButton = new CustomButton("Abbrechen", 14);
@@ -43,7 +39,7 @@ public class DeleteDialog extends JDialog {
         buttonPanel.add(cancelButton);
         buttonPanel.add(deleteCurrent);
         buttonPanel.add(deleteAll);
-        add(buttonPanel, BorderLayout.SOUTH);
+        return buttonPanel;
     }
 
     private void clickedDeleteWholeList() {
@@ -57,19 +53,19 @@ public class DeleteDialog extends JDialog {
         if (confirm == JOptionPane.YES_OPTION) {
             dispose();
             deleteWholeList();
-            showEmptyListOptions(listEditor);
+            showEmptyListOptions();
         }
     }
 
     private void deleteWholeList() {
         // löscht wirklich alles
-        ListElement currentListElement = listEditor.getCurrentListElement();
+        ListElement<T> currentListElement = listEditor.getCurrentListElement();
 
         if (currentListElement != null) {
-            ListElement<String> first = currentListElement.getFirst();
+            ListElement<T> first = currentListElement.getFirst();
 
             while (first != null) {
-                ListElement<String> next = first.getNext();
+                ListElement<T> next = first.getNext();
                 first.setPrevious(null);
                 first.setNext(null);
                 first = next;
@@ -83,13 +79,13 @@ public class DeleteDialog extends JDialog {
 
     private void deleteSingleElement() {
         // Get current Element
-        ListElement current = listEditor.getCurrentListElement();
+        ListElement<T> current = listEditor.getCurrentListElement();
 
         // Push deep copy of current to the stack
-        Controller.getController().push(new ListEvent(current.deepCopy(), ListEvent.events.remove));
+        Controller.getController().push(new ListEvent<>(current.deepCopy(), ListEvent.events.remove));
 
         // Define next element to display
-        ListElement nextToDisplay = remove(current);
+        ListElement<T> nextToDisplay = remove(current);
 
         // Display the next element or show emptyListOptions
         dispose();
@@ -97,14 +93,14 @@ public class DeleteDialog extends JDialog {
         if (nextToDisplay != null) {
             listEditor.openList(nextToDisplay);
         } else {
-            showEmptyListOptions(listEditor);
+            showEmptyListOptions();
         }
     }
 
-    private void showEmptyListOptions(ListEditor editor) {
+    private void showEmptyListOptions() {
         String[] options = {"Zurück zum Launcher", "Neues Element hinzufügen"};
         int choice = JOptionPane.showOptionDialog(
-                editor,
+                listEditor,
                 "Die Liste ist jetzt leer. Was möchtest du tun?",
                 "Aktion nach dem Löschen",
                 JOptionPane.DEFAULT_OPTION,
@@ -115,13 +111,13 @@ public class DeleteDialog extends JDialog {
         );
 
         if (choice == 0) {
-            editor.backToLauncher();
+            listEditor.backToLauncher();
         } else if (choice == 1) {
             Controller.getController().openList(Controller.getController().getCurrentListFile());
         }
     }
 
-    public <T> ListElement<T> remove(ListElement<T> current) {
+    public ListElement<T> remove(ListElement<T> current) {
         // Get the previous and next
         ListElement<T> previous = current.getPrevious();
         ListElement<T> next = current.getNext();

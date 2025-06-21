@@ -61,6 +61,7 @@ public class Controller <T>{
     public static void handleError(String errorMessage) {
         System.out.println(errorMessage);
         // Später über JOptionPane ausgeben
+        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public void addList(String name) {
