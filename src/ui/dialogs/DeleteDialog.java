@@ -44,7 +44,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
 
     private void clickedDeleteWholeList() {
         int confirm = JOptionPane.showConfirmDialog(
-                DeleteDialog.this,
+                this,
                 "Bist du sicher, dass du die gesamte Liste löschen willst?",
                 "Sicher?",
                 JOptionPane.YES_NO_OPTION,

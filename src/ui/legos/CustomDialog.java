@@ -17,7 +17,7 @@ public abstract class CustomDialog<T> extends JDialog {
         setValues();
         build(message);
         add(getOptionPanel(), BorderLayout.SOUTH);
-}
+    }
 
     private void setValues() {
         setLayout(new BorderLayout());

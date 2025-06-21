@@ -21,32 +21,32 @@ public class AddDialog<T> extends CustomDialog<T> {
 
     private JTextField textField;
     private JComboBox<String> positionSelector;
-    private String[] positionOptions;
+    private String[] positionOptions = new String[]{"An den Start", "Als Nächstes", "An das Ende"};
     private boolean positionSelectorEditable = true;
 
     public AddDialog(ListEditor<T> listEditor, ListElement<T> current, AddElementPositions position) {
         // Call of the other constructor
-        this(listEditor, current);
+        this(listEditor, current, false);
 
         this.position = position;
 
         // Change the JComboBox options
         this.positionOptions = new String[]{"Als erstes Element", "An den Start", "Als Nächstes", "An das Ende"};
         this.positionSelectorEditable = false;
+        initializePositionSelector();
+        setVisible(true);
     }
 
-    public AddDialog(ListEditor<T> listEditor, ListElement<T> current) {
+    public AddDialog(ListEditor<T> listEditor, ListElement<T> current, boolean visible) {
         super(listEditor, "Neue Daten hinzufügen", "Bitte geben Sie neuen Daten ein");
 
         this.current = current;
 
         initializePositionSelector();
-        setVisible(true);
+        setVisible(visible);
     }
 
     private void initializePositionSelector() {
-        if (positionOptions == null) this.positionOptions = new String[]{"An den Start", "Als Nächstes", "An das Ende"};
-
         positionSelector.setModel(new DefaultComboBoxModel<>(positionOptions));
         positionSelector.setEnabled(positionSelectorEditable);
         // If it's the first element, set change the selected position
