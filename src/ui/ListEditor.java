@@ -119,7 +119,7 @@ public class ListEditor <T> extends JFrame {
     }
 
     private void clickedAddNode() {
-        new AddDialog<>(this, currentListElement);
+        new AddDialog<>(this, currentListElement, true);
     }
 
     public void setUndoRedoButtonAvailability(boolean undoAvailability, boolean redoAvailability) {
