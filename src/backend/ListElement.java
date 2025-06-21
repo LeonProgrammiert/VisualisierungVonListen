@@ -7,7 +7,7 @@ public class ListElement<T> {
     private ListElement<T> previous;
     private ListElement<T> next;
 
-    private T data;
+    private final T data;
 
     public ListElement(T data) {
         this.data = data;
@@ -67,11 +67,6 @@ public class ListElement<T> {
     public ListElement<T> deepCopy() {
         // Returns a deep copy of the list
 
-        // Handle empty list
-        if (getFirst() == null) {
-            return null;
-        }
-
         // Copy the first node
         ListElement<T> original = getFirst();
         ListElement<T> newFirst = new ListElement<>(original.data);
@@ -92,9 +87,4 @@ public class ListElement<T> {
 
         return newFirst;
     }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
 }
