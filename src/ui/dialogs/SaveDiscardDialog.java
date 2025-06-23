@@ -1,19 +1,23 @@
 package ui.dialogs;
 
-import java.awt.FlowLayout;
-import javax.swing.border.EmptyBorder;
-import ui.Launcher;
-import ui.ListEditor;
-import ui.legos.CustomButton;
 import ui.legos.CustomDialog;
+import ui.legos.CustomButton;
 import ui.legos.CustomPanel;
 import ui.style.GUIStyle;
+import ui.ListEditor;
+import ui.Launcher;
 
-public class SaveDiscardDialog<T> extends CustomDialog<T>{    
-    Launcher<T> launcher;
+import java.awt.*;
+import javax.swing.border.EmptyBorder;
+
+public class SaveDiscardDialog<T> extends CustomDialog<T>{
+
+    private final Launcher<T> launcher;
+    private final ListEditor<T> listEditor;
 
     public SaveDiscardDialog(ListEditor<T> listEditor, Launcher<T> launcher){
         super(listEditor, "Änderungen speichern?", "Es existieren ungespeicherte Änderungen.\n Was soll mit diesen gemacht werden?");
+        this.listEditor = listEditor;
         this.launcher = launcher;
         setSize(720, 120);
         setVisible(true);

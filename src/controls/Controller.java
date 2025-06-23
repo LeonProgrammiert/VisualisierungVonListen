@@ -91,6 +91,7 @@ public class Controller <T> {
     public void initializeStacks() {
         // Initialize the stacks every time a new list is opened
         stackManager.initialize();
+        listEditor.setUndoRedoButtonAvailability(false, false);
     }
 
     public void openList(File file) {
