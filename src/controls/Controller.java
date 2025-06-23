@@ -5,6 +5,7 @@ import backend.ListElement;
 import backend.StackManager;
 import storage.DatabaseAccessor;
 import ui.ListEditor;
+import ui.dialogs.SaveDiscardDialog;
 import ui.Launcher;
 
 import javax.sound.sampled.*;
@@ -17,6 +18,7 @@ public class Controller <T> {
 
     private String currentListName;
     private File currentListFile;
+    private boolean unsavedChanges;
 
     private final DatabaseAccessor<T> databaseAccessor;
     private final Launcher<T> launcher;
@@ -39,6 +41,8 @@ public class Controller <T> {
 
     public Controller() {
         instance = this;
+
+        unsavedChanges = false;
 
         databaseAccessor = new DatabaseAccessor<>();
         stackManager = new StackManager<>(this);
@@ -93,8 +97,12 @@ public class Controller <T> {
     }
 
     public void backToLauncher(ListElement<T> anker) {
-        launcher.setVisible(true);
-        listEditor.setVisible(false);
+        if(unsavedChanges){
+            new SaveDiscardDialog<>(listEditor, launcher);
+        } else{
+            launcher.setVisible(true);
+            listEditor.setVisible(false);
+        }
     }
 
     public void playSound(File soundFile) {
@@ -116,6 +124,7 @@ public class Controller <T> {
 
     public void push(ListEvent<T> event) {
         stackManager.push(event);
+        unsavedChanges = true;
     }
 
     public void pull(ListEvent<T> event) {
@@ -139,6 +148,13 @@ public class Controller <T> {
         // Displays the previous state in the editor
         listEditor.openList(oldState);
 
+    }
+
+    public void saveList(ListElement<T> firstElement){
+        if(unsavedChanges){
+            databaseAccessor.saveListToFile(firstElement, currentListFile);
+            unsavedChanges = false;
+        }
     }
 
     public File getCurrentListFile() {
