@@ -1,17 +1,16 @@
 package controls;
 
-import backend.ListEvent;
 import backend.ListElement;
+import backend.ListEvent;
 import backend.StackManager;
-import storage.DatabaseAccessor;
-import ui.ListEditor;
-import ui.dialogs.SaveDiscardDialog;
-import ui.Launcher;
-
-import javax.sound.sampled.*;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import storage.DatabaseAccessor;
+import ui.Launcher;
+import ui.ListEditor;
+import ui.dialogs.SaveDiscardDialog;
 
 //  verbindet UI, Daten und Logik
 public class Controller <T> {
@@ -103,6 +102,7 @@ public class Controller <T> {
             launcher.setVisible(true);
             listEditor.setVisible(false);
         }
+        unsavedChanges = false;
     }
 
     public void playSound(File soundFile) {

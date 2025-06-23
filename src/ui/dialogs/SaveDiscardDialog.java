@@ -2,7 +2,6 @@ package ui.dialogs;
 
 import java.awt.FlowLayout;
 import javax.swing.border.EmptyBorder;
-
 import ui.Launcher;
 import ui.ListEditor;
 import ui.legos.CustomButton;
@@ -52,6 +51,7 @@ public class SaveDiscardDialog<T> extends CustomDialog<T>{
 
     private void discard(){
         dispose();
+        listEditor.changeUnsavedStatus(false);
         listEditor.setVisible(false);
         launcher.setVisible(true);
     }
