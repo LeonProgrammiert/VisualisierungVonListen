@@ -6,6 +6,7 @@ import backend.StackManager;
 import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
+import ui.dialogs.ErrorMessageDialog;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -61,7 +62,10 @@ public class Controller <T> {
     public static void handleError(String errorMessage) {
         System.out.println(errorMessage);
         // Später über JOptionPane ausgeben
-        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+        //JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+
+        new ErrorMessageDialog<>(null, "Error", errorMessage).setVisible(true);
+
     }
 
     public void addList(String name) {
@@ -125,14 +129,6 @@ public class Controller <T> {
         // Prüft, ob ein Zustand vorhanden ist
         if (oldState == null) {
             handleError("Es gibt keinen vorherigen Zustand");
-            /*
-            JOptionPane.showMessageDialog(
-                    listEditor,
-                    "Es gibt keinen vorherigen Zustand.",
-                    "Aktion nicht möglich",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-             */
             return;
         }
 
