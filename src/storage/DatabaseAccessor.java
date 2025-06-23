@@ -10,9 +10,29 @@ public class DatabaseAccessor<T> {
 
     private final String source = "src/saves/";
 
-    public void saveList(ListElement<T> first) {
-        FileWriter fw;
-        String src = source;
+    public boolean saveListToFile(ListElement<T> first, File listFile){    
+        try(BufferedWriter fileWriter = new BufferedWriter(new FileWriter(listFile))){
+            ListElement<T> current = first;
+
+            // the first line of the file should be changed depending on 
+            // how custom objects are implemented in the future
+            fileWriter.write("metadata/attribute names");
+            fileWriter.newLine();
+
+            while(current != null){
+                fileWriter.write(current.getElement());
+                fileWriter.newLine();
+                current = current.getNext();
+            }
+            
+            fileWriter.close();
+
+            System.out.println("CSV-Datei gespeichert: " + listFile.getAbsolutePath());
+            return true;
+        } catch(IOException e){
+            System.err.println("Fehler beim Speichern der Liste: " + e.getMessage());
+            return false;
+        }
     }
 
     public boolean addList(String name) {
@@ -28,14 +48,7 @@ public class DatabaseAccessor<T> {
             }
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("data");
-            System.out.println("CSV-Datei erstellt: " + file.getAbsolutePath());
-            return true;
-        } catch (IOException e) {
-            System.err.println("Fehler beim Erstellen der Liste: " + e.getMessage());
-            return false;
-        }
+        return saveListToFile(null, file);
     }
 
     public ListElement<T> openList(File file) {

@@ -7,6 +7,7 @@ import controls.Controller;
 import ui.dialogs.AddDialog;
 import ui.legos.CustomButton;
 import ui.dialogs.DeleteDialog;
+import ui.dialogs.SaveDiscardDialog;
 import ui.legos.UndoRedoButton;
 import ui.style.GUIStyle;
 
@@ -19,13 +20,14 @@ public class ListEditor <T> extends JFrame {
 
     private final Controller controller;
 
-    private enum eventTypes {backToLauncher, previous, current, next, add, delete}
+    private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList}
 
     private ListElement<T> currentListElement;
 
     private CustomButton predecessor;
     private CustomButton successor;
     private CustomButton current;
+    private CustomButton saveListButton;
 
     private File clickSound;
     private File errorSound;
@@ -73,6 +75,7 @@ public class ListEditor <T> extends JFrame {
 
         // define components
         CustomButton backToLauncher = createButton("← Zurück zum Launcher", 12, eventTypes.backToLauncher);
+        saveListButton = createButton("🖫 Liste speichern", 16, eventTypes.saveList);
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
         current = createButton("Aktuell", 24, eventTypes.current);
@@ -98,7 +101,8 @@ public class ListEditor <T> extends JFrame {
         actionPanel.add(redoButton);
 
         // Add components
-        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHEAST);
         addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, successor, editorLayout, 2, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
         addComponentToGrid(container, current, editorLayout, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
@@ -133,13 +137,18 @@ public class ListEditor <T> extends JFrame {
         gbc.gridy = y;
         gbc.gridwidth = width;
         gbc.gridheight = 1;
-        gbc.insets = padding;
+        
+        // Insets are already set to 0 in the gbc-Constructor
+        if(padding != null){
+            gbc.insets = padding;
+        }
+        
         gbc.anchor = anchor;
         layout.setConstraints(comp, gbc);
         cont.add(comp);
     }
 
-    //erstellt Button und verknüpft ihn mit der richtigen Funktion
+    // erstellt Button und verknüpft ihn mit der richtigen Funktion
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
         // Add padding
@@ -152,13 +161,34 @@ public class ListEditor <T> extends JFrame {
         button.addActionListener(e -> {
             switch (eventType) {
                 case backToLauncher -> controller.backToLauncher(currentListElement);
-                case next -> displayObjet(currentListElement.getNext());
-                case previous -> displayObjet(currentListElement.getPrevious());
-                case add -> clickedAddNode();
-                case delete -> clickedRemoveNode();
+                case current -> {} // to be implemented
+                case next -> displayObject(currentListElement.getNext());
+                case previous -> displayObject(currentListElement.getPrevious());
+                case add -> {
+                    clickedAddNode();
+                    changeUnsavedStatus(true);
+                }
+                case delete -> {
+                    clickedRemoveNode();
+                    changeUnsavedStatus(true);
+                }
+                case saveList -> saveList();
             }
         });
         return button;
+    }
+
+    public void saveList(){
+        controller.saveList(getFirstListElement());
+        changeUnsavedStatus(false);
+    }
+
+    private ListElement<T> getFirstListElement() {
+        ListElement<T> currentElement = currentListElement;
+        while(currentElement.getPrevious() != null){
+            currentElement = currentElement.getPrevious();
+        }
+        return currentElement;
     }
 
     public void openList(ListElement<T> currentListElement) {
@@ -201,7 +231,7 @@ public class ListEditor <T> extends JFrame {
         repaint();
     }
 
-    private void displayObjet(ListElement<T> newObject) {
+    private void displayObject(ListElement<T> newObject) {
         if (newObject != null) {
             controller.playSound(clickSound);
             setData(newObject);
@@ -218,5 +248,13 @@ public class ListEditor <T> extends JFrame {
         predecessor.setText("");
         current.setText("");
         successor.setText("");
+    }
+
+    public void changeUnsavedStatus(boolean isUnsaved){
+        if(isUnsaved){
+            saveListButton.setText("🖫* Liste speichern");
+        } else{
+            saveListButton.setText("🖫 Liste speichern");
+        }
     }
 }

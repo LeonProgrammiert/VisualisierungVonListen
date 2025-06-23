@@ -1,7 +1,7 @@
 package controls;
 
-import backend.ListEvent;
 import backend.ListElement;
+import backend.ListEvent;
 import backend.StackManager;
 import storage.DatabaseAccessor;
 import ui.ListEditor;
@@ -12,12 +12,19 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import storage.DatabaseAccessor;
+import ui.Launcher;
+import ui.ListEditor;
+import ui.dialogs.SaveDiscardDialog;
 
 //  verbindet UI, Daten und Logik
 public class Controller <T> {
 
     private String currentListName;
     private File currentListFile;
+    private boolean unsavedChanges;
 
     private final DatabaseAccessor<T> databaseAccessor;
     private final Launcher<T> launcher;
@@ -40,6 +47,8 @@ public class Controller <T> {
 
     public Controller() {
         instance = this;
+
+        unsavedChanges = false;
 
         databaseAccessor = new DatabaseAccessor<>();
         stackManager = new StackManager<>(this);
@@ -97,8 +106,13 @@ public class Controller <T> {
     }
 
     public void backToLauncher(ListElement<T> anker) {
-        launcher.setVisible(true);
-        listEditor.setVisible(false);
+        if(unsavedChanges){
+            new SaveDiscardDialog<>(listEditor, launcher);
+        } else{
+            launcher.setVisible(true);
+            listEditor.setVisible(false);
+        }
+        unsavedChanges = false;
     }
 
     public void playSound(File soundFile) {
@@ -120,6 +134,7 @@ public class Controller <T> {
 
     public void push(ListEvent<T> event) {
         stackManager.push(event);
+        unsavedChanges = true;
     }
 
     public void pull(ListEvent<T> event) {
@@ -130,11 +145,19 @@ public class Controller <T> {
         if (oldState == null) {
             handleError("Es gibt keinen vorherigen Zustand");
             return;
+            //TODO update unsavedChanges
         }
 
         // Displays the previous state in the editor
         listEditor.openList(oldState);
 
+    }
+
+    public void saveList(ListElement<T> firstElement){
+        if(unsavedChanges){
+            databaseAccessor.saveListToFile(firstElement, currentListFile);
+            unsavedChanges = false;
+        }
     }
 
     public File getCurrentListFile() {
