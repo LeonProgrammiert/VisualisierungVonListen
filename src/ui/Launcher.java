@@ -115,6 +115,6 @@ public class Launcher<T> extends JFrame {
     }
 
     private void addList() {
-        new NewListDialog<>(null, controller); // No listEditor needed
+        new NewListDialog<>(this, controller); // No listEditor needed
     }
 }

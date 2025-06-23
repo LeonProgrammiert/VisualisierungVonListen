@@ -15,9 +15,12 @@ import java.awt.*;
 
 public class DeleteDialog<T> extends CustomDialog<T> {
 
-    public DeleteDialog(ListEditor<T> listEditor) {
-        super(listEditor, "Element löschen", "Was möchtest du löschen?");
+    private final ListEditor<T> listEditor;
+
+    public DeleteDialog(Frame parent, ListEditor<T> listEditor) {
+        super(parent, "Element löschen", "Was möchtest du löschen?");
         super.setSize(getWidth(), 130);
+        this.listEditor = listEditor;
     }
 
     @Override

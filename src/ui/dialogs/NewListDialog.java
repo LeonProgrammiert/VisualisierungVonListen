@@ -15,8 +15,8 @@ public class NewListDialog<T> extends CustomDialog<T> {
 
     private final Controller<T> controller;
 
-    public NewListDialog(ListEditor<T> listEditor, Controller<T> controller) {
-        super(listEditor, "Neue Liste erstellen", "Vergib einen Listenname:");
+    public NewListDialog(Frame parent, Controller<T> controller) {
+        super(parent, "Neue Liste erstellen", "Vergib einen Listenname:");
         this.controller = controller;
         setVisible(true);
     }
@@ -69,7 +69,7 @@ public class NewListDialog<T> extends CustomDialog<T> {
                 dispose();
                 controller.addList(nameField.getText());
             } else {
-                Controller.handleError("Bitte geben Sie einen Namen ein");
+                Controller.handleError("Bitte geben Sie einen gültigen Namen ein");
             }
         });
         buttonPanel.add(submitButton);

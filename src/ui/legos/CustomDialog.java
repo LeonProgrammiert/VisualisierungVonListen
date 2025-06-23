@@ -8,11 +8,11 @@ import java.awt.*;
 
 public abstract class CustomDialog<T> extends JDialog {
 
-    protected final ListEditor<T> listEditor;
+    private final Frame parent;
 
-    public CustomDialog(ListEditor<T> listEditor, String title, String message) {
-        super(listEditor, title, true);
-        this.listEditor = listEditor;
+    public CustomDialog(Frame parent, String title, String message) {
+        super(parent, title, true);
+        this.parent = parent;
 
         setValues();
         build(message);
@@ -22,7 +22,7 @@ public abstract class CustomDialog<T> extends JDialog {
     private void setValues() {
         setLayout(new BorderLayout());
         setSize(400, 200);
-        setLocationRelativeTo(listEditor);
+        setLocationRelativeTo(parent);
         getContentPane().setBackground(GUIStyle.getGrayColor());
     }
 

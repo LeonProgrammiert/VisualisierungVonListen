@@ -13,9 +13,10 @@ import ui.ListEditor;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.function.Function;
 
 public class AddDialog<T> extends CustomDialog<T> {
+
+    private final ListEditor<T> listEditor;
 
     private final ListElement<T> current;
     private AddElementPositions position;
@@ -25,10 +26,9 @@ public class AddDialog<T> extends CustomDialog<T> {
     private String[] positionOptions = new String[]{"An den Start", "Als Nächstes", "An das Ende"};
     private boolean positionSelectorEditable = true;
 
-    public AddDialog(ListEditor<T> listEditor, ListElement<T> current, AddElementPositions position) {
+    public AddDialog(Frame parent, ListEditor<T> listEditor, ListElement<T> current, AddElementPositions position) {
         // Call of the other constructor
-        this(listEditor, current, false);
-
+        this(parent, listEditor, current, false);
         this.position = position;
 
         // Change the JComboBox options
@@ -38,9 +38,10 @@ public class AddDialog<T> extends CustomDialog<T> {
         setVisible(true);
     }
 
-    public AddDialog(ListEditor<T> listEditor, ListElement<T> current, boolean visible) {
-        super(listEditor, "Neue Daten hinzufügen", "Bitte geben Sie neuen Daten ein");
+    public AddDialog(Frame parent, ListEditor<T> listEditor, ListElement<T> current, boolean visible) {
+        super(parent, "Neue Daten hinzufügen", "Bitte geben Sie neuen Daten ein");
 
+        this.listEditor = listEditor;
         this.current = current;
 
         initializePositionSelector();

@@ -39,7 +39,7 @@ public class ListElement<T> {
     }
 
     public String[] getData() {
-        //Gibt Array mit drei Werten zurück: Knoten oder „N/A“
+        //Gibt Array mit drei Werten zurück: Knot   en oder „N/A“
         String[] displayableData = new String[3];
         displayableData[0] = previous != null ? previous.getElement() : "N/A";
         displayableData[1] = data != null ? getElement() : "N/A";

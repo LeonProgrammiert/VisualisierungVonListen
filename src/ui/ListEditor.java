@@ -109,7 +109,7 @@ public class ListEditor <T> extends JFrame {
     }
 
     private void clickedRemoveNode() {
-        DeleteDialog<T> dialog = new DeleteDialog<>(this);
+        DeleteDialog<T> dialog = new DeleteDialog<>(this, this);
         dialog.setVisible(true);
     }
 
@@ -118,7 +118,7 @@ public class ListEditor <T> extends JFrame {
     }
 
     private void clickedAddNode() {
-        new AddDialog<>(this, currentListElement, true);
+        new AddDialog<>(this, this, currentListElement, true);
     }
 
     public void setUndoRedoButtonAvailability(boolean undoAvailability, boolean redoAvailability) {
@@ -164,7 +164,7 @@ public class ListEditor <T> extends JFrame {
     public void openList(ListElement<T> currentListElement) {
         this.currentListElement = currentListElement;
         if (currentListElement == null) {
-            new AddDialog<>(this, null, AddElementPositions.firstElement);
+            new AddDialog<>(this, this, null, AddElementPositions.firstElement);
         } else {
             setData(currentListElement);
         }
