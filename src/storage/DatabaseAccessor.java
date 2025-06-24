@@ -10,6 +10,17 @@ public class DatabaseAccessor<T> {
 
     private final String source = "src/saves/";
 
+    public boolean deleteList(File listFile){
+        boolean deleted = false;
+
+        // Delete file
+        if (listFile != null && listFile.exists()) {
+            deleted = listFile.delete();
+        }
+
+        return deleted;
+    }
+
     public boolean saveListToFile(ListElement<T> first, File listFile){    
         try(BufferedWriter fileWriter = new BufferedWriter(new FileWriter(listFile))){
             ListElement<T> current = first;
@@ -35,12 +46,12 @@ public class DatabaseAccessor<T> {
         }
     }
 
-    public boolean addList(String name) {
+    public boolean addList(String name, boolean overwrite) {
         // Create empty csv-file
         // Erstelle eine neue leere CSV-Datei im Projektordner
 
         File file = new File(source + name + ".csv");
-        if (file.exists()) {
+        if (file.exists() && !overwrite) {
             int ans = JOptionPane.showConfirmDialog(null, "Es gibt bereits eine Datei mit diesem Namen.\r\nDatei überschreiben?", "Datei existiert bereits", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             if (ans == JOptionPane.NO_OPTION || ans == JOptionPane.CLOSED_OPTION) {
@@ -71,7 +82,7 @@ public class DatabaseAccessor<T> {
                 previous = current;
             }
         } catch (IOException e) {
-            Controller.handleError(e.getLocalizedMessage());
+            Controller.displayMessage(e.getLocalizedMessage(), "Fehlermeldung");
         }
         return firstElement;
     }

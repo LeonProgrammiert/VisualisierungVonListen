@@ -122,7 +122,7 @@ public class AddDialog<T> extends CustomDialog<T> {
     private void clicked() {
         // Testing for empty text field
         if (textField.getText().isEmpty()) {
-            Controller.handleError("Keine Daten eingegeben");
+            Controller.displayMessage("Keine Daten eingegeben", "Fehlermeldung");
             return;
         }
 

@@ -5,7 +5,6 @@ import ui.legos.CustomDialog;
 import ui.legos.CustomPanel;
 import controls.Controller;
 import ui.style.GUIStyle;
-import ui.ListEditor;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
@@ -67,9 +66,9 @@ public class NewListDialog<T> extends CustomDialog<T> {
         submitButton.addActionListener(e -> {
             if (!nameField.getText().isEmpty()) {
                 dispose();
-                controller.addList(nameField.getText());
+                controller.addList(nameField.getText(), false);
             } else {
-                Controller.handleError("Bitte geben Sie einen gültigen Namen ein");
+                Controller.displayMessage("Bitte geben Sie einen gültigen Namen ein", "Fehlermeldung");
             }
         });
         buttonPanel.add(submitButton);

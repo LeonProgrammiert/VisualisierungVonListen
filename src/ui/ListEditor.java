@@ -1,24 +1,24 @@
 package ui;
 
-import backend.ListEvent;
-import backend.ListElement;
 import backend.enumerations.AddElementPositions;
-import controls.Controller;
-import ui.dialogs.AddDialog;
-import ui.legos.CustomButton;
 import ui.dialogs.DeleteDialog;
 import ui.dialogs.SaveDiscardDialog;
 import ui.legos.UndoRedoButton;
+import ui.legos.CustomButton;
+import ui.dialogs.AddDialog;
+import backend.ListElement;
+import controls.Controller;
+import backend.ListEvent;
 import ui.style.GUIStyle;
 
-import java.awt.*;
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.*;
 import java.io.File;
+import java.awt.*;
 
 public class ListEditor <T> extends JFrame {
 
-    private final Controller controller;
+    private final Controller<T> controller;
 
     private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList}
 
@@ -35,8 +35,9 @@ public class ListEditor <T> extends JFrame {
     private UndoRedoButton undoButton;
     private UndoRedoButton redoButton;
 
+    private boolean listHasBeenEdited;
 
-    public ListEditor(Controller controller) {
+    public ListEditor(Controller<T> controller) {
         this.controller = controller;
         setValues();
         build();
@@ -56,6 +57,8 @@ public class ListEditor <T> extends JFrame {
 
         clickSound = new File(System.getProperty("user.dir") + "/src/assets/clickSound.wav");
         errorSound = new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
+
+        listHasBeenEdited = false;
     }
 
     //baut die Benutzeroberfläche
@@ -113,11 +116,14 @@ public class ListEditor <T> extends JFrame {
     }
 
     private void clickedRemoveNode() {
-        DeleteDialog<T> dialog = new DeleteDialog<>(this, this);
+        DeleteDialog<T> dialog = new DeleteDialog<>(this, this, controller);
         dialog.setVisible(true);
     }
 
     public void backToLauncher() {
+        if (listHasBeenEdited) {
+            new SaveDiscardDialog<>(this);
+        }
         controller.backToLauncher(currentListElement);
     }
 
@@ -128,6 +134,8 @@ public class ListEditor <T> extends JFrame {
     public void setUndoRedoButtonAvailability(boolean undoAvailability, boolean redoAvailability) {
         undoButton.setAvailable(undoAvailability);
         redoButton.setAvailable(redoAvailability);
+        listHasBeenEdited = undoAvailability;
+        updateSaveAvailability();
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int fill, Insets padding, int anchor) {
@@ -160,18 +168,12 @@ public class ListEditor <T> extends JFrame {
         // Add click action
         button.addActionListener(e -> {
             switch (eventType) {
-                case backToLauncher -> controller.backToLauncher(currentListElement);
+                case backToLauncher -> backToLauncher();
                 case current -> {} // to be implemented
                 case next -> displayObject(currentListElement.getNext());
                 case previous -> displayObject(currentListElement.getPrevious());
-                case add -> {
-                    clickedAddNode();
-                    changeUnsavedStatus(true);
-                }
-                case delete -> {
-                    clickedRemoveNode();
-                    changeUnsavedStatus(true);
-                }
+                case add -> clickedAddNode();
+                case delete -> clickedRemoveNode();
                 case saveList -> saveList();
             }
         });
@@ -179,16 +181,11 @@ public class ListEditor <T> extends JFrame {
     }
 
     public void saveList(){
-        controller.saveList(getFirstListElement());
-        changeUnsavedStatus(false);
-    }
+        controller.saveList(currentListElement.getFirst());
 
-    private ListElement<T> getFirstListElement() {
-        ListElement<T> currentElement = currentListElement;
-        while(currentElement.getPrevious() != null){
-            currentElement = currentElement.getPrevious();
-        }
-        return currentElement;
+        // Update saving availability
+        listHasBeenEdited = false;
+        updateSaveAvailability();
     }
 
     public void openList(ListElement<T> currentListElement) {
@@ -228,7 +225,7 @@ public class ListEditor <T> extends JFrame {
 
         if (!isVisible()) {
             System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
-            setVisible(true);
+            this.setVisible(true);
         }
 
         revalidate();
@@ -258,8 +255,8 @@ public class ListEditor <T> extends JFrame {
         successor.setEnabled(false);
     }
 
-    public void changeUnsavedStatus(boolean isUnsaved){
-        if(isUnsaved){
+    public void updateSaveAvailability(){
+        if(listHasBeenEdited){
             saveListButton.setText("🖫* Liste speichern");
         } else{
             saveListButton.setText("🖫 Liste speichern");

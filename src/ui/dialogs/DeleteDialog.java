@@ -12,16 +12,17 @@ import ui.style.GUIStyle;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.io.File;
 
 public class DeleteDialog<T> extends CustomDialog<T> {
 
     private final ListEditor<T> listEditor;
+    private final Controller<T> controller;
 
-    public DeleteDialog(Frame parent, ListEditor<T> listEditor) {
+    public DeleteDialog(Frame parent, ListEditor<T> listEditor, Controller<T> controller) {
         super(parent, "Element löschen", "Was möchtest du löschen?");
         super.setSize(getWidth(), 130);
         this.listEditor = listEditor;
+        this.controller = controller;
     }
 
     @Override
@@ -52,57 +53,20 @@ public class DeleteDialog<T> extends CustomDialog<T> {
     }
 
     private void clickedDeleteWholeList() {
-            int confirm = JOptionPane.showConfirmDialog(
-                    listEditor,
-                    "Willst du wirklich die gesamte Liste dauerhaft löschen?",
-                    "Sicherheitsabfrage",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE
-            );
+        int confirm = JOptionPane.showConfirmDialog(
+                listEditor,
+                "Willst du wirklich die gesamte Liste dauerhaft löschen?",
+                "Sicherheitsabfrage",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        dispose();
 
-            if (confirm != JOptionPane.YES_OPTION) {
-                return; // Nutzer hat abgebrochen
-            }
-
-            // Speicher löschen
-            ListElement<T> current = listEditor.getCurrentListElement();
-            if (current != null) {
-                ListElement<T> first = current.getFirst();
-                while (first != null) {
-                    ListElement<T> next = first.getNext();
-                    first.setPrevious(null);
-                    first.setNext(null);
-                    first = next;
-                }
-            }
-
-            // UI leeren
-            listEditor.clearData();
-            listEditor.changeUnsavedStatus(false);
-
-            // Datei löschen
-            File fileToDelete = Controller.getController().getCurrentListFile();
-            if (fileToDelete != null && fileToDelete.exists()) {
-                boolean deleted = fileToDelete.delete();
-                if (deleted) {
-                    System.out.println("[LOG] Datei erfolgreich gelöscht: " + fileToDelete.getAbsolutePath());
-                } else {
-                    System.out.println("[WARN] Datei konnte nicht gelöscht werden.");
-                }
-            }
-
-            // Controller zurücksetzen
-            Controller.getController().setCurrentListElement(null);
-            Controller.getController().setSkipSavePrompt(true);
-
-            JOptionPane.showMessageDialog(
-                    listEditor,
-                    "Die Liste wurde erfolgreich gelöscht.",
-                    "Bestätigung",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Confirmed -> delete
+            Controller.getController().deleteList();
             listEditor.backToLauncher();
-
+        }
     }
 
     private void deleteSingleElement() {
@@ -110,9 +74,9 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         ListElement<T> current = listEditor.getCurrentListElement();
 
         // Push deep copy of current to the stack
-        Controller.getController().push(new ListEvent<>(current.deepCopy(), ListEvent.events.remove));
+        controller.push(new ListEvent<>(current.deepCopy(), ListEvent.events.remove));
 
-        // Define next element to display
+        // Define next element to display and remove the current element
         ListElement<T> nextToDisplay = remove(current);
 
         // Display the next element or show emptyListOptions
@@ -120,46 +84,8 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         if (nextToDisplay != null) {
             listEditor.openList(nextToDisplay);
         } else {
-                // Sicherheitsabfrage nur wenn Liste dadurch wirklich leer wäre
-                int confirm = JOptionPane.showConfirmDialog(
-                        listEditor,
-                        "Das war das letzte Element. Willst du wirklich die gesamte Liste dauerhaft löschen?",
-                        "Sicherheitsabfrage",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE
-                );
-
-                if (confirm != JOptionPane.YES_OPTION) {
-                    return; //Abbruch
-                }
-
-                listEditor.clearData();
-                listEditor.changeUnsavedStatus(false);
-
-                // Datei löschen
-                File fileToDelete = Controller.getController().getCurrentListFile();
-                if (fileToDelete != null && fileToDelete.exists()) {
-                    boolean deleted = fileToDelete.delete();
-                    if (deleted) {
-                        System.out.println("[LOG] Datei erfolgreich gelöscht: " + fileToDelete.getAbsolutePath());
-                    } else {
-                        System.out.println("[WARN] Datei konnte nicht gelöscht werden.");
-                    }
-                }
-
-                // Zustand zurücksetzen
-                Controller.getController().setCurrentListElement(null);
-                Controller.getController().setSkipSavePrompt(true);
-                JOptionPane.showMessageDialog(
-                        listEditor,
-                        "Die Liste wurde erfolgreich gelöscht.",
-                        "Bestätigung",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-                listEditor.backToLauncher();
-            }
-
-
+            showEmptyListOptions();
+        }
     }
 
     public ListElement<T> remove(ListElement<T> current) {
@@ -181,5 +107,29 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         if (previous != null) {
             return previous;
         } else return next;
+    }
+
+
+    private void showEmptyListOptions() {
+        String[] options = {"Zurück zum Launcher", "Neues Element hinzufügen"};
+        int choice = JOptionPane.showOptionDialog(
+                listEditor,
+                "Die Liste ist jetzt leer. Was möchtest du tun?",
+                "Aktion nach dem Löschen",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        if (choice == 0) {
+            // Deletes the list and opens the launcher
+            controller.deleteList();
+            controller.backToLauncher(null);
+        } else if (choice == 1) {
+            // Deletes the current element and asks to enter a new one
+            controller.addList(controller.getCurrentListName(), true);
+        }
     }
 }
