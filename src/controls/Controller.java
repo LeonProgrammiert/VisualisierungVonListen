@@ -12,40 +12,40 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import javax.sound.sampled.*;
-import javax.swing.*;
-import storage.DatabaseAccessor;
-import ui.Launcher;
-import ui.ListEditor;
+
 import ui.dialogs.SaveDiscardDialog;
 
 //  verbindet UI, Daten und Logik
-public class Controller <T> {
+public class Controller<T> {
 
     private String currentListName;
     private File currentListFile;
     private boolean unsavedChanges;
 
+    private boolean skipSavePrompt = false;
+    private ListElement<T> currentListElement;
     private final DatabaseAccessor<T> databaseAccessor;
     private final Launcher<T> launcher;
     private final ListEditor<T> listEditor;
     private final StackManager<T> stackManager;
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
 
         // sorgt dafür, dass das Aussehen des Programms dem Betriebssystem angepasst wird
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+        } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException |
+                 ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        new Controller<>(); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
+        new Controller<>(null); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
     }
 
     private static Controller instance;
 
-    public Controller() {
+    public Controller(ListElement<T> currentListElement) {
+        this.currentListElement = currentListElement;
         instance = this;
 
         unsavedChanges = false;
@@ -107,9 +107,16 @@ public class Controller <T> {
     }
 
     public void backToLauncher(ListElement<T> anker) {
-        if(unsavedChanges){
+        if (skipSavePrompt) {
+            skipSavePrompt = false; // nur einmal unterdrücken
+            launcher.setVisible(true);
+            listEditor.setVisible(false);
+            unsavedChanges = false;
+            return;
+        }
+        if (unsavedChanges) {
             new SaveDiscardDialog<>(listEditor, launcher);
-        } else{
+        } else {
             launcher.setVisible(true);
             listEditor.setVisible(false);
         }
@@ -154,8 +161,8 @@ public class Controller <T> {
 
     }
 
-    public void saveList(ListElement<T> firstElement){
-        if(unsavedChanges){
+    public void saveList(ListElement<T> firstElement) {
+        if (unsavedChanges) {
             databaseAccessor.saveListToFile(firstElement, currentListFile);
             unsavedChanges = false;
         }
@@ -163,5 +170,14 @@ public class Controller <T> {
 
     public File getCurrentListFile() {
         return currentListFile;
+    }
+
+    public void setCurrentListElement(ListElement<?> element) {
+        this.currentListElement = (ListElement<T>) element;
+    }
+
+    public void setSkipSavePrompt(boolean skipSavePrompt) {
+        this.skipSavePrompt = skipSavePrompt;
+
     }
 }

@@ -1,5 +1,6 @@
 package ui.dialogs;
 
+import controls.Controller;
 import ui.legos.CustomDialog;
 import ui.legos.CustomButton;
 import ui.legos.CustomPanel;
@@ -8,6 +9,8 @@ import ui.ListEditor;
 import ui.Launcher;
 
 import java.awt.*;
+import java.io.File;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class SaveDiscardDialog<T> extends CustomDialog<T>{
@@ -48,9 +51,30 @@ public class SaveDiscardDialog<T> extends CustomDialog<T>{
 
     private void save(){
         listEditor.saveList();
+
+        // Wenn die Liste leer ist → Datei löschen
+        if (listEditor.getCurrentListElement() == null) {
+            File file = Controller.getController().getCurrentListFile();
+            if (file != null && file.exists()) {
+                file.delete();
+                System.out.println("[LOG] Leere Datei gelöscht.");
+
+            }
+        } else {
+            listEditor.saveList(); // Normales Speichern bei vorhandener Liste
+        }
+
         dispose();
         listEditor.setVisible(false);
         launcher.setVisible(true);
+
+        JOptionPane.showMessageDialog(
+                listEditor,
+                "Die Datei wurde gelöscht.",
+                "Speicherung abgeschlossen",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+
     }
 
     private void discard(){

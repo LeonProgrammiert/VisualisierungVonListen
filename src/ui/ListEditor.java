@@ -137,12 +137,12 @@ public class ListEditor <T> extends JFrame {
         gbc.gridy = y;
         gbc.gridwidth = width;
         gbc.gridheight = 1;
-        
+
         // Insets are already set to 0 in the gbc-Constructor
         if(padding != null){
             gbc.insets = padding;
         }
-        
+
         gbc.anchor = anchor;
         layout.setConstraints(comp, gbc);
         cont.add(comp);
@@ -222,6 +222,10 @@ public class ListEditor <T> extends JFrame {
         current.setText(readableData[1]);
         successor.setText(readableData[2]);
 
+        predecessor.setEnabled(true);
+        current.setEnabled(true);
+        successor.setEnabled(true);
+
         if (!isVisible()) {
             System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
             setVisible(true);
@@ -245,9 +249,13 @@ public class ListEditor <T> extends JFrame {
     }
 
     public void clearData() {
-        predecessor.setText("");
-        current.setText("");
-        successor.setText("");
+        predecessor.setText("N/A");
+        current.setText("N/A");
+        successor.setText("N/A");
+
+        predecessor.setEnabled(false);
+        current.setEnabled(false);
+        successor.setEnabled(false);
     }
 
     public void changeUnsavedStatus(boolean isUnsaved){
