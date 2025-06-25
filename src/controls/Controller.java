@@ -6,14 +6,13 @@ import backend.StackManager;
 import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
-import ui.dialogs.ErrorMessageDialog;
+import ui.dialogs.CustomOptionPane;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
-import ui.dialogs.SaveDiscardDialog;
 
 //  verbindet UI, Daten und Logik
 public class Controller<T> {
@@ -67,7 +66,9 @@ public class Controller<T> {
     }
 
     public static void displayMessage(String message, String title) {
-        new ErrorMessageDialog<>(null, title, message).setVisible(true);
+        //new ErrorMessageDialog<>(null, title, message).setVisible(true);
+        CustomOptionPane.showMessageDialog(null, title, message);
+
     }
 
     public void addList(String name, boolean overwrite) {

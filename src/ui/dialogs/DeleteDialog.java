@@ -53,14 +53,9 @@ public class DeleteDialog<T> extends CustomDialog<T> {
     }
 
     private void clickedDeleteWholeList() {
-        int confirm = JOptionPane.showConfirmDialog(
-                listEditor,
-                "Willst du wirklich die gesamte Liste dauerhaft löschen?",
+        int confirm = CustomOptionPane.showConfirmDialog(null,
                 "Sicherheitsabfrage",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-        );
-        dispose();
+                "Willst du wirklich die gesamte Liste dauerhaft löschen?");
 
         if (confirm == JOptionPane.YES_OPTION) {
             // Confirmed -> delete
