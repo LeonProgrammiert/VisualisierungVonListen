@@ -262,4 +262,10 @@ public class ListEditor <T> extends JFrame {
             saveListButton.setText("🖫 Liste speichern");
         }
     }
+
+    public void markListAsEdited() {
+        listHasBeenEdited = true;
+        updateSaveAvailability();
+    }
+
 }
