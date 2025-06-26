@@ -5,7 +5,6 @@ import ui.legos.CustomDialog;
 import ui.legos.CustomPanel;
 import controls.Controller;
 import ui.style.GUIStyle;
-import ui.ListEditor;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;

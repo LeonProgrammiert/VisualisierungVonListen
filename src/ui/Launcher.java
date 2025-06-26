@@ -15,7 +15,7 @@ public class Launcher<T> extends JFrame {
 
     private final Controller<T> controller;
 
-    enum eventTypes {add, open, export}
+    enum eventTypes {add, open}
 
     public Launcher(Controller<T> controller) {
         this.controller = controller;
@@ -25,7 +25,7 @@ public class Launcher<T> extends JFrame {
 
     public void setValues() {
         setTitle("Visualisierung von Listen");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //Schließt Programm, wenn das Fenster schließt
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1400, 1000);
         setLocationRelativeTo(null);
     }
@@ -37,38 +37,48 @@ public class Launcher<T> extends JFrame {
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //alle container untereinander
 
         // Titel & Untertitel
-        JLabel title = GUIStyle.getStyledLabel("Willkommen bei den friedlichen Koalas", 24);
-        JLabel subtitle1 = GUIStyle.getStyledLabel("Hier wird deine Liste visualisiert", 19);
-        JLabel subtitle2 = GUIStyle.getStyledLabel("Erstelle oder öffne eine Liste", 14, GUIStyle.getPinkColor());
+        JLabel title = GUIStyle.getStyledLabel("Willkommen bei den friedlichen Koalas", 40);
+        JLabel subtitle1 = GUIStyle.getStyledLabel("Hier wird deine Liste visualisiert", 30);
+        JLabel subtitle2 = GUIStyle.getStyledLabel("Erstelle oder öffne eine Liste", 22, GUIStyle.getPinkColor());
 
-        // Container für alle Buttons (untereinander, zentriert)
+        // Container für alle Buttons (nebeneinander, zentriert)
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setBackground(container.getBackground());
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Buttons einfügen
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20))); //wie margin in css, abstand zwischen den buttons
+        buttonPanel.add(Box.createRigidArea(new Dimension(10, 10))); //wie margin in css, abstand zwischen den buttons
         buttonPanel.add(createIconButton("+", "Neue Liste", eventTypes.add)); // button besteht aus Icon+Text, wird per Methode createIconButton(...) gebaut
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        buttonPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen", eventTypes.open));
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        buttonPanel.add(createIconButton("\uD83D\uDCE4", "Exportieren", eventTypes.export));
 
-        // Add to container
-        container.add(Box.createVerticalGlue());        // flexibler Platzfüller, der überschüssigen Raum verteilt. Alles vertikal mittig
-        container.add(title);
-        container.add(Box.createRigidArea(new Dimension(0, 10)));
-        container.add(subtitle1);
-        container.add(Box.createRigidArea(new Dimension(0, 30))); //fester platzhalter
-        container.add(subtitle2);
-        container.add(Box.createRigidArea(new Dimension(0, 50)));
-        container.add(buttonPanel);
+        // Neues Panel für mittigen Inhalt mit Rahmen
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBackground(container.getBackground());
+        centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(GUIStyle.getPinkColor(), 2),  // sichtbarer Rahmen
+                BorderFactory.createEmptyBorder(30, 50, 30, 50)
+        ));
+
+
+        centerPanel.add(Box.createRigidArea(new Dimension(10, 50)));
+        centerPanel.add(title);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        centerPanel.add(subtitle1);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 60)));
+        centerPanel.add(subtitle2);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerPanel.add(buttonPanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+
+        container.add(Box.createVerticalGlue());
+        container.add(centerPanel);
         container.add(Box.createVerticalGlue());
 
-        //Fügt mainPanel in das Fenster (JFrame) ein. mainPanel enthält ganzen Inhalt: Titel, Buttons, Texte
         add(container);
-        //Macht das Fenster sichtbar auf dem Bildschirm
         setVisible(true);
     }
 
@@ -76,7 +86,8 @@ public class Launcher<T> extends JFrame {
         CustomIconButton button = new CustomIconButton(icon, labelText);
         button.setForeground(GUIStyle.getWhiteColor());
         // Set size
-        button.setNewSize(160, 80);
+        button.setNewSize(220, 110);
+
 
         // Actions that happen when button is clicked
         button.addMouseListener(new MouseAdapter() {
@@ -84,7 +95,6 @@ public class Launcher<T> extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 switch (eventType) {
                     case open -> open();
-                    case export -> export();
                     case add -> addList();
                 }
             }
@@ -108,10 +118,6 @@ public class Launcher<T> extends JFrame {
             controller.initializeStacks();
             controller.openList(file);
         }
-    }
-
-    private void export() {
-
     }
 
     private void addList() {
