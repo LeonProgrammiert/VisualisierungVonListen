@@ -2,17 +2,17 @@ package ui.legos;
 
 import ui.style.GUIStyle;
 
+import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.Border;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class CustomButton extends CustomPanel {
 
-    private final java.util.List<ActionListener> actionListeners = new ArrayList<>();
+    private final ArrayList<ActionListener> actionListeners = new ArrayList<>();
     protected JLabel textLabel;
 
     public CustomButton(String buttonText, int fontSize) {

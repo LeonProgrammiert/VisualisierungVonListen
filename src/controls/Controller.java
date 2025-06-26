@@ -6,28 +6,26 @@ import backend.StackManager;
 import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
-import ui.dialogs.ErrorMessageDialog;
+import ui.dialogs.CustomOptionPane;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
-import ui.dialogs.SaveDiscardDialog;
 
 //  verbindet UI, Daten und Logik
 public class Controller<T> {
 
+    // Current list data
     private String currentListName;
     private File currentListFile;
-    private boolean unsavedChanges;
 
-    private boolean skipSavePrompt = false;
-    private ListElement<T> currentListElement;
+    // Instances
     private final DatabaseAccessor<T> databaseAccessor;
-    private final Launcher<T> launcher;
-    private final ListEditor<T> listEditor;
     private final StackManager<T> stackManager;
+    private final ListEditor<T> listEditor;
+    private final Launcher<T> launcher;
 
     public static void main(String[] args) {
 
@@ -39,25 +37,24 @@ public class Controller<T> {
             throw new RuntimeException(e);
         }
 
-        new Controller<>(null); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
+        new Controller<>(); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
     }
 
     private static Controller instance;
 
-    public Controller(ListElement<T> currentListElement) {
-        this.currentListElement = currentListElement;
+    public Controller() {
+        // Initialize
         instance = this;
 
-        unsavedChanges = false;
-
-        databaseAccessor = new DatabaseAccessor<>();
+        // Initialize instances
         stackManager = new StackManager<>(this);
-
-        launcher = new Launcher(this);
-        launcher.setVisible(true);
-
         listEditor = new ListEditor<>(this);
+        launcher = new Launcher<>(this);
+        databaseAccessor = new DatabaseAccessor<>();
+
+        // Set visibilities
         listEditor.setVisible(false);
+        launcher.setVisible(true);
     }
 
     public static Controller getController() {
@@ -68,22 +65,21 @@ public class Controller<T> {
         return listEditor;
     }
 
-    public static void handleError(String errorMessage) {
-        System.out.println(errorMessage);
-        // Später über JOptionPane ausgeben
-        //JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
-
-        new ErrorMessageDialog<>(null, "Error", errorMessage).setVisible(true);
+    public static void displayMessage(String message, String title) {
+        //new ErrorMessageDialog<>(null, title, message).setVisible(true);
+        CustomOptionPane.showMessageDialog(null, title, message);
 
     }
 
-    public void addList(String name) {
+    public void addList(String name, boolean overwrite) {
         // Creates a new list
         this.currentListName = name;
-        boolean check = databaseAccessor.addList(name);
+
+        boolean check = databaseAccessor.addList(name, overwrite);
+
+        initializeStacks();
         if (check) {
-            String path = System.getProperty("user.dir") + "/src/saves/" + name + ".csv";
-            initializeStacks();
+            String path = System.getProperty("user.dir") + "/src/saves/" + currentListName + ".csv";
             openList(new File(path));
         }
     }
@@ -107,20 +103,10 @@ public class Controller<T> {
     }
 
     public void backToLauncher(ListElement<T> anker) {
-        if (skipSavePrompt) {
-            skipSavePrompt = false; // nur einmal unterdrücken
-            launcher.setVisible(true);
-            listEditor.setVisible(false);
-            unsavedChanges = false;
-            return;
-        }
-        if (unsavedChanges) {
-            new SaveDiscardDialog<>(listEditor, launcher);
-        } else {
-            launcher.setVisible(true);
-            listEditor.setVisible(false);
-        }
-        unsavedChanges = false;
+        // Set visibilities
+        launcher.setVisible(true);
+        launcher.toFront();
+        listEditor.setVisible(false);
     }
 
     public void playSound(File soundFile) {
@@ -135,14 +121,13 @@ public class Controller<T> {
                 Thread.sleep(clip.getMicrosecondLength() / 1000);
             } catch (UnsupportedAudioFileException | IOException | InterruptedException |
                      LineUnavailableException e) {
-                handleError(e.getMessage());
+                displayMessage(e.getMessage(), "Fehlermeldung");
             }
         }).start();
     }
 
     public void push(ListEvent<T> event) {
         stackManager.push(event);
-        unsavedChanges = true;
     }
 
     public void pull(ListEvent<T> event) {
@@ -151,7 +136,7 @@ public class Controller<T> {
 
         // Prüft, ob ein Zustand vorhanden ist
         if (oldState == null) {
-            handleError("Es gibt keinen vorherigen Zustand");
+            displayMessage("Es gibt keinen vorherigen Zustand", "Fehlermeldung");
             return;
             //TODO update unsavedChanges
         }
@@ -162,22 +147,22 @@ public class Controller<T> {
     }
 
     public void saveList(ListElement<T> firstElement) {
-        if (unsavedChanges) {
-            databaseAccessor.saveListToFile(firstElement, currentListFile);
-            unsavedChanges = false;
+        databaseAccessor.saveListToFile(firstElement, currentListFile);
+    }
+
+    public String getCurrentListName() {
+        return currentListName;
+    }
+
+    public void deleteList() {
+        boolean confirmed = databaseAccessor.deleteList(currentListFile);
+        // Print LOG
+        if (confirmed) {
+            System.out.println("[LOG] Datei erfolgreich gelöscht: " + currentListFile.getAbsolutePath());
+            displayMessage("Datei erfolgreich gelöscht: " + currentListName, "Löschen bestätigt");
+        } else {
+            System.out.println("[WARN] Datei konnte nicht gelöscht werden.");
         }
     }
 
-    public File getCurrentListFile() {
-        return currentListFile;
-    }
-
-    public void setCurrentListElement(ListElement<?> element) {
-        this.currentListElement = (ListElement<T>) element;
-    }
-
-    public void setSkipSavePrompt(boolean skipSavePrompt) {
-        this.skipSavePrompt = skipSavePrompt;
-
-    }
 }

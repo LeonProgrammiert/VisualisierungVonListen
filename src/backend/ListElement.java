@@ -33,7 +33,7 @@ public class ListElement<T> {
         try {
             return data.toString();
         } catch (Exception e) {
-            Controller.handleError("Der Typ kann nicht in einen String umgewandelt werden!");
+            Controller.displayMessage("Der Typ kann nicht in einen String umgewandelt werden!", "Fehlermeldung");
             return "Error";
         }
     }
