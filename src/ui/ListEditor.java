@@ -1,5 +1,6 @@
 package ui;
 
+import backend.ListUtilities;
 import backend.enumerations.AddElementPositions;
 import ui.dialogs.DeleteDialog;
 import ui.dialogs.SaveDiscardDialog;
@@ -18,9 +19,9 @@ import java.awt.*;
 
 public class ListEditor <T> extends JFrame {
 
-    private final Controller<T> controller;
-
     private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList}
+
+    private final Controller<T> controller;
 
     private ListElement<T> currentListElement;
 
@@ -200,6 +201,7 @@ public class ListEditor <T> extends JFrame {
     private void setData(ListElement<T> newData) {
         System.out.println("[LOG] setData() aufgerufen mit: " + (newData != null ? newData.getElement() : "null"));
 
+        // Clear data if newData is null
         if (newData == null) {
             clearData();
             currentListElement = null;
@@ -207,14 +209,19 @@ public class ListEditor <T> extends JFrame {
             return;
         }
 
+        // Overwrite current
         currentListElement = newData;
-        String[] readableData = newData.getData();
 
+        // Get data
+        String[] readableData = ListUtilities.getData(newData);
+
+        // LOG
         System.out.println("[LOG] Anzeige wird aktualisiert:");
         System.out.println("       Vorgänger: " + readableData[0]);
         System.out.println("       Aktuell:   " + readableData[1]);
         System.out.println("       Nachfolger:" + readableData[2]);
 
+        // Set data
         predecessor.setText(readableData[0]);
         current.setText(readableData[1]);
         successor.setText(readableData[2]);

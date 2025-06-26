@@ -1,6 +1,7 @@
 package backend;
 
 import controls.Controller;
+
 //Datenstruktur (verkette Listen, speichert Daten und verknüpfungen)
 public class ListElement<T> {
 
@@ -29,25 +30,6 @@ public class ListElement<T> {
         return next;
     }
 
-    public String getElement() {
-        try {
-            return data.toString();
-        } catch (Exception e) {
-            Controller.displayMessage("Der Typ kann nicht in einen String umgewandelt werden!", "Fehlermeldung");
-            return "Error";
-        }
-    }
-
-    public String[] getData() {
-        //Gibt Array mit drei Werten zurück: Knot   en oder „N/A“
-        String[] displayableData = new String[3];
-        displayableData[0] = previous != null ? previous.getElement() : "N/A";
-        displayableData[1] = data != null ? getElement() : "N/A";
-        displayableData[2] = next != null ? next.getElement() : "N/A";
-
-        return displayableData;
-    }
-
     public ListElement<T> getFirst() {
         ListElement<T> first = this;
         while (first.getPrevious() != null) {
@@ -64,27 +46,12 @@ public class ListElement<T> {
         return tail;
     }
 
-    public ListElement<T> deepCopy() {
-        // Returns a deep copy of the list
-
-        // Copy the first node
-        ListElement<T> original = getFirst();
-        ListElement<T> newFirst = new ListElement<>(original.data);
-        newFirst.previous = null;
-
-        ListElement<T> currOriginal = original.next;
-        ListElement<T> currCopy = newFirst;
-
-        // Copy the rest of the nodes
-        while (currOriginal != null) {
-            ListElement<T> newNode = new ListElement<>(currOriginal.data);
-            currCopy.next = newNode;
-            newNode.previous = currCopy;
-
-            currCopy = newNode;
-            currOriginal = currOriginal.next;
+    public String getElement() {
+        try {
+            return data.toString();
+        } catch (Exception e) {
+            Controller.displayMessage("Der Typ kann nicht in einen String umgewandelt werden!", "Fehlermeldung");
+            return "Error";
         }
-
-        return newFirst;
     }
 }
