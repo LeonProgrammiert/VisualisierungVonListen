@@ -25,6 +25,7 @@ public class AddDialog<T> extends CustomDialog<T> {
     private JComboBox<String> positionSelector;
     private String[] positionOptions = new String[]{"An den Start", "Als Nächstes", "An das Ende"};
     private boolean positionSelectorEditable = true;
+    private int maxInputLength = 12;
 
     public AddDialog(Frame parent, ListEditor<T> listEditor, ListElement<T> current, AddElementPositions position) {
         // Call of the other constructor
@@ -87,6 +88,7 @@ public class AddDialog<T> extends CustomDialog<T> {
 
         gbc.gridx = 1;
         textField = new JTextField();
+        textField.setToolTipText("max 12 Zeichen");
         textField.setHorizontalAlignment(JTextField.CENTER);
         optionPanel.add(textField, gbc);
 
@@ -123,6 +125,12 @@ public class AddDialog<T> extends CustomDialog<T> {
         // Testing for empty text field
         if (textField.getText().isEmpty()) {
             Controller.displayMessage("Keine Daten eingegeben", "Fehlermeldung");
+            return;
+        }
+
+        // Testing if input is too long
+        if (textField.getText().length() > maxInputLength) {
+            Controller.displayMessage("Maximal " + maxInputLength + " Zeichen erlaubt!", "Fehlermeldung");
             return;
         }
 
