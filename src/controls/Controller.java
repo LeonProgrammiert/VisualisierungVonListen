@@ -109,6 +109,10 @@ public class Controller<T> {
         launcher.setVisible(true);
         launcher.toFront();
         listEditor.setVisible(false);
+
+        if (listViewer.isVisible()) {
+            listViewer.setVisible(false);
+        }
     }
 
     public void playSound(File soundFile) {
@@ -168,6 +172,7 @@ public class Controller<T> {
     }
 
     public void openListView(ListElement<T> current) {
+        listEditor.setVisible(false);
         listViewer.openList(current.getFirst());
         listViewer.setVisible(true);
     }
@@ -175,6 +180,7 @@ public class Controller<T> {
     public void listViewerToListEditor() {
         listViewer.setVisible(false);
         listEditor.setVisible(true);
+        listEditor.toFront();
     }
 
 
