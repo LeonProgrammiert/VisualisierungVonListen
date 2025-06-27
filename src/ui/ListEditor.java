@@ -86,9 +86,9 @@ public class ListEditor <T> extends JFrame {
 
         current.setMaximumSize(new Dimension(100, 160));
         current.setPreferredSize(new Dimension(100, 160));
-        backToLauncher.setNewSize(250, 20);
-        listViewButton.setNewSize(250, 20);
-        saveListButton.setNewSize(250,20);
+        backToLauncher.setNewSize(250, 30);
+        listViewButton.setNewSize(250, 30);
+        saveListButton.setNewSize(250,30);
 
 
         // Label for index of te list
