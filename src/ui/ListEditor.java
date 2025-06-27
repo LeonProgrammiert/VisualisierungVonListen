@@ -1,5 +1,6 @@
 package ui;
 
+import backend.ListUtilities;
 import backend.enumerations.AddElementPositions;
 import ui.dialogs.DeleteDialog;
 import ui.dialogs.SaveDiscardDialog;
@@ -16,7 +17,7 @@ import javax.swing.*;
 import java.io.File;
 import java.awt.*;
 
-public class ListEditor<T> extends JFrame {
+public class ListEditor <T> extends JFrame {
 
     private final Controller<T> controller;
 
@@ -138,7 +139,6 @@ public class ListEditor<T> extends JFrame {
     private void clickedRemoveNode() {
         DeleteDialog<T> dialog = new DeleteDialog<>(this, this, controller);
         dialog.setVisible(true);
-
     }
 
     public void backToLauncher() {
@@ -190,8 +190,7 @@ public class ListEditor<T> extends JFrame {
         button.addActionListener(e -> {
             switch (eventType) {
                 case backToLauncher -> backToLauncher();
-                case current -> {
-                } // to be implemented
+                case current -> {} // to be implemented
                 case next -> displayObject(currentListElement.getNext());
                 case previous -> displayObject(currentListElement.getPrevious());
                 case add -> clickedAddNode();
@@ -223,6 +222,7 @@ public class ListEditor<T> extends JFrame {
     private void setData(ListElement<T> newData) {
         System.out.println("[LOG] setData() aufgerufen mit: " + (newData != null ? newData.getElement() : "null"));
 
+        // Clear data if newData is null
         if (newData == null) {
             clearData();
             currentListElement = null;
@@ -230,14 +230,19 @@ public class ListEditor<T> extends JFrame {
             return;
         }
 
+        // Overwrite current
         currentListElement = newData;
-        String[] readableData = newData.getData();
 
+        // Get data
+        String[] readableData = ListUtilities.getData(newData);
+
+        // LOG
         System.out.println("[LOG] Anzeige wird aktualisiert:");
         System.out.println("       Vorgänger: " + readableData[0]);
         System.out.println("       Aktuell:   " + readableData[1]);
         System.out.println("       Nachfolger:" + readableData[2]);
 
+        // Set data
         predecessor.setText(readableData[0]);
         current.setText(readableData[1]);
         successor.setText(readableData[2]);
