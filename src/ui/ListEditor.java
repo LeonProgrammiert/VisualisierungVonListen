@@ -78,18 +78,19 @@ public class ListEditor <T> extends JFrame {
         container.setLayout(editorLayout);
 
         // define components
-        CustomButton backToLauncher = createButton("← Zurück zum Launcher", 14, eventTypes.backToLauncher);
-        CustomButton listViewButton = createButton("Liste anzeigen", 14, eventTypes.viewList);
-        saveListButton = createButton("🖫 Liste speichern", 14, eventTypes.saveList);
+        CustomButton backToLauncher = createButton("← Zurück zum Launcher", 18, eventTypes.backToLauncher);
+        CustomButton listViewButton = createButton("Liste anzeigen", 18, eventTypes.viewList);
+        saveListButton = createButton("🖫 Liste speichern", 18, eventTypes.saveList);
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
         current = createButton("Aktuell", 24, eventTypes.current);
 
-        current.setMaximumSize(new Dimension(100, 160));
-        current.setPreferredSize(new Dimension(100, 160));
-        backToLauncher.setNewSize(250, 30);
-        listViewButton.setNewSize(250, 30);
-        saveListButton.setNewSize(250,30);
+        current.setNewSize(100, 160);
+
+        Dimension size = new Dimension(275, 60);
+        backToLauncher.setNewSize(size);
+        listViewButton.setNewSize(size);
+        saveListButton.setNewSize(size);
 
 
         // Label for index of te list
@@ -104,9 +105,16 @@ public class ListEditor <T> extends JFrame {
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
         CustomButton deleteNodeButton = createButton("Löschen", 24, eventTypes.delete);
 
+        size = new Dimension(210, 60);
+        addNodeButton.setNewSize(size);
+        deleteNodeButton.setNewSize(size);
+
         undoButton = new UndoRedoButton("↺", "rückgängig", ListEvent.events.undo);
         redoButton = new UndoRedoButton("↻", "wiederherstellen", ListEvent.events.redo);
 
+        int margin = 15;
+
+        // Add buttons to actionPanel
         actionPanel.add(undoButton);
         actionPanel.add(addNodeButton);
         actionPanel.add(deleteNodeButton);
@@ -121,9 +129,9 @@ public class ListEditor <T> extends JFrame {
 
         // Add components
         addComponentToGrid(centerPanel, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHWEST);
-        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        centerPanel.add(Box.createRigidArea(new Dimension(margin, 0)));
         addComponentToGrid(centerPanel, listViewButton, editorLayout, 1,0,1, GridBagConstraints.NONE, null, GridBagConstraints.NORTH);
-        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        centerPanel.add(Box.createRigidArea(new Dimension(margin, 0)));
         addComponentToGrid(centerPanel, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHEAST);
 
         addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
@@ -177,11 +185,12 @@ public class ListEditor <T> extends JFrame {
         cont.add(comp);
     }
 
-    // erstellt Button und verknüpft ihn mit der richtigen Funktion
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
+        // erstellt Button und verknüpft ihn mit der richtigen Funktion
         CustomButton button = new CustomButton(buttonText, fontSize);
+
         // Add padding
-        button.setBorder(new EmptyBorder(5, 5, 5, 5));
+        button.setBorder(new EmptyBorder(5,5,5,5));
 
         // Set size
         button.setNewSize(160, 80);
