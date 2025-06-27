@@ -26,7 +26,7 @@ public class Launcher<T> extends JFrame {
     public void setValues() {
         setTitle("Visualisierung von Listen");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1400, 1000);
+        setSize(GUIStyle.getFrameSize());
         setLocationRelativeTo(null);
     }
 

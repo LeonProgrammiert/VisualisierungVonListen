@@ -65,4 +65,10 @@ public class GUIStyle {
     public static Color getGrayButtonHighlightedColor() {
         return new Color(65, 65, 65);
     }
+
+
+    public static Dimension getFrameSize() {
+        return new Dimension(1400, 1000);
+    }
+
 }
