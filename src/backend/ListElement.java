@@ -54,4 +54,29 @@ public class ListElement<T> {
             return "Error";
         }
     }
+
+    public int getIndex() {
+        ListElement<T> first = getFirst();
+        int counter = 0;
+        while (first != this) {
+            counter ++;
+            first = first.getNext();
+        }
+        return counter;
+    }
+
+    private int getSize() {
+        ListElement<T> first = getFirst();
+        int counter = 0;
+        while (first != null) {
+            counter ++;
+            first = first.getNext();
+        }
+        return counter;
+    }
+
+    public int getMaxIndex() {
+        return getSize() - 1;
+    }
+
 }
