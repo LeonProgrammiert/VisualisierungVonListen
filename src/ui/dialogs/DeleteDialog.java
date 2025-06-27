@@ -121,7 +121,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         if (choice == 0) {
             // Deletes the list and opens the launcher
             controller.deleteList();
-            controller.backToLauncher(null);
+            controller.backToLauncher();
         } else if (choice == 1) {
             // Deletes the current element and asks to enter a new one
             controller.addList(controller.getCurrentListName(), true);

@@ -3,7 +3,6 @@ package ui;
 import backend.ListElement;
 import controls.Controller;
 import ui.legos.CustomListElementPanel;
-import ui.legos.CustomPanel;
 import ui.style.GUIStyle;
 
 import javax.swing.*;

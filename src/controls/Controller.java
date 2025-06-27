@@ -104,7 +104,7 @@ public class Controller<T> {
         listEditor.openList(firstElement);
     }
 
-    public void backToLauncher(ListElement<T> anker) {
+    public void backToLauncher() {
         // Set visibilities
         launcher.setVisible(true);
         launcher.toFront();
