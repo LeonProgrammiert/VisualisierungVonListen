@@ -143,9 +143,10 @@ public class ListEditor <T> extends JFrame {
 
     public void backToLauncher() {
         if (listHasBeenEdited) {
-            new SaveDiscardDialog<>(this);
+            new SaveDiscardDialog<>(this, controller);
+        } else {
+            controller.backToLauncher();
         }
-        controller.backToLauncher();
     }
 
     private void clickedAddNode() {
