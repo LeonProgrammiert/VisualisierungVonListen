@@ -42,7 +42,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
 
         // Whole list
         CustomButton deleteAll = new CustomButton("Komplette Liste", 14);
-        deleteAll.addActionListener(e -> clickedDeleteWholeList());
+        deleteAll.addActionListener(e ->    clickedDeleteWholeList());
 
         // Add components
         container.add(cancelButton);
@@ -57,11 +57,14 @@ public class DeleteDialog<T> extends CustomDialog<T> {
                 "Sicherheitsabfrage",
                 "Willst du wirklich die gesamte Liste dauerhaft löschen?");
 
+        dispose();
+
         if (confirm == JOptionPane.YES_OPTION) {
             // Confirmed -> delete
             Controller.getController().deleteList();
             listEditor.backToLauncher();
         }
+
     }
 
     private void deleteSingleElement() {
@@ -74,8 +77,10 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         // Define next element to display and remove the current element
         ListElement<T> nextToDisplay = remove(current);
 
-        // Display the next element or show emptyListOptions
+        // Close the dialog
         dispose();
+
+        // Display the next element or show emptyListOptions
         if (nextToDisplay != null) {
             listEditor.openList(nextToDisplay);
         } else {
