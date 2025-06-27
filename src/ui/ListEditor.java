@@ -6,6 +6,7 @@ import ui.dialogs.DeleteDialog;
 import ui.dialogs.SaveDiscardDialog;
 import ui.legos.UndoRedoButton;
 import ui.legos.CustomButton;
+import ui.legos.SaveButton;
 import ui.dialogs.AddDialog;
 import backend.ListElement;
 import controls.Controller;
@@ -28,7 +29,7 @@ public class ListEditor <T> extends JFrame {
     private CustomButton predecessor;
     private CustomButton successor;
     private CustomButton current;
-    private CustomButton saveListButton;
+    private SaveButton saveListButton;
 
     private File clickSound;
     private File errorSound;
@@ -58,8 +59,6 @@ public class ListEditor <T> extends JFrame {
 
         clickSound = new File(System.getProperty("user.dir") + "/src/assets/clickSound.wav");
         errorSound = new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
-
-        listHasBeenEdited = false;
     }
 
     //baut die Benutzeroberfläche
@@ -79,20 +78,18 @@ public class ListEditor <T> extends JFrame {
 
         // define components
         CustomButton backToLauncher = createButton("← Zurück zum Launcher", 14, eventTypes.backToLauncher);
-        CustomButton listViewButton = createButton("Liste anzeigen", 14, eventTypes.viewList);
-        saveListButton = createButton("🖫 Liste speichern", 14, eventTypes.saveList);
+        CustomButton listViewButton = createButton("gesamte Liste anzeigen", 14, eventTypes.viewList);
+        saveListButton = new SaveButton();
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
         current = createButton("Aktuell", 24, eventTypes.current);
 
         current.setMaximumSize(new Dimension(100, 160));
         current.setPreferredSize(new Dimension(100, 160));
-        backToLauncher.setNewSize(250, 30);
-        listViewButton.setNewSize(250, 30);
-        saveListButton.setNewSize(250,30);
+        backToLauncher.setNewSize(250, 60);
+        listViewButton.setNewSize(250, 60);
 
-
-        // Label for index of te list
+        // Label for index of the list
         JLabel index = GUIStyle.getStyledLabel("Indexplatzhalter", 24);
 
         // Gemeinsames Panel für Hinzufügen/Löschen + Undo/Redo
@@ -112,27 +109,15 @@ public class ListEditor <T> extends JFrame {
         actionPanel.add(deleteNodeButton);
         actionPanel.add(redoButton);
 
-        //Panel für zentrale Leiste
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-        centerPanel.setBackground(container.getBackground());
-        centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-
-        // Add components
-        addComponentToGrid(centerPanel, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHWEST);
-        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-        addComponentToGrid(centerPanel, listViewButton, editorLayout, 1,0,1, GridBagConstraints.NONE, null, GridBagConstraints.NORTH);
-        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-        addComponentToGrid(centerPanel, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHEAST);
-
-        addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.WEST);
+        addComponentToGrid(container, listViewButton, editorLayout, 1, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.CENTER);
+        addComponentToGrid(container, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.EAST);
+        addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, successor, editorLayout, 2, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
         addComponentToGrid(container, current, editorLayout, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, index, editorLayout, 0, 2, 3, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
-        addComponentToGrid(container, centerPanel, editorLayout, 0, 0, 3, GridBagConstraints.NONE, new Insets(0, 0, 30, 0), GridBagConstraints.CENTER);
         add(container);
     }
 
@@ -142,7 +127,7 @@ public class ListEditor <T> extends JFrame {
     }
 
     public void backToLauncher() {
-        if (listHasBeenEdited) {
+        if (Controller.unsavedChanges) {
             new SaveDiscardDialog<>(this);
         }
         controller.backToLauncher();
@@ -155,8 +140,8 @@ public class ListEditor <T> extends JFrame {
     public void setUndoRedoButtonAvailability(boolean undoAvailability, boolean redoAvailability) {
         undoButton.setAvailable(undoAvailability);
         redoButton.setAvailable(redoAvailability);
-        listHasBeenEdited = undoAvailability;
-        updateSaveAvailability();
+        Controller.unsavedChanges = undoAvailability || redoAvailability;
+        updateSaveAvailability(Controller.unsavedChanges);
     }
 
     private void addComponentToGrid(Container cont, Component comp, GridBagLayout layout, int x, int y, int width, int fill, Insets padding, int anchor) {
@@ -204,10 +189,6 @@ public class ListEditor <T> extends JFrame {
 
     public void saveList() {
         controller.saveList(currentListElement.getFirst());
-
-        // Update saving availability
-        listHasBeenEdited = false;
-        updateSaveAvailability();
     }
 
     public void openList(ListElement<T> currentListElement) {
@@ -283,17 +264,8 @@ public class ListEditor <T> extends JFrame {
         successor.setEnabled(false);
     }
 
-    public void updateSaveAvailability() {
-        if (listHasBeenEdited) {
-            saveListButton.setText("🖫* Liste speichern");
-        } else {
-            saveListButton.setText("🖫 Liste speichern");
-        }
+    public void updateSaveAvailability(boolean isUnsaved) {
+        Controller.unsavedChanges = isUnsaved;
+        saveListButton.updateSaveAvailability(Controller.unsavedChanges);
     }
-
-    public void markListAsEdited() {
-        listHasBeenEdited = true;
-        updateSaveAvailability();
-    }
-
 }
