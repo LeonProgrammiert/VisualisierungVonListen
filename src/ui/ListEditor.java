@@ -20,7 +20,7 @@ public class ListEditor <T> extends JFrame {
 
     private final Controller<T> controller;
 
-    private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList}
+    private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList, viewList}
 
     private ListElement<T> currentListElement;
 
@@ -48,7 +48,7 @@ public class ListEditor <T> extends JFrame {
     private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
-        setSize(1400, 1000);
+        setSize(GUIStyle.getFrameSize());
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -78,6 +78,7 @@ public class ListEditor <T> extends JFrame {
 
         // define components
         CustomButton backToLauncher = createButton("← Zurück zum Launcher", 12, eventTypes.backToLauncher);
+        CustomButton listViewButton = createButton("Liste anzeigen", 16, eventTypes.viewList);
         saveListButton = createButton("🖫 Liste speichern", 16, eventTypes.saveList);
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
@@ -89,7 +90,6 @@ public class ListEditor <T> extends JFrame {
         // Gemeinsames Panel für Hinzufügen/Löschen + Undo/Redo
         JPanel actionPanel = new JPanel();
         actionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        actionPanel.setBackground(new Color(24, 26, 28));
         actionPanel.setOpaque(false);
 
         CustomButton addNodeButton = createButton("Hinzufügen", 24, eventTypes.add);
@@ -105,6 +105,7 @@ public class ListEditor <T> extends JFrame {
 
         // Add components
         addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHWEST);
+        addComponentToGrid(container, listViewButton, editorLayout, 1,0,1, GridBagConstraints.NONE, null, GridBagConstraints.NORTH);
         addComponentToGrid(container, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHEAST);
         addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, successor, editorLayout, 2, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
@@ -175,6 +176,7 @@ public class ListEditor <T> extends JFrame {
                 case add -> clickedAddNode();
                 case delete -> clickedRemoveNode();
                 case saveList -> saveList();
+                case viewList -> controller.openListView(currentListElement);
             }
         });
         return button;
