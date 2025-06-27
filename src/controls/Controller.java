@@ -177,11 +177,15 @@ public class Controller<T> {
         listViewer.setVisible(true);
     }
 
-    public void listViewerToListEditor() {
+    public void backToListEditor() {
         listViewer.setVisible(false);
         listEditor.setVisible(true);
         listEditor.toFront();
     }
 
+    public void backToListEditor(ListElement<T> current) {
+        backToListEditor();
+        listEditor.openList(current);
+    }
 
 }
