@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.io.File;
 import java.awt.*;
 
-public class ListEditor <T> extends JFrame {
+public class ListEditor<T> extends JFrame {
 
     private final Controller<T> controller;
 
@@ -138,6 +138,7 @@ public class ListEditor <T> extends JFrame {
     private void clickedRemoveNode() {
         DeleteDialog<T> dialog = new DeleteDialog<>(this, this, controller);
         dialog.setVisible(true);
+
     }
 
     public void backToLauncher() {
@@ -167,7 +168,7 @@ public class ListEditor <T> extends JFrame {
         gbc.gridheight = 1;
 
         // Insets are already set to 0 in the gbc-Constructor
-        if(padding != null){
+        if (padding != null) {
             gbc.insets = padding;
         }
 
@@ -180,16 +181,17 @@ public class ListEditor <T> extends JFrame {
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
         // Add padding
-        button.setBorder(new EmptyBorder(5,5,5,5));
+        button.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         // Set size
-        button.setNewSize(160,80);
+        button.setNewSize(160, 80);
 
         // Add click action
         button.addActionListener(e -> {
             switch (eventType) {
                 case backToLauncher -> backToLauncher();
-                case current -> {} // to be implemented
+                case current -> {
+                } // to be implemented
                 case next -> displayObject(currentListElement.getNext());
                 case previous -> displayObject(currentListElement.getPrevious());
                 case add -> clickedAddNode();
@@ -201,7 +203,7 @@ public class ListEditor <T> extends JFrame {
         return button;
     }
 
-    public void saveList(){
+    public void saveList() {
         controller.saveList(currentListElement.getFirst());
 
         // Update saving availability
@@ -276,11 +278,17 @@ public class ListEditor <T> extends JFrame {
         successor.setEnabled(false);
     }
 
-    public void updateSaveAvailability(){
-        if(listHasBeenEdited){
+    public void updateSaveAvailability() {
+        if (listHasBeenEdited) {
             saveListButton.setText("🖫* Liste speichern");
-        } else{
+        } else {
             saveListButton.setText("🖫 Liste speichern");
         }
     }
+
+    public void markListAsEdited() {
+        listHasBeenEdited = true;
+        updateSaveAvailability();
+    }
+
 }

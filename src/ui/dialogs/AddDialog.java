@@ -144,9 +144,12 @@ public class AddDialog<T> extends CustomDialog<T> {
         ListElement<T> newData = new ListElement(textField.getText());
         insertData(position, newData);
 
+        listEditor.markListAsEdited();
+
         // Displays new data
         listEditor.openList(newData);
         dispose();
+
     }
 
     private AddElementPositions getSelectedPosition() {
