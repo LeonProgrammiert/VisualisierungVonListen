@@ -22,7 +22,7 @@ public class CustomButton extends CustomPanel {
     public CustomButton(String buttonText, int fontSize, Border padding) {
         // Initialize
         Border emptyBorder = padding == null ? BorderFactory.createEmptyBorder(5, 5, 5, 5) : padding;
-        Border unhighlightedBorder = BorderFactory.createLineBorder(new Color(40, 40, 40), 1);
+        Border unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1);
 
         // Text
         textLabel = GUIStyle.getStyledLabel(buttonText, fontSize);

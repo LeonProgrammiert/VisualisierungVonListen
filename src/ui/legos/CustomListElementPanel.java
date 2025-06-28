@@ -10,7 +10,7 @@ public class CustomListElementPanel extends JPanel {
 
     public CustomListElementPanel(String data) {
         setLayout(new GridLayout(1, 3)); // 1 Zeile, 3 Spalten
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        setBorder(BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
 
         add(getPanel("←"));
         add(getPanel(data));
@@ -20,7 +20,7 @@ public class CustomListElementPanel extends JPanel {
 
     private JPanel getPanel(String text) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(GUIStyle.getGrayButtonColor());
+        panel.setBackground(GUIStyle.getButtonColor());
         CustomButton label = new CustomButton(text, 28, new EmptyBorder(2, 5, 2, 5));
         panel.add(label);
         return panel;

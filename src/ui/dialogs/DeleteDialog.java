@@ -2,7 +2,6 @@ package ui.dialogs;
 
 import backend.ListElement;
 import backend.ListEvent;
-import backend.ListUtilities;
 import controls.Controller;
 import ui.ListEditor;
 import ui.legos.CustomButton;
@@ -31,7 +30,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         CustomPanel container = new CustomPanel();
         container.setBorder(new EmptyBorder(5, 5, 5, 5));
         container.setLayout(new FlowLayout(FlowLayout.CENTER));
-        container.setBackground(GUIStyle.getGrayColor());
+        container.setBackground(GUIStyle.getBackgroundColor());
 
         // Cancel button
         CustomButton cancelButton = new CustomButton("Abbrechen", 14);

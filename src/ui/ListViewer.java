@@ -33,7 +33,7 @@ public class ListViewer<T> extends JFrame {
         setLocationRelativeTo(null);
 
         EmptyBorder emptyBorder = new EmptyBorder(5, 5, 5, 5);
-        LineBorder lineBorder = new LineBorder(GUIStyle.getPinkColor());
+        LineBorder lineBorder = new LineBorder(GUIStyle.getHighlightedColor());
         border = BorderFactory.createCompoundBorder(emptyBorder, lineBorder);
         border = BorderFactory.createCompoundBorder(border, emptyBorder);
     }
@@ -41,12 +41,12 @@ public class ListViewer<T> extends JFrame {
     private void build() {
         // Container
         JPanel container = new JPanel();
-        container.setBackground(GUIStyle.getGrayColor());
+        container.setBackground(GUIStyle.getBackgroundColor());
         container.setLayout(new BorderLayout());
 
         // Header
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headerPanel.setBackground(GUIStyle.getGrayColor());
+        headerPanel.setBackground(GUIStyle.getBackgroundColor());
         headerPanel.setBorder(border);
 
         CustomButton backToListEditorButton = new CustomButton("Zurück zum Editor", 18);
@@ -58,7 +58,7 @@ public class ListViewer<T> extends JFrame {
 
         // Body
         contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        contentPanel.setBackground(GUIStyle.getGrayColor());
+        contentPanel.setBackground(GUIStyle.getBackgroundColor());
         contentPanel.setBorder(border);
 
 

@@ -5,7 +5,6 @@ import ui.legos.CustomButton;
 import ui.legos.CustomPanel;
 import ui.style.GUIStyle;
 import ui.ListEditor;
-import ui.Launcher;
 
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
@@ -25,7 +24,7 @@ public class SaveDiscardDialog<T> extends CustomDialog<T>{
     @Override
     public CustomPanel getOptionPanel() {
         CustomPanel container = new CustomPanel();
-        container.setBackground(GUIStyle.getGrayColor());
+        container.setBackground(GUIStyle.getBackgroundColor());
         container.setBorder(new EmptyBorder(5,5,5,5));
         container.setLayout(new FlowLayout());
         

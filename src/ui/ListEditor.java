@@ -12,7 +12,6 @@ import controls.Controller;
 import backend.ListEvent;
 import ui.style.GUIStyle;
 
-import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.io.File;
 import java.awt.*;
@@ -64,7 +63,7 @@ public class ListEditor <T> extends JFrame {
 
     //baut die Benutzeroberfläche
     public void build() {
-        Color backgroundColor = GUIStyle.getGrayColor();
+        Color backgroundColor = GUIStyle.getBackgroundColor();
 
         // Create container
         JPanel container = new JPanel();
@@ -180,8 +179,6 @@ public class ListEditor <T> extends JFrame {
     // erstellt Button und verknüpft ihn mit der richtigen Funktion
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
-        // Add padding
-        button.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         // Set size
         button.setNewSize(160, 80);

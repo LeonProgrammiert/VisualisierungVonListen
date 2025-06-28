@@ -7,10 +7,37 @@ public class GUIStyle {
     private static final String fontName = "SansSerif";
     private static final int fontStyle = Font.PLAIN;
 
-    private static final Color white = Color.WHITE;
-    private static final Color pink = new Color(255, 182, 193);
-    private static final Color grayBackground = new Color(24, 26, 28);
-    private static final Color grayButton = new Color(40,40,40);
+    private static Color fontColor;
+    private static Color highlightColor;
+    private static Color backgroundColor;
+
+    private static Color unhighlightedButtonColor;
+    private static Color highlightedButtonColor;
+    private static Color unhighlightedBorderColor;
+
+    public static void setColorMode(boolean darkMode) {
+        if (darkMode) {
+            // Dark mode
+            fontColor = Color.WHITE;
+            highlightColor = new Color(255, 182, 193);
+            backgroundColor = new Color(24, 26, 28);
+            unhighlightedButtonColor = new Color(40,40,40);
+            highlightedButtonColor = new Color(65, 65, 65);
+            unhighlightedBorderColor = new Color(89, 89, 89);
+        } else {
+            // Light mode
+            fontColor = Color.BLACK;
+            highlightColor = new Color(224, 14, 46);
+            backgroundColor = new Color(240, 242, 244);
+            unhighlightedButtonColor = new Color(230, 232, 234);
+            highlightedButtonColor = new Color(215, 217, 219);
+            unhighlightedBorderColor = new Color(15, 15, 15);
+        }
+    }
+
+    public GUIStyle(boolean darkMode) {
+
+    }
 
 
     // JLabels
@@ -32,7 +59,7 @@ public class GUIStyle {
     }
 
     public static JLabel getStyledLabel(String message, int fontSize) {
-        return getStyledLabel(message, fontSize, white);
+        return getStyledLabel(message, fontSize, fontColor);
     }
 
 
@@ -45,24 +72,28 @@ public class GUIStyle {
         return getFont(fontSize, fontStyle);
     }
 
-    public static Color getWhiteColor() {
-        return white;
+    public static Color getFontColor() {
+        return fontColor;
     }
 
-    public static Color getPinkColor() {
-        return pink;
+    public static Color getHighlightedColor() {
+        return highlightColor;
     }
 
-    public static Color getGrayColor() {
-        return grayBackground;
+    public static Color getBackgroundColor() {
+        return backgroundColor;
     }
 
-    public static Color getGrayButtonColor() {
-        return grayButton;
+    public static Color getButtonColor() {
+        return unhighlightedButtonColor;
     }
 
-    public static Color getGrayButtonHighlightedColor() {
-        return new Color(65, 65, 65);
+    public static Color getUnhighlightedButtonBorderColor() {
+        return unhighlightedBorderColor;
+    }
+
+    public static Color getHighlightedButtonColor() {
+        return highlightedButtonColor;
     }
 
 
