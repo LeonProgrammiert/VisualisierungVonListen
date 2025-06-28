@@ -2,6 +2,7 @@ package ui.legos;
 
 import backend.ListEvent;
 import backend.ListElement;
+import backend.ListUtilities;
 import controls.Controller;
 import ui.style.GUIStyle;
 
@@ -51,8 +52,8 @@ public class UndoRedoButton extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if (isAvailable) {
                     System.out.println("[LOG] Undo/Redo-Button geklickt: " + event.name());
-                    ListElement listCopy = Controller.getController().getListEditor().getCurrentListElement().deepCopy();
-                    Controller.getController().pull(new ListEvent(listCopy, event));
+                    ListElement current = Controller.getController().getListEditor().getCurrentListElement();
+                    Controller.getController().pull(new ListEvent<>(current, event));
                 }
             }
 

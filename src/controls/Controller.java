@@ -6,6 +6,7 @@ import backend.StackManager;
 import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
+import ui.ListViewer;
 import ui.dialogs.CustomOptionPane;
 
 import javax.sound.sampled.*;
@@ -24,6 +25,7 @@ public class Controller<T> {
     // Instances
     private final DatabaseAccessor<T> databaseAccessor;
     private final StackManager<T> stackManager;
+    private final ListViewer<T> listViewer;
     private final ListEditor<T> listEditor;
     private final Launcher<T> launcher;
 
@@ -49,6 +51,7 @@ public class Controller<T> {
         // Initialize instances
         stackManager = new StackManager<>(this);
         listEditor = new ListEditor<>(this);
+        listViewer = new ListViewer<>(this);
         launcher = new Launcher<>(this);
         databaseAccessor = new DatabaseAccessor<>();
 
@@ -68,7 +71,6 @@ public class Controller<T> {
     public static void displayMessage(String message, String title) {
         //new ErrorMessageDialog<>(null, title, message).setVisible(true);
         CustomOptionPane.showMessageDialog(null, title, message);
-
     }
 
     public void addList(String name, boolean overwrite) {
@@ -102,11 +104,15 @@ public class Controller<T> {
         listEditor.openList(firstElement);
     }
 
-    public void backToLauncher(ListElement<T> anker) {
+    public void backToLauncher() {
         // Set visibilities
         launcher.setVisible(true);
         launcher.toFront();
         listEditor.setVisible(false);
+
+        if (listViewer.isVisible()) {
+            listViewer.setVisible(false);
+        }
     }
 
     public void playSound(File soundFile) {
@@ -164,5 +170,18 @@ public class Controller<T> {
             System.out.println("[WARN] Datei konnte nicht gelöscht werden.");
         }
     }
+
+    public void openListView(ListElement<T> current) {
+        listEditor.setVisible(false);
+        listViewer.openList(current.getFirst());
+        listViewer.setVisible(true);
+    }
+
+    public void listViewerToListEditor() {
+        listViewer.setVisible(false);
+        listEditor.setVisible(true);
+        listEditor.toFront();
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package ui;
 
+import backend.ListUtilities;
 import backend.enumerations.AddElementPositions;
 import ui.dialogs.DeleteDialog;
 import ui.dialogs.SaveDiscardDialog;
@@ -20,7 +21,7 @@ public class ListEditor <T> extends JFrame {
 
     private final Controller<T> controller;
 
-    private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList}
+    private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList, viewList}
 
     private ListElement<T> currentListElement;
 
@@ -48,7 +49,7 @@ public class ListEditor <T> extends JFrame {
     private void setValues() {
         setTitle("List-Editor");
         setVisible(true);
-        setSize(1400, 1000);
+        setSize(GUIStyle.getFrameSize());
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -77,11 +78,19 @@ public class ListEditor <T> extends JFrame {
         container.setLayout(editorLayout);
 
         // define components
-        CustomButton backToLauncher = createButton("← Zurück zum Launcher", 12, eventTypes.backToLauncher);
-        saveListButton = createButton("🖫 Liste speichern", 16, eventTypes.saveList);
+        CustomButton backToLauncher = createButton("← Zurück zum Launcher", 14, eventTypes.backToLauncher);
+        CustomButton listViewButton = createButton("Liste anzeigen", 14, eventTypes.viewList);
+        saveListButton = createButton("🖫 Liste speichern", 14, eventTypes.saveList);
         predecessor = createButton("Vorgänger", 24, eventTypes.previous);
         successor = createButton("Nachfolger", 24, eventTypes.next);
         current = createButton("Aktuell", 24, eventTypes.current);
+
+        current.setMaximumSize(new Dimension(100, 160));
+        current.setPreferredSize(new Dimension(100, 160));
+        backToLauncher.setNewSize(250, 30);
+        listViewButton.setNewSize(250, 30);
+        saveListButton.setNewSize(250,30);
+
 
         // Label for index of te list
         JLabel index = GUIStyle.getStyledLabel("Indexplatzhalter", 24);
@@ -103,15 +112,27 @@ public class ListEditor <T> extends JFrame {
         actionPanel.add(deleteNodeButton);
         actionPanel.add(redoButton);
 
+        //Panel für zentrale Leiste
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+        centerPanel.setBackground(container.getBackground());
+        centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
         // Add components
-        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHWEST);
-        addComponentToGrid(container, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHEAST);
+        addComponentToGrid(centerPanel, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHWEST);
+        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        addComponentToGrid(centerPanel, listViewButton, editorLayout, 1,0,1, GridBagConstraints.NONE, null, GridBagConstraints.NORTH);
+        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        addComponentToGrid(centerPanel, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHEAST);
+
         addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, successor, editorLayout, 2, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
         addComponentToGrid(container, current, editorLayout, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, index, editorLayout, 0, 2, 3, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
+        addComponentToGrid(container, centerPanel, editorLayout, 0, 0, 3, GridBagConstraints.NONE, new Insets(0, 0, 30, 0), GridBagConstraints.CENTER);
         add(container);
     }
 
@@ -124,7 +145,7 @@ public class ListEditor <T> extends JFrame {
         if (listHasBeenEdited) {
             new SaveDiscardDialog<>(this);
         }
-        controller.backToLauncher(currentListElement);
+        controller.backToLauncher();
     }
 
     private void clickedAddNode() {
@@ -147,7 +168,7 @@ public class ListEditor <T> extends JFrame {
         gbc.gridheight = 1;
 
         // Insets are already set to 0 in the gbc-Constructor
-        if(padding != null){
+        if (padding != null) {
             gbc.insets = padding;
         }
 
@@ -160,10 +181,10 @@ public class ListEditor <T> extends JFrame {
     private CustomButton createButton(String buttonText, int fontSize, eventTypes eventType) {
         CustomButton button = new CustomButton(buttonText, fontSize);
         // Add padding
-        button.setBorder(new EmptyBorder(5,5,5,5));
+        button.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         // Set size
-        button.setNewSize(160,80);
+        button.setNewSize(160, 80);
 
         // Add click action
         button.addActionListener(e -> {
@@ -175,12 +196,13 @@ public class ListEditor <T> extends JFrame {
                 case add -> clickedAddNode();
                 case delete -> clickedRemoveNode();
                 case saveList -> saveList();
+                case viewList -> controller.openListView(currentListElement);
             }
         });
         return button;
     }
 
-    public void saveList(){
+    public void saveList() {
         controller.saveList(currentListElement.getFirst());
 
         // Update saving availability
@@ -200,6 +222,7 @@ public class ListEditor <T> extends JFrame {
     private void setData(ListElement<T> newData) {
         System.out.println("[LOG] setData() aufgerufen mit: " + (newData != null ? newData.getElement() : "null"));
 
+        // Clear data if newData is null
         if (newData == null) {
             clearData();
             currentListElement = null;
@@ -207,14 +230,19 @@ public class ListEditor <T> extends JFrame {
             return;
         }
 
+        // Overwrite current
         currentListElement = newData;
-        String[] readableData = newData.getData();
 
+        // Get data
+        String[] readableData = ListUtilities.getData(newData);
+
+        // LOG
         System.out.println("[LOG] Anzeige wird aktualisiert:");
         System.out.println("       Vorgänger: " + readableData[0]);
         System.out.println("       Aktuell:   " + readableData[1]);
         System.out.println("       Nachfolger:" + readableData[2]);
 
+        // Set data
         predecessor.setText(readableData[0]);
         current.setText(readableData[1]);
         successor.setText(readableData[2]);
@@ -255,11 +283,17 @@ public class ListEditor <T> extends JFrame {
         successor.setEnabled(false);
     }
 
-    public void updateSaveAvailability(){
-        if(listHasBeenEdited){
+    public void updateSaveAvailability() {
+        if (listHasBeenEdited) {
             saveListButton.setText("🖫* Liste speichern");
-        } else{
+        } else {
             saveListButton.setText("🖫 Liste speichern");
         }
     }
+
+    public void markListAsEdited() {
+        listHasBeenEdited = true;
+        updateSaveAvailability();
+    }
+
 }

@@ -16,8 +16,12 @@ public class CustomButton extends CustomPanel {
     protected JLabel textLabel;
 
     public CustomButton(String buttonText, int fontSize) {
+        this(buttonText, fontSize, new EmptyBorder(5, 5, 5, 5));
+    }
+
+    public CustomButton(String buttonText, int fontSize, Border padding) {
         // Initialize
-        Border emptyBorder = new EmptyBorder(5, 5, 5, 5);
+        Border emptyBorder = padding == null ? BorderFactory.createEmptyBorder(5, 5, 5, 5) : padding;
         Border unhighlightedBorder = BorderFactory.createLineBorder(new Color(40, 40, 40), 1);
 
         // Text
@@ -29,7 +33,7 @@ public class CustomButton extends CustomPanel {
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         // Mange click events and add hover effect
-        addMouseListener(new CustomMouseListener(this, textLabel));
+        addMouseListener(new CustomMouseListener(this, textLabel, emptyBorder));
 
         add(textLabel);
     }

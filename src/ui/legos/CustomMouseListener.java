@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 //Diese Klasse sorgt für den Hover-Effekt
 public class CustomMouseListener extends MouseAdapter {
@@ -18,10 +17,10 @@ public class CustomMouseListener extends MouseAdapter {
     private final Border highlightBorder;
     private final Border unhighlightedBorder;
 
-    public CustomMouseListener(CustomButton parent, JLabel label) {
+    public CustomMouseListener(CustomButton parent, JLabel label, Border padding) {
         this.parent = parent;
         this.label = label;
-        emptyBorder = new EmptyBorder(5, 5, 5, 5);
+        emptyBorder = padding;
         highlightBorder = BorderFactory.createLineBorder(GUIStyle.getPinkColor(), 1);
         unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getGrayButtonColor(), 1);
     }

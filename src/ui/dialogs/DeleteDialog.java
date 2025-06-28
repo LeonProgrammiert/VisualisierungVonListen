@@ -2,6 +2,7 @@ package ui.dialogs;
 
 import backend.ListElement;
 import backend.ListEvent;
+import backend.ListUtilities;
 import controls.Controller;
 import ui.ListEditor;
 import ui.legos.CustomButton;
@@ -42,7 +43,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
 
         // Whole list
         CustomButton deleteAll = new CustomButton("Komplette Liste", 14);
-        deleteAll.addActionListener(e -> clickedDeleteWholeList());
+        deleteAll.addActionListener(e ->    clickedDeleteWholeList());
 
         // Add components
         container.add(cancelButton);
@@ -57,11 +58,14 @@ public class DeleteDialog<T> extends CustomDialog<T> {
                 "Sicherheitsabfrage",
                 "Willst du wirklich die gesamte Liste dauerhaft löschen?");
 
+        dispose();
+
         if (confirm == JOptionPane.YES_OPTION) {
             // Confirmed -> delete
             Controller.getController().deleteList();
             listEditor.backToLauncher();
         }
+
     }
 
     private void deleteSingleElement() {
@@ -69,13 +73,15 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         ListElement<T> current = listEditor.getCurrentListElement();
 
         // Push deep copy of current to the stack
-        controller.push(new ListEvent<>(current.deepCopy(), ListEvent.events.remove));
+        controller.push(new ListEvent<T>(current, ListEvent.events.remove));
 
         // Define next element to display and remove the current element
         ListElement<T> nextToDisplay = remove(current);
 
-        // Display the next element or show emptyListOptions
+        // Close the dialog
         dispose();
+
+        // Display the next element or show emptyListOptions
         if (nextToDisplay != null) {
             listEditor.openList(nextToDisplay);
         } else {
@@ -121,7 +127,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         if (choice == 0) {
             // Deletes the list and opens the launcher
             controller.deleteList();
-            controller.backToLauncher(null);
+            controller.backToLauncher();
         } else if (choice == 1) {
             // Deletes the current element and asks to enter a new one
             controller.addList(controller.getCurrentListName(), true);

@@ -1,5 +1,6 @@
 package ui.dialogs;
 
+import backend.ListUtilities;
 import backend.enumerations.AddElementPositions;
 import ui.legos.CustomButton;
 import ui.legos.CustomDialog;
@@ -136,7 +137,7 @@ public class AddDialog<T> extends CustomDialog<T> {
 
         // Save previous state
         if (current != null) {
-            Controller.getController().push(new ListEvent<>(current.deepCopy(), ListEvent.events.add));
+            Controller.getController().push(new ListEvent<>(current, ListEvent.events.add));
         }
 
         // Inserts new data
@@ -144,9 +145,12 @@ public class AddDialog<T> extends CustomDialog<T> {
         ListElement<T> newData = new ListElement(textField.getText());
         insertData(position, newData);
 
+        listEditor.markListAsEdited();
+
         // Displays new data
         listEditor.openList(newData);
         dispose();
+
     }
 
     private AddElementPositions getSelectedPosition() {
