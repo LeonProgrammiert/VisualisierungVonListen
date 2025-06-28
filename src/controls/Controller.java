@@ -8,6 +8,7 @@ import ui.ListEditor;
 import ui.Launcher;
 import ui.ListViewer;
 import ui.dialogs.CustomOptionPane;
+import ui.style.GUIStyle;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -29,9 +30,13 @@ public class Controller<T> {
     private final ListEditor<T> listEditor;
     private final Launcher<T> launcher;
 
+    private static Controller instance;
+
+    private static boolean darkMode = true;
+
     public static void main(String[] args) {
 
-        // sorgt dafür, dass das Aussehen des Programms dem Betriebssystem angepasst wird
+        // Sorgt dafür, dass das Aussehen des Programms dem Betriebssystem angepasst wird
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException |
@@ -39,15 +44,15 @@ public class Controller<T> {
             throw new RuntimeException(e);
         }
 
-        new Controller<>(); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
+        // Set color theme
+        GUIStyle.setColorMode(darkMode);
+
+        // Startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
+        instance = new Controller<>();
+
     }
 
-    private static Controller instance;
-
     public Controller() {
-        // Initialize
-        instance = this;
-
         // Initialize instances
         stackManager = new StackManager<>(this);
         listEditor = new ListEditor<>(this);
@@ -184,4 +189,17 @@ public class Controller<T> {
     }
 
 
+    public void toggleTheme() {
+        // Close open windows
+        listEditor.dispose();
+        listViewer.dispose();
+        launcher.dispose();
+
+        // Set new color theme
+        darkMode = !darkMode;
+        GUIStyle.setColorMode(darkMode);
+
+        // restart programm
+        instance = new Controller<>();
+    }
 }
