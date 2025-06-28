@@ -26,7 +26,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
     }
 
     @Override
-    public CustomPanel getOptionPanel() {
+    public CustomPanel getOptionPanel()  {
         CustomPanel container = new CustomPanel();
         container.setBorder(new EmptyBorder(5, 5, 5, 5));
         container.setLayout(new FlowLayout(FlowLayout.CENTER));
