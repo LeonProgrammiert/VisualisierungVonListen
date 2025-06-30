@@ -35,6 +35,7 @@ public class SaveDiscardDialog<T> extends CustomDialog<T>{
         save.addActionListener(event -> {
             dispose();
             listEditor.saveList();
+            controller.backToLauncher();
         });
 
         CustomButton discard = new CustomButton("Änderungen verwerfen", 14);
