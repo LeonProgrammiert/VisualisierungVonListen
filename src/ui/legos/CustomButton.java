@@ -15,6 +15,7 @@ public class CustomButton extends CustomPanel {
     private final ArrayList<ActionListener> actionListeners = new ArrayList<>();
     protected JLabel textLabel;
 
+
     public CustomButton(String buttonText, int fontSize) {
         this(buttonText, fontSize, new EmptyBorder(5, 5, 5, 5));
     }
@@ -22,15 +23,16 @@ public class CustomButton extends CustomPanel {
     public CustomButton(String buttonText, int fontSize, Border padding) {
         // Initialize
         Border emptyBorder = padding == null ? BorderFactory.createEmptyBorder(5, 5, 5, 5) : padding;
-        Border unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1);
 
         // Text
         textLabel = GUIStyle.getStyledLabel(buttonText, fontSize);
 
-        // Format
+        // Layout
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, emptyBorder));
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Border
+        setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, new EmptyBorder(5, 5, 5, 5)));
 
         // Mange click events and add hover effect
         addMouseListener(new CustomMouseListener(this, textLabel, emptyBorder));

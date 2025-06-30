@@ -11,35 +11,42 @@ public class GUIStyle {
     private static Color highlightColor;
     private static Color backgroundColor;
 
+
+    private static Color buttonUnavailableColor;
     private static Color unhighlightedButtonColor;
     private static Color highlightedButtonColor;
+
     private static Color unhighlightedBorderColor;
+
+
 
     public static void setColorMode(boolean darkMode) {
         if (darkMode) {
             // Dark mode
             fontColor = Color.WHITE;
+
             highlightColor = new Color(255, 182, 193);
             backgroundColor = new Color(24, 26, 28);
+
+            buttonUnavailableColor = new Color(70, 70, 70);
             unhighlightedButtonColor = new Color(40,40,40);
             highlightedButtonColor = new Color(65, 65, 65);
+
             unhighlightedBorderColor = new Color(89, 89, 89);
         } else {
             // Light mode
             fontColor = Color.BLACK;
+
             highlightColor = new Color(224, 14, 46);
             backgroundColor = new Color(240, 242, 244);
+
+            buttonUnavailableColor = new Color(70, 70, 70);
             unhighlightedButtonColor = new Color(230, 232, 234);
             highlightedButtonColor = new Color(215, 217, 219);
+
             unhighlightedBorderColor = new Color(15, 15, 15);
         }
     }
-
-    public GUIStyle(boolean darkMode) {
-
-    }
-
-    private static final Color buttonUnavailable = new Color(70, 70, 70);
 
     // JLabels
     public static JLabel getStyledLabel(String message, Font font, Color color) {
@@ -98,7 +105,7 @@ public class GUIStyle {
     }
 
     public static Color getButtonUnavailableColor() {
-        return buttonUnavailable;
+        return buttonUnavailableColor;
     }
 
     // Frame
