@@ -7,7 +7,7 @@ import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
 import ui.ListViewer;
-import ui.dialogs.CustomOptionPane;
+import ui.legos.CustomOptionPane;
 
 import javax.sound.sampled.*;
 import javax.swing.*;

@@ -2,11 +2,11 @@ package ui.dialogs;
 
 import backend.ListElement;
 import backend.ListEvent;
-import backend.ListUtilities;
 import controls.Controller;
 import ui.ListEditor;
 import ui.legos.CustomButton;
 import ui.legos.CustomDialog;
+import ui.legos.CustomOptionPane;
 import ui.legos.CustomPanel;
 import ui.style.GUIStyle;
 

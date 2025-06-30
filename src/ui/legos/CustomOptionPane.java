@@ -1,6 +1,5 @@
-package ui.dialogs;
+package ui.legos;
 
-import ui.legos.CustomButton;
 import ui.style.GUIStyle;
 
 import javax.swing.*;
