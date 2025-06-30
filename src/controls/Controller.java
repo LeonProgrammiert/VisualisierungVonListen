@@ -174,19 +174,24 @@ public class Controller<T> {
         }
     }
 
+    public void updateSaveAvailability(boolean isUnsaved){
+        listEditor.updateSaveAvailability(isUnsaved);
+    }
+
     public void openListView(ListElement<T> current) {
         listEditor.setVisible(false);
         listViewer.openList(current.getFirst());
         listViewer.setVisible(true);
     }
 
-    public void listViewerToListEditor() {
+    public void backToListEditor() {
         listViewer.setVisible(false);
         listEditor.setVisible(true);
         listEditor.toFront();
     }
 
-    public void updateSaveAvailability(boolean isUnsaved){
-        listEditor.updateSaveAvailability(isUnsaved);
+    public void backToListEditor(ListElement<T> current) {
+        backToListEditor();
+        listEditor.openList(current);
     }
 }
