@@ -86,8 +86,9 @@ public class ListEditor <T> extends JFrame {
 
         current.setMaximumSize(new Dimension(100, 160));
         current.setPreferredSize(new Dimension(100, 160));
-        backToLauncher.setNewSize(250, 60);
-        listViewButton.setNewSize(250, 60);
+        backToLauncher.setNewSize(250, 30);
+        listViewButton.setNewSize(250, 30);
+
 
         // Label for index of the list
         JLabel index = GUIStyle.getStyledLabel("Indexplatzhalter", 24);
@@ -108,16 +109,27 @@ public class ListEditor <T> extends JFrame {
         actionPanel.add(addNodeButton);
         actionPanel.add(deleteNodeButton);
         actionPanel.add(redoButton);
+        //Panel für zentrale Leiste
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+        centerPanel.setBackground(container.getBackground());
+        centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
-        addComponentToGrid(container, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.WEST);
-        addComponentToGrid(container, listViewButton, editorLayout, 1, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.CENTER);
-        addComponentToGrid(container, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.EAST);
-        addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.CENTER);
+        // Add components
+        addComponentToGrid(centerPanel, backToLauncher, editorLayout, 0, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHWEST);
+        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        addComponentToGrid(centerPanel, listViewButton, editorLayout, 1,0,1, GridBagConstraints.NONE, null, GridBagConstraints.NORTH);
+        centerPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        addComponentToGrid(centerPanel, saveListButton, editorLayout, 2, 0, 1, GridBagConstraints.NONE, null, GridBagConstraints.NORTHEAST);
+
+        addComponentToGrid(container, predecessor, editorLayout, 0, 1, 1, GridBagConstraints.BOTH, new Insets(60, 60, 60, 30), GridBagConstraints.NORTHWEST);
         addComponentToGrid(container, successor, editorLayout, 2, 1, 1, GridBagConstraints.BOTH, new Insets(60, 30, 60, 60), GridBagConstraints.CENTER);
         addComponentToGrid(container, current, editorLayout, 1, 1, 1, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, index, editorLayout, 0, 2, 3, GridBagConstraints.NONE, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
         addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
+        addComponentToGrid(container, centerPanel, editorLayout, 0, 0, 3, GridBagConstraints.NONE, new Insets(0, 0, 30, 0), GridBagConstraints.CENTER);
         add(container);
     }
 
