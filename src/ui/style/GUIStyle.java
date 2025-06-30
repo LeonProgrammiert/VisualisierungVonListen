@@ -12,6 +12,7 @@ public class GUIStyle {
     private static final Color grayBackground = new Color(24, 26, 28);
     private static final Color grayButton = new Color(40,40,40);
 
+    private static final Color buttonUnavailable = new Color(70, 70, 70);
 
     // JLabels
     public static JLabel getStyledLabel(String message, Font font, Color color) {
@@ -65,6 +66,9 @@ public class GUIStyle {
         return new Color(65, 65, 65);
     }
 
+    public static Color getButtonUnavailableColor() {
+        return buttonUnavailable;
+    }
 
     // Frame
     public static Dimension getFrameSize() {

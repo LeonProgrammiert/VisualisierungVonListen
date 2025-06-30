@@ -4,40 +4,67 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import controls.Controller;
 import ui.style.GUIStyle;
 
-public class SaveButton extends JPanel{
-    private final ImageIcon whiteIcon;
-    private final ImageIcon grayIcon;
-    private final ImageIcon pinkIcon;
+public class SaveButton extends CustomPanel{
+    private final ImageIcon availableIcon;
+    private final ImageIcon unavailableIcon;
+    private final ImageIcon highlightedIcon;
+
+    private final Color availableColor;
+    private final Color unavailableColor;
+    private final Color highlightedColor;
 
     private final JLabel imageContainer;
+    private final JLabel textContainer;
 
-    public SaveButton(){
-        whiteIcon = loadAndScaleIcon("src/assets/saveIconWhite.png", 10, 10);
-        grayIcon = loadAndScaleIcon("src/assets/saveIconGray.png", 10, 10);
-        pinkIcon = loadAndScaleIcon("src/assets/saveIconPink.png", 10, 10);
+    public SaveButton(int fontsize){
+        setValues();
 
-        imageContainer = new JLabel(grayIcon);
-        
+        // Initialize images
+        availableIcon = loadAndScaleIcon("src/assets/saveIconWhite.png");
+        unavailableIcon = loadAndScaleIcon("src/assets/saveIconGray.png");
+        highlightedIcon = loadAndScaleIcon("src/assets/saveIconPink.png");
+
+        availableColor = GUIStyle.getWhiteColor();
+        unavailableColor = GUIStyle.getButtonUnavailableColor();
+        highlightedColor = GUIStyle.getPinkColor();
+
+
+        // Image container
+        imageContainer = new JLabel(unavailableIcon);
+        imageContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
+        addButtonFunctionality();
+
+        // Text container
+        textContainer = GUIStyle.getStyledLabel("Speichern", fontsize);
+        // Margin to image
+        textContainer.setBorder(new EmptyBorder(0, 5, 0, 0));
+
+        add(imageContainer);
+        add(textContainer);
+
+    }
+
+    private void setValues() {
         setBackground(GUIStyle.getGrayButtonColor());
         setBorder(new EmptyBorder(new Insets(5, 5, 5, 5)));
         setSize(60, 60);
+        setLayout(new FlowLayout(FlowLayout.CENTER));
+    }
 
-        add(imageContainer);
-
+    private void addButtonFunctionality() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(Controller.unsavedChanges){
                     Controller.getController().getListEditor().saveList();
-                    imageContainer.setIcon(grayIcon);
+                    imageContainer.setIcon(unavailableIcon);
+                    textContainer.setForeground(unavailableColor);
                     setBackground(GUIStyle.getGrayButtonColor());
                 }
             }
@@ -45,7 +72,8 @@ public class SaveButton extends JPanel{
             @Override
             public void mouseEntered(MouseEvent e) {
                 if(Controller.unsavedChanges){
-                    imageContainer.setIcon(pinkIcon);
+                    imageContainer.setIcon(highlightedIcon);
+                    textContainer.setForeground(highlightedColor);
                     setBackground(GUIStyle.getGrayButtonHighlightedColor());
                 }
             }
@@ -53,9 +81,11 @@ public class SaveButton extends JPanel{
             @Override
             public void mouseExited(MouseEvent e) {
                 if(Controller.unsavedChanges){
-                    imageContainer.setIcon(whiteIcon);
+                    imageContainer.setIcon(availableIcon);
+                    textContainer.setForeground(availableColor);
                 } else {
-                    imageContainer.setIcon(grayIcon);
+                    textContainer.setForeground(unavailableColor);
+                    imageContainer.setIcon(unavailableIcon);
                 }
                 setBackground(GUIStyle.getGrayButtonColor());
             }
@@ -64,14 +94,19 @@ public class SaveButton extends JPanel{
 
     public void updateSaveAvailability(boolean isUnsaved) {
         if(isUnsaved){
-            imageContainer.setIcon(whiteIcon);
+            textContainer.setForeground(availableColor);
+            imageContainer.setIcon(availableIcon);
         } else {
-            imageContainer.setIcon(grayIcon);        
+            textContainer.setForeground(unavailableColor);
+            imageContainer.setIcon(unavailableIcon);
         }
     }
-    private ImageIcon loadAndScaleIcon(String path, int width, int height) {
+    private ImageIcon loadAndScaleIcon(String path) {
+        // Image size
+        int size = 20;
+
         ImageIcon original = new ImageIcon(path);
-        Image scaled = original.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        Image scaled = original.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
         return new ImageIcon(scaled);
     }
 }

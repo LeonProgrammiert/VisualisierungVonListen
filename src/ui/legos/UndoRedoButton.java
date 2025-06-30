@@ -16,12 +16,15 @@ public class UndoRedoButton extends JPanel {
     private final JLabel iconLabel;
     private boolean isAvailable;
 
-    private final Color unavailableColor = new Color(70, 70, 70);
-    private Color currentColor = unavailableColor;
+    private final Color unavailableColor;
+    private Color currentColor;
 
     public UndoRedoButton(String symbol, String tooltip, ListEvent.events event) {
         setLayout(new GridBagLayout());
         setOpaque(false);
+
+        unavailableColor = GUIStyle.getButtonUnavailableColor();
+        currentColor = unavailableColor;
 
         // Kreis-Panel mit Symbol
         JPanel circlePanel = new JPanel() {
