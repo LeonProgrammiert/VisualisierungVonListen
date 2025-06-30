@@ -1,13 +1,13 @@
 package ui;
 
-import backend.ListUtilities;
 import backend.enumerations.AddElementPositions;
-import ui.dialogs.DeleteDialog;
 import ui.dialogs.SaveDiscardDialog;
+import ui.dialogs.DeleteDialog;
 import ui.legos.UndoRedoButton;
 import ui.legos.CustomButton;
-import ui.legos.SaveButton;
+import backend.ListUtilities;
 import ui.dialogs.AddDialog;
+import ui.legos.SaveButton;
 import backend.ListElement;
 import controls.Controller;
 import backend.ListEvent;
@@ -36,8 +36,6 @@ public class ListEditor <T> extends JFrame {
 
     private UndoRedoButton undoButton;
     private UndoRedoButton redoButton;
-
-    private boolean listHasBeenEdited;
 
     public ListEditor(Controller<T> controller) {
         this.controller = controller;
@@ -141,9 +139,10 @@ public class ListEditor <T> extends JFrame {
 
     public void backToLauncher() {
         if (Controller.unsavedChanges) {
-            new SaveDiscardDialog<>(this);
+            new SaveDiscardDialog<>(this, controller);
+        } else {
+            controller.backToLauncher();
         }
-        controller.backToLauncher();
     }
 
     private void clickedAddNode() {
@@ -204,7 +203,6 @@ public class ListEditor <T> extends JFrame {
         controller.saveList(currentListElement.getFirst());
 
         // Update saving availability
-        listHasBeenEdited = false;
         updateSaveAvailability(false);
     }
 
