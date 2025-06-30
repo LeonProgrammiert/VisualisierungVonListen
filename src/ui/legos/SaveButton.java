@@ -1,6 +1,6 @@
 package ui.legos;
 
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,11 +18,11 @@ public class SaveButton extends JPanel{
     private final ImageIcon pinkIcon;
 
     private final JLabel imageContainer;
-    
+
     public SaveButton(){
-        whiteIcon = new ImageIcon("src/assets/saveIconWhite.png");
-        grayIcon = new ImageIcon("src/assets/saveIconGray.png");
-        pinkIcon = new ImageIcon("src/assets/saveIconPink.png");
+        whiteIcon = loadAndScaleIcon("src/assets/saveIconWhite.png", 10, 10);
+        grayIcon = loadAndScaleIcon("src/assets/saveIconGray.png", 10, 10);
+        pinkIcon = loadAndScaleIcon("src/assets/saveIconPink.png", 10, 10);
 
         imageContainer = new JLabel(grayIcon);
         
@@ -68,5 +68,10 @@ public class SaveButton extends JPanel{
         } else {
             imageContainer.setIcon(grayIcon);        
         }
+    }
+    private ImageIcon loadAndScaleIcon(String path, int width, int height) {
+        ImageIcon original = new ImageIcon(path);
+        Image scaled = original.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
     }
 }
