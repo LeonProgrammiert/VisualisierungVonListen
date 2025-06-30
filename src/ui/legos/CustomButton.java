@@ -52,14 +52,4 @@ public class CustomButton extends CustomPanel {
             l.actionPerformed(evt);
         }
     }
-
-    public void setNewSize(Dimension size) {
-        setPreferredSize(size);
-        setMinimumSize(size);
-        setMaximumSize(size);
-    }
-
-    public void setNewSize(int width, int height) {
-        setNewSize(new Dimension(width, height));
-    }
 }
