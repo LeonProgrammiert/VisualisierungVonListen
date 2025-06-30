@@ -14,4 +14,14 @@ public class CustomPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(GUIStyle.getButtonColor(), 1)); // erst sichtbar beim Hover (wenn rosa wird)
         setOpaque(true);
     }
+
+    public void setNewSize(int width, int height) {
+        setNewSize(new Dimension(width, height));
+    }
+
+    public void setNewSize(Dimension size) {
+        setPreferredSize(size);
+        setMinimumSize(size);
+        setMaximumSize(size);
+    }
 }

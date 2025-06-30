@@ -7,8 +7,8 @@ import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
 import ui.ListViewer;
-import ui.dialogs.CustomOptionPane;
 import ui.style.GUIStyle;
+import ui.legos.CustomOptionPane;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -20,6 +20,7 @@ import java.io.IOException;
 public class Controller<T> {
 
     // Current list data
+    public static boolean unsavedChanges;
     private String currentListName;
     private File currentListFile;
 
@@ -53,6 +54,9 @@ public class Controller<T> {
     }
 
     public Controller() {
+        // Initialize
+        unsavedChanges = false;
+
         // Initialize instances
         stackManager = new StackManager<>(this);
         listEditor = new ListEditor<>(this);
@@ -159,6 +163,7 @@ public class Controller<T> {
 
     public void saveList(ListElement<T> firstElement) {
         databaseAccessor.saveListToFile(firstElement, currentListFile);
+        unsavedChanges = false;
     }
 
     public String getCurrentListName() {
@@ -182,12 +187,16 @@ public class Controller<T> {
         listViewer.setVisible(true);
     }
 
-    public void listViewerToListEditor() {
+    public void backToListEditor(ListElement<T> current) {
+        backToListEditor();
+        listEditor.openList(current);
+    }
+
+    public void backToListEditor() {
         listViewer.setVisible(false);
         listEditor.setVisible(true);
         listEditor.toFront();
     }
-
 
     public void toggleTheme() {
         // Close open windows

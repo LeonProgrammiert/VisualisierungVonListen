@@ -6,6 +6,7 @@ import controls.Controller;
 import ui.ListEditor;
 import ui.legos.CustomButton;
 import ui.legos.CustomDialog;
+import ui.legos.CustomOptionPane;
 import ui.legos.CustomPanel;
 import ui.style.GUIStyle;
 
@@ -26,7 +27,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
     }
 
     @Override
-    public CustomPanel getOptionPanel() {
+    public CustomPanel getOptionPanel()  {
         CustomPanel container = new CustomPanel();
         container.setBorder(new EmptyBorder(5, 5, 5, 5));
         container.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -72,7 +73,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         ListElement<T> current = listEditor.getCurrentListElement();
 
         // Push deep copy of current to the stack
-        controller.push(new ListEvent<T>(current, ListEvent.events.remove));
+        controller.push(new ListEvent<>(current, ListEvent.events.remove));
 
         // Define next element to display and remove the current element
         ListElement<T> nextToDisplay = remove(current);

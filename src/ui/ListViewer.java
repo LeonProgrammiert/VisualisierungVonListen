@@ -51,10 +51,7 @@ public class ListViewer<T> extends JFrame {
 
         CustomButton backToListEditorButton = new CustomButton("Zurück zum Editor", 18);
         headerPanel.add(backToListEditorButton);
-        backToListEditorButton.addActionListener(e -> {
-            contentPanel.removeAll();
-            controller.listViewerToListEditor();
-        });
+        backToListEditorButton.addActionListener(e -> backToListEditor());
 
         // Body
         contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -74,13 +71,34 @@ public class ListViewer<T> extends JFrame {
             return;
         }
 
+        // Start
+        JPanel nullPanelStart = new CustomListElementPanel<>(first, this).getPanel("null", null);
+        nullPanelStart.setBorder(new LineBorder(Color.BLACK, 2));
+        contentPanel.add(nullPanelStart);
+
+        // In between
         ListElement<T> current = first;
         while (current != null) {
-
-            String data = current.getElement();
-            contentPanel.add(new CustomListElementPanel(data));
-
+            contentPanel.add(new CustomListElementPanel<>(current, this));
             current = current.getNext();
         }
+
+        // End
+        JPanel nullPanelEnd = new CustomListElementPanel<>(first, this).getPanel("null", null);
+        nullPanelEnd.setBorder(new LineBorder(Color.BLACK, 2));
+        contentPanel.add(nullPanelEnd);
     }
+
+    public void backToListEditor() {
+        contentPanel.removeAll();
+        controller.backToListEditor();
+    }
+
+    public void backToListEditor(ListElement<T> current) {
+        contentPanel.removeAll();
+        controller.backToListEditor(current);
+    }
+
+
+
 }

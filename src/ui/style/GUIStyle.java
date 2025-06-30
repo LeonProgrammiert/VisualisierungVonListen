@@ -39,6 +39,7 @@ public class GUIStyle {
 
     }
 
+    private static final Color buttonUnavailable = new Color(70, 70, 70);
 
     // JLabels
     public static JLabel getStyledLabel(String message, Font font, Color color) {
@@ -96,6 +97,9 @@ public class GUIStyle {
         return highlightedButtonColor;
     }
 
+    public static Color getButtonUnavailableColor() {
+        return buttonUnavailable;
+    }
 
     // Frame
     public static Dimension getFrameSize() {

@@ -3,24 +3,29 @@ package ui.legos;
 import backend.ListEvent;
 import backend.ListElement;
 import controls.Controller;
+import backend.ListElement;
 import ui.style.GUIStyle;
+import backend.ListEvent;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
+import java.awt.*;
 
 public class UndoRedoButton extends JPanel {
 
     private final JLabel iconLabel;
     private boolean isAvailable;
 
-    private final Color unavailableColor = new Color(70, 70, 70);
-    private Color currentColor = unavailableColor;
+    private final Color unavailableColor;
+    private Color currentColor;
 
     public UndoRedoButton(String symbol, String tooltip, ListEvent.events event) {
         setLayout(new GridBagLayout());
         setOpaque(false);
+
+        unavailableColor = GUIStyle.getButtonUnavailableColor();
+        currentColor = unavailableColor;
 
         // Kreis-Panel mit Symbol
         JPanel circlePanel = new JPanel() {
@@ -52,7 +57,7 @@ public class UndoRedoButton extends JPanel {
                 if (isAvailable) {
                     System.out.println("[LOG] Undo/Redo-Button geklickt: " + event.name());
                     ListElement current = Controller.getController().getListEditor().getCurrentListElement();
-                    Controller.getController().pull(new ListEvent<>(current, event));
+                    Controller.getController().pull(new ListEvent(current, event));
                 }
             }
 
