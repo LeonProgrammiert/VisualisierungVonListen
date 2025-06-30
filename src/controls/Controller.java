@@ -174,10 +174,6 @@ public class Controller<T> {
         }
     }
 
-    public void updateSaveAvailability(boolean isUnsaved){
-        listEditor.updateSaveAvailability(isUnsaved);
-    }
-
     public void openListView(ListElement<T> current) {
         listEditor.setVisible(false);
         listViewer.openList(current.getFirst());

@@ -73,7 +73,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         ListElement<T> current = listEditor.getCurrentListElement();
 
         // Push deep copy of current to the stack
-        controller.push(new ListEvent<T>(current, ListEvent.events.remove));
+        controller.push(new ListEvent<>(current, ListEvent.events.remove));
 
         // Define next element to display and remove the current element
         ListElement<T> nextToDisplay = remove(current);
