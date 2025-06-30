@@ -19,6 +19,7 @@ import java.io.IOException;
 public class Controller<T> {
 
     // Current list data
+    public static boolean unsavedChanges;
     private String currentListName;
     private File currentListFile;
 
@@ -47,6 +48,7 @@ public class Controller<T> {
     public Controller() {
         // Initialize
         instance = this;
+        unsavedChanges = false;
 
         // Initialize instances
         stackManager = new StackManager<>(this);
@@ -154,6 +156,7 @@ public class Controller<T> {
 
     public void saveList(ListElement<T> firstElement) {
         databaseAccessor.saveListToFile(firstElement, currentListFile);
+        unsavedChanges = false;
     }
 
     public String getCurrentListName() {
@@ -183,5 +186,7 @@ public class Controller<T> {
         listEditor.toFront();
     }
 
-
+    public void updateSaveAvailability(boolean isUnsaved){
+        listEditor.updateSaveAvailability(isUnsaved);
+    }
 }
