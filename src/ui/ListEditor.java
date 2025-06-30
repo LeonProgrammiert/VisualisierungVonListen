@@ -30,6 +30,7 @@ public class ListEditor <T> extends JFrame {
     private CustomButton successor;
     private CustomButton current;
     private SaveButton saveListButton;
+    private JLabel index;
 
     private File clickSound;
     private File errorSound;
@@ -89,7 +90,7 @@ public class ListEditor <T> extends JFrame {
 
 
         // Label for index of the list
-        JLabel index = GUIStyle.getStyledLabel("Indexplatzhalter", 24);
+        index = GUIStyle.getStyledLabel("Indexplatzhalter", 24);
 
         // Gemeinsames Panel für Hinzufügen/Löschen + Undo/Redo
         JPanel actionPanel = new JPanel();
@@ -231,17 +232,21 @@ public class ListEditor <T> extends JFrame {
 
         // Get data
         String[] readableData = ListUtilities.getData(newData);
+        String indexString = newData.getIndex() + "/" + newData.getMaxIndex();
 
         // LOG
         System.out.println("[LOG] Anzeige wird aktualisiert:");
         System.out.println("       Vorgänger: " + readableData[0]);
         System.out.println("       Aktuell:   " + readableData[1]);
         System.out.println("       Nachfolger:" + readableData[2]);
+        System.out.println("       Index: "     +   indexString);
+
 
         // Set data
         predecessor.setText(readableData[0]);
         current.setText(readableData[1]);
         successor.setText(readableData[2]);
+        index.setText(indexString);
 
         predecessor.setEnabled(true);
         current.setEnabled(true);
