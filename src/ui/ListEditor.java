@@ -109,6 +109,7 @@ public class ListEditor <T> extends JFrame {
         actionPanel.add(addNodeButton);
         actionPanel.add(deleteNodeButton);
         actionPanel.add(redoButton);
+
         //Panel für zentrale Leiste
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
@@ -201,6 +202,10 @@ public class ListEditor <T> extends JFrame {
 
     public void saveList() {
         controller.saveList(currentListElement.getFirst());
+
+        // Update saving availability
+        listHasBeenEdited = false;
+        updateSaveAvailability(false);
     }
 
     public void openList(ListElement<T> currentListElement) {
