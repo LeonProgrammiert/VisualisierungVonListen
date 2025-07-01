@@ -1,15 +1,14 @@
 package ui;
 
-import ui.dialogs.NewListDialog;
-import ui.legos.CustomIconButton;
 import controls.Controller;
-import ui.style.GUIStyle;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import javax.swing.*;
+import ui.dialogs.NewListDialog;
+import ui.legos.CustomIconButton;
+import ui.style.GUIStyle;
 
 public class Launcher<T> extends JFrame {
 
@@ -110,7 +109,9 @@ public class Launcher<T> extends JFrame {
         File src = new File(path);
 
         fileChooser.setCurrentDirectory(src);
-        fileChooser.showOpenDialog(null);
+        if(fileChooser.showOpenDialog(null) == JFileChooser.CANCEL_OPTION){
+            return;
+        }
         File file = fileChooser.getSelectedFile();
 
         // Prevent NullPointerException, if no file is selected
