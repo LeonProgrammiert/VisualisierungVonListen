@@ -62,6 +62,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
 
         if (confirm == JOptionPane.YES_OPTION) {
             // Confirmed -> delete
+            listEditor.saveList();
             Controller.getController().deleteList();
             listEditor.backToLauncher();
         }
