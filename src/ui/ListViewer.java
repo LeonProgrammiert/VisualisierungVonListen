@@ -87,26 +87,24 @@ public class ListViewer<T> extends JFrame {
 
 
     public void openList(ListElement<T> first) {
-        if (isVisible()) {
-            return;
-        }
-
         // Start
-        JPanel nullPanelStart = new CustomListElementPanel<>(first, this).getPanel("null", null);
+        JPanel nullPanelStart = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
         nullPanelStart.setBorder(new LineBorder(Color.BLACK, 2));
         contentPanel.add(nullPanelStart);
 
         // In between
         ListElement<T> current = first;
         while (current != null) {
-            contentPanel.add(new CustomListElementPanel<>(current, this));
+            contentPanel.add(new CustomListElementPanel<>(current, this, controller));
             current = current.getNext();
         }
 
         // End
-        JPanel nullPanelEnd = new CustomListElementPanel<>(first, this).getPanel("null", null);
+        JPanel nullPanelEnd = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
         nullPanelEnd.setBorder(new LineBorder(Color.BLACK, 2));
         contentPanel.add(nullPanelEnd);
+        repaint();
+        revalidate();
     }
 
     public void backToListEditor() {
@@ -117,5 +115,14 @@ public class ListViewer<T> extends JFrame {
     public void backToListEditor(ListElement<T> current) {
         contentPanel.removeAll();
         controller.backToListEditor(current);
+    }
+
+    public void update(ListElement<T> element) {
+        contentPanel.removeAll();
+        repaint();
+        revalidate();
+
+        openList(element.getFirst());
+
     }
 }

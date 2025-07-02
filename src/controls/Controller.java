@@ -174,9 +174,11 @@ public class Controller<T> {
     }
 
     public void openListView(ListElement<T> current) {
-        listEditor.setVisible(false);
-        listViewer.openList(current.getFirst());
-        listViewer.setVisible(true);
+        if (!listViewer.isVisible()) {
+            listEditor.setVisible(false);
+            listViewer.openList(current.getFirst());
+            listViewer.setVisible(true);
+        }
     }
 
     public void backToListEditor() {
