@@ -1,0 +1,12 @@
+Zaehler;Rechnungs-Nummer;Rechnungsdatum;Abrechnungsmonat;Kundennummer;Rufnummer;SIM-Nummer;Benutzer;Kostenstelle;Zusatzinfo;Kategorie;Detail;Datum von;Datum bis;Menge;MwSt-Satz;Betrag
+1;"M25041548902";17.06.2025;"Juni 25";1209015308;"";"";"Salma El Youssoufi";"";"";"Gesamtsummen";"Nettosumme";;;;19;37,7731
+2;"M25041548902";17.06.2025;"Juni 25";1209015308;"";"";"Salma El Youssoufi";"";"";"Gesamtsummen";"Summe MwSt.Satz";;;;19;7,18
+3;"M25041548902";17.06.2025;"Juni 25";1209015308;"";"";"Salma El Youssoufi";"";"";"Gesamtsummen";"Rechnungsbetrag gesamt";;;;;44,95
+4;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Basisleistungen";"Grundgebühr";01.06.2025;30.06.2025;1;19;62,9832
+5;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Basisleistungen";"Smartphone-Option";01.06.2025;30.06.2025;1;19;8,4034
+6;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Verbindungen";"Verbindungen ins dt. Festnetz (FN)";18.05.2025;12.06.2025;11;19;0,0000
+7;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Verbindungen";"Netzinterne Verbindungen (NI)";29.05.2025;12.06.2025;4;19;0,0000
+8;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Verbindungen";"Netzexterne Verbindungen (NX)";17.05.2025;15.06.2025;25;19;0,0000
+9;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Verbindungen";"Datenverbindungen (DATA)";15.05.2025;15.06.2025;63;19;0,0000
+10;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Ihre freenet Vorteile";"10,00 EUR Rabatt auf Monatsgrundpreis dauerhaft";01.06.2025;30.06.2025;1;19;-8,4034
+11;"M25041548902";17.06.2025;"Juni 25";1209015308;"017664821123";"89490200002016934573";"Salma El Youssoufi";"";"";"Ihre freenet Vorteile";"24 x 30 EUR Rabatt auf Monatsgrundpreis";01.06.2025;30.06.2025;1;19;-25,2101
