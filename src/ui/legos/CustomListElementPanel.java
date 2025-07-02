@@ -26,7 +26,7 @@ public class CustomListElementPanel<T> extends JPanel {
 
     public JPanel getPanel(String text, ListElement<T> element) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(GUIStyle.getGrayButtonColor());
+        panel.setBackground(GUIStyle.getButtonColor());
         CustomButton button = new CustomButton(text, 28, new EmptyBorder(2, 5, 2, 5));
 
         if (element != null) {

@@ -31,7 +31,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
         CustomPanel container = new CustomPanel();
         container.setBorder(new EmptyBorder(5, 5, 5, 5));
         container.setLayout(new FlowLayout(FlowLayout.CENTER));
-        container.setBackground(GUIStyle.getGrayColor());
+        container.setBackground(GUIStyle.getBackgroundColor());
 
         // Cancel button
         CustomButton cancelButton = new CustomButton("Abbrechen", 14);
@@ -118,7 +118,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
             @Override
             public CustomPanel getOptionPanel() {
                 CustomPanel panel = new CustomPanel();
-                panel.setBackground(GUIStyle.getGrayColor());
+                panel.setBackground(GUIStyle.getBackgroundColor());
                 panel.setBorder(new EmptyBorder(0, 5, 5, 5));
 
                 panel.setLayout(new GridLayout(2, 1, 0, 10));

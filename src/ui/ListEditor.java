@@ -62,7 +62,7 @@ public class ListEditor <T> extends JFrame {
 
     //baut die Benutzeroberfläche
     public void build() {
-        Color backgroundColor = GUIStyle.getGrayColor();
+        Color backgroundColor = GUIStyle.getBackgroundColor();
 
         // Create container
         JPanel container = new JPanel();
