@@ -14,6 +14,8 @@ import ui.ListEditor;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class AddDialog<T> extends CustomDialog<T> {
 
@@ -74,7 +76,17 @@ public class AddDialog<T> extends CustomDialog<T> {
         optionPanel.setBorder(new EmptyBorder(5,5,5,5));
         optionPanel.setBackground(super.getContentPane().getBackground());
         optionPanel.setLayout(new GridBagLayout());
-
+        
+        // pressing the enter key while in this dialog acts the same as clicking the save button
+        KeyAdapter enterKey = new KeyAdapter(){
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    clicked();
+                }
+            }
+        };
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -91,6 +103,7 @@ public class AddDialog<T> extends CustomDialog<T> {
         textField = new JTextField();
         textField.setToolTipText("max 12 Zeichen");
         textField.setHorizontalAlignment(JTextField.CENTER);
+        textField.addKeyListener(enterKey);
         optionPanel.add(textField, gbc);
 
         // ---------- Line 1: Label and ComboBox ----------
@@ -102,6 +115,7 @@ public class AddDialog<T> extends CustomDialog<T> {
 
         gbc.gridx = 1;
         positionSelector = new JComboBox<>();
+        positionSelector.addKeyListener(enterKey);
         optionPanel.add(positionSelector, gbc);
 
         // ---------- Line 2: Cancel- and Save-Button ----------
