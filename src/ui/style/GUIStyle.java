@@ -110,7 +110,7 @@ public class GUIStyle {
 
     // Frame
     public static Dimension getFrameSize() {
-        return new Dimension(1400, 1000);
+        return new Dimension(1400, 800);
     }
 
 }
