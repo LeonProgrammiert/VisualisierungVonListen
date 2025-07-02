@@ -9,6 +9,7 @@ import ui.Launcher;
 import ui.ListViewer;
 import ui.style.GUIStyle;
 import ui.legos.CustomOptionPane;
+import ui.style.GUIStyle;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -57,6 +58,8 @@ public class Controller<T> {
     public Controller() {
         // Initialize
         unsavedChanges = false;
+
+        GUIStyle.setColorMode(true);
 
         // Initialize instances
         stackManager = new StackManager<>(this);

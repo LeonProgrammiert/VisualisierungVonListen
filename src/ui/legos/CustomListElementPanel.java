@@ -16,8 +16,7 @@ public class CustomListElementPanel<T> extends JPanel {
         this.listViewer = listViewer;
 
         setLayout(new GridLayout(1, 3)); // 1 Zeile, 3 Spalten
-        setBorder(BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
-        setOpaque(false);
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         add(getPanel("←", null));
         add(getPanel(element.getElement(), element));
@@ -27,6 +26,7 @@ public class CustomListElementPanel<T> extends JPanel {
 
     public JPanel getPanel(String text, ListElement<T> element) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setBackground(GUIStyle.getButtonColor());
         CustomButton button = new CustomButton(text, 28, new EmptyBorder(2, 5, 2, 5));
 
         if (element != null) {
@@ -34,9 +34,6 @@ public class CustomListElementPanel<T> extends JPanel {
         }
 
         panel.add(button);
-        panel.setBackground(GUIStyle.getButtonColor());
-        CustomButton label = new CustomButton(text, 28, new EmptyBorder(2, 5, 2, 5));
-        panel.add(label);
         return panel;
     }
 }

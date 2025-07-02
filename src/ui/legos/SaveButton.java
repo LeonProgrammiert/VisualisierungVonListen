@@ -52,7 +52,7 @@ public class SaveButton extends CustomPanel{
 
     private void setValues() {
         setBackground(GUIStyle.getButtonColor());
-        setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, new EmptyBorder(5, 5, 5, 5)));
+        setBorder(new EmptyBorder(new Insets(5, 5, 5, 5)));
         setSize(60, 60);
         setLayout(new FlowLayout(FlowLayout.CENTER));
     }
