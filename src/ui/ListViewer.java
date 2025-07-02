@@ -29,7 +29,7 @@ public class ListViewer<T> extends JFrame {
     }
 
     private void setValues() {
-        setTitle("ListViewer");
+        setTitle("ListEditor");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(GUIStyle.getFrameSize());
         setLocationRelativeTo(null);
@@ -76,6 +76,8 @@ public class ListViewer<T> extends JFrame {
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        // Scroll speed
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         container.add(headerPanel, BorderLayout.NORTH);
         container.add(scrollPane, BorderLayout.CENTER);
