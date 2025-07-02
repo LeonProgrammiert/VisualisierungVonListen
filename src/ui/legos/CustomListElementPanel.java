@@ -10,7 +10,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.List;
 
 public class CustomListElementPanel<T> extends JPanel {
 
@@ -71,8 +70,13 @@ public class CustomListElementPanel<T> extends JPanel {
     private ListElement<T> switchElements(buttonTypes type) {
         ListElement<T> current = listElement;
 
-        // Push event
-        controller.push(new ListEvent<>(current, ListEvent.events.switchPrevious));
+        if (switchAvailable(type)) {
+            // Push event
+            controller.push(new ListEvent<>(current, ListEvent.events.switchPrevious));
+            // Play sound
+            controller.playSound(swapSound);
+        }
+
 
 
         if (type == buttonTypes.previous) {
@@ -93,7 +97,6 @@ public class CustomListElementPanel<T> extends JPanel {
             if (next != null) next.setPrevious(prev);
 
             // Return new "current"
-            controller.playSound(swapSound);
             return current;
         } else {
             ListElement<T> next = current.getNext();
@@ -113,9 +116,18 @@ public class CustomListElementPanel<T> extends JPanel {
             if (after != null) after.setPrevious(current);
 
             // Return new "current"
-            controller.playSound(swapSound);
             return next;
         }
+    }
+
+    private boolean switchAvailable(buttonTypes type) {
+        if (type == buttonTypes.previous) {
+            return listElement.getPrevious() != null;
+        }
+        else if (type == buttonTypes.next) {
+            return listElement.getNext() != null;
+        }
+        return false;
     }
 }
 
