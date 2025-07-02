@@ -9,9 +9,9 @@ public class CustomPanel extends JPanel {
 
     public CustomPanel() {
         setLayout(new GridBagLayout());
-        setBackground(GUIStyle.getGrayButtonColor());
+        setBackground(GUIStyle.getButtonColor());
 
-        setBorder(BorderFactory.createLineBorder(GUIStyle.getGrayButtonColor(), 1)); // erst sichtbar beim Hover (wenn rosa wird)
+        setBorder(BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1)); // erst sichtbar beim Hover (wenn rosa wird)
         setOpaque(true);
     }
 

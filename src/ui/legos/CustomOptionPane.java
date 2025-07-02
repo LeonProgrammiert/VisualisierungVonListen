@@ -35,12 +35,12 @@ public class CustomOptionPane extends JDialog {
         setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
-        panel.setBackground(GUIStyle.getGrayColor());
+        panel.setBackground(GUIStyle.getBackgroundColor());
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(15, 20, 15, 20));
 
         JLabel label = new JLabel("<html><div style='text-align:center;'>" + message + "</div></html>", SwingConstants.CENTER);
-        label.setForeground(GUIStyle.getWhiteColor());
+        label.setForeground(GUIStyle.getFontColor());
         label.setFont(GUIStyle.getFont(18));
         label.setOpaque(false);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -66,7 +66,7 @@ public class CustomOptionPane extends JDialog {
 
 
             JPanel buttonsPanel = new JPanel();
-            buttonsPanel.setBackground(GUIStyle.getGrayColor());
+            buttonsPanel.setBackground(GUIStyle.getBackgroundColor());
             buttonsPanel.setLayout(new GridLayout(1, 2, 10, 0));
 
             buttonsPanel.add(yesButton);

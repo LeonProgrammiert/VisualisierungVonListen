@@ -21,20 +21,20 @@ public class CustomMouseListener extends MouseAdapter {
         this.parent = parent;
         this.label = label;
         emptyBorder = padding;
-        highlightBorder = BorderFactory.createLineBorder(GUIStyle.getPinkColor(), 1);
-        unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getGrayButtonColor(), 1);
+        highlightBorder = BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 1);
+        unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getButtonColor(), 1);
     }
 
     public void mouseEntered(MouseEvent e) {
-        parent.setBackground(GUIStyle.getGrayButtonHighlightedColor());
+        parent.setBackground(GUIStyle.getHighlightedButtonColor());
         parent.setBorder(BorderFactory.createCompoundBorder(highlightBorder, emptyBorder));
-        label.setForeground(GUIStyle.getPinkColor()); // ← Rosa Text beim Hover
+        label.setForeground(GUIStyle.getHighlightedColor()); // ← Rosa Text beim Hover
     }
 
     public void mouseExited(MouseEvent e) {
-        parent.setBackground(GUIStyle.getGrayButtonColor());
+        parent.setBackground(GUIStyle.getButtonColor());
         parent.setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, emptyBorder));
-        label.setForeground(GUIStyle.getWhiteColor());
+        label.setForeground(GUIStyle.getFontColor());
     }
 
     public void mouseClicked(MouseEvent e) {
