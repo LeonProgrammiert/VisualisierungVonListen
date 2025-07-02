@@ -9,6 +9,7 @@ import ui.ListViewer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 
 public class CustomListElementPanel<T> extends JPanel {
@@ -20,11 +21,16 @@ public class CustomListElementPanel<T> extends JPanel {
 
     public enum buttonTypes {previous, current, next, none}
 
+    private final File swapSound;
+    private final File clickSound;
 
     public CustomListElementPanel(ListElement<T> element, ListViewer<T> listViewer, Controller<T> controller) {
         this.controller = controller;
         this.listViewer = listViewer;
         this.listElement = element;
+
+        swapSound = new File(System.getProperty("user.dir") + "/src/assets/swapSound.wav");
+        clickSound = new File(System.getProperty("user.dir") + "/src/assets/clickSound.wav");
 
         setLayout(new GridLayout(1, 3)); // 1 Zeile, 3 Spalten
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -55,6 +61,7 @@ public class CustomListElementPanel<T> extends JPanel {
                 break;
             case current:
                 listViewer.backToListEditor(listElement);
+                controller.playSound(clickSound);
             default:
                 System.out.println("unknown button type " + type);
 
@@ -63,6 +70,10 @@ public class CustomListElementPanel<T> extends JPanel {
 
     private ListElement<T> switchElements(buttonTypes type) {
         ListElement<T> current = listElement;
+
+        // Push event
+        controller.push(new ListEvent<>(current, ListEvent.events.switchPrevious));
+
 
         if (type == buttonTypes.previous) {
             ListElement<T> prev = current.getPrevious();
@@ -81,9 +92,8 @@ public class CustomListElementPanel<T> extends JPanel {
 
             if (next != null) next.setPrevious(prev);
 
-            // Push event
-            controller.push(new ListEvent<>(current, ListEvent.events.switchPrevious));
             // Return new "current"
+            controller.playSound(swapSound);
             return current;
         } else {
             ListElement<T> next = current.getNext();
@@ -102,9 +112,8 @@ public class CustomListElementPanel<T> extends JPanel {
 
             if (after != null) after.setPrevious(current);
 
-            // Push event
-            controller.push(new ListEvent<>(current, ListEvent.events.switchNext));
             // Return new "current"
+            controller.playSound(swapSound);
             return next;
         }
     }

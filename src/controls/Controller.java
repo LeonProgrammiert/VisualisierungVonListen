@@ -184,14 +184,10 @@ public class Controller<T> {
         }
     }
 
-    public void backToListEditor() {
+    public void backToListEditor(ListElement<T> current) {
         listViewer.setVisible(false);
         listEditor.setVisible(true);
         listEditor.toFront();
-    }
-
-    public void backToListEditor(ListElement<T> current) {
-        backToListEditor();
         listEditor.openList(current);
     }
 }

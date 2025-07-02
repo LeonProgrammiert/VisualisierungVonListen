@@ -1,6 +1,7 @@
 package ui;
 
 import backend.ListElement;
+import backend.ListUtilities;
 import controls.Controller;
 import ui.legos.CustomButton;
 import ui.legos.CustomListElementPanel;
@@ -18,6 +19,8 @@ import java.awt.event.WindowEvent;
 public class ListViewer<T> extends JFrame {
 
     private final Controller<T> controller;
+
+    private ListElement<T> currentList;
 
     private JPanel contentPanel;
     private CompoundBorder border;
@@ -46,7 +49,7 @@ public class ListViewer<T> extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                backToListEditor();
+                backToListEditor(currentList);
             }
         });
     }
@@ -65,7 +68,7 @@ public class ListViewer<T> extends JFrame {
 
         CustomButton backToListEditorButton = new CustomButton("Zurück zum Editor", 18);
         headerPanel.add(backToListEditorButton);
-        backToListEditorButton.addActionListener(e -> backToListEditor());
+        backToListEditorButton.addActionListener(e -> backToListEditor(currentList));
 
         // Body
         contentPanel = new JPanel(new WrapLayout(FlowLayout.CENTER));
@@ -87,6 +90,9 @@ public class ListViewer<T> extends JFrame {
 
 
     public void openList(ListElement<T> first) {
+        // Set current list
+        this.currentList = ListUtilities.deepCopy(first);
+
         // Start
         JPanel nullPanelStart = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
         nullPanelStart.setBorder(new LineBorder(Color.BLACK, 2));
@@ -107,22 +113,18 @@ public class ListViewer<T> extends JFrame {
         revalidate();
     }
 
-    public void backToListEditor() {
-        contentPanel.removeAll();
-        controller.backToListEditor();
-    }
-
     public void backToListEditor(ListElement<T> current) {
         contentPanel.removeAll();
         controller.backToListEditor(current);
     }
 
-    public void update(ListElement<T> element) {
+    public void update(ListElement<T> newList) {
+        // Remove all components and update the frame
         contentPanel.removeAll();
         repaint();
         revalidate();
 
-        openList(element.getFirst());
-
+        // Open new list (saves the current state of the list)
+        openList(newList.getFirst());
     }
 }
