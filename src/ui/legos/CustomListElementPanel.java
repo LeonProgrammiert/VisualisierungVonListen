@@ -2,6 +2,8 @@ package ui.legos;
 
 import backend.ListElement;
 import backend.ListEvent;
+import backend.ListUtilities;
+import backend.enumerations.SwapPositions;
 import controls.Controller;
 import ui.style.GUIStyle;
 import ui.ListViewer;
@@ -53,81 +55,36 @@ public class CustomListElementPanel<T> extends JPanel {
     }
 
     private void actionPerformed(buttonTypes type) {
+        ListElement<T> newList;
         switch (type) {
-            case previous, next:
-                ListElement<T> newList = switchElements(type);
+            case previous:
+                newList = switchElements(SwapPositions.previous);
+                listViewer.update(newList);
+                break;
+            case next:
+                newList = switchElements(SwapPositions.next);
                 listViewer.update(newList);
                 break;
             case current:
                 listViewer.backToListEditor(listElement);
                 controller.playSound(clickSound);
+                break;
             default:
                 System.out.println("unknown button type " + type);
 
         }
     }
 
-    private ListElement<T> switchElements(buttonTypes type) {
-        ListElement<T> current = listElement;
-
-        if (switchAvailable(type)) {
+    private ListElement<T> switchElements(SwapPositions position) {
+        if (ListUtilities.switchAvailable(listElement, position)) {
             // Push event
-            controller.push(new ListEvent<>(current, ListEvent.events.switchPrevious));
+            controller.push(new ListEvent<>(listElement, ListEvent.events.switchPrevious));
             // Play sound
             controller.playSound(swapSound);
+            // Execute switch
+            return ListUtilities.switchElements(listElement, position);
         }
-
-
-
-        if (type == buttonTypes.previous) {
-            ListElement<T> prev = current.getPrevious();
-            if (prev == null) return current; // Can't switch if no previous
-
-            ListElement<T> before = prev.getPrevious();
-            ListElement<T> next = current.getNext();
-
-            // Re-link surrounding nodes
-            if (before != null) before.setNext(current);
-            current.setPrevious(before);
-            current.setNext(prev);
-
-            prev.setPrevious(current);
-            prev.setNext(next);
-
-            if (next != null) next.setPrevious(prev);
-
-            // Return new "current"
-            return current;
-        } else {
-            ListElement<T> next = current.getNext();
-            if (next == null) return current; // Can't switch if no next
-
-            ListElement<T> after = next.getNext();
-            ListElement<T> prev = current.getPrevious();
-
-            // Re-link surrounding nodes
-            if (prev != null) prev.setNext(next);
-            next.setPrevious(prev);
-            next.setNext(current);
-
-            current.setPrevious(next);
-            current.setNext(after);
-
-            if (after != null) after.setPrevious(current);
-
-            // Return new "current"
-            return next;
-        }
-    }
-
-    private boolean switchAvailable(buttonTypes type) {
-        if (type == buttonTypes.previous) {
-            return listElement.getPrevious() != null;
-        }
-        else if (type == buttonTypes.next) {
-            return listElement.getNext() != null;
-        }
-        return false;
+        return listElement;
     }
 }
 

@@ -79,4 +79,12 @@ public class ListElement<T> {
         return getSize() - 1;
     }
 
+    public boolean isFirst() {
+        return previous == null;
+    }
+
+    public boolean isLast() {
+        return next == null;
+    }
+
 }
