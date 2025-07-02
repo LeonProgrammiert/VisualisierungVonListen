@@ -18,6 +18,7 @@ public class Launcher<T> extends JFrame {
     enum eventTypes {add, open}
 
     private boolean darkMode = false;
+
     public Launcher(Controller<T> controller) {
         this.controller = controller;
         setValues();
@@ -35,12 +36,24 @@ public class Launcher<T> extends JFrame {
         // Hintergrund
         JPanel container = new JPanel();
         container.setBackground(GUIStyle.getBackgroundColor());
+
+
+        JToggleButton toggleButton = new JToggleButton("🌕");
+        toggleButton.setPreferredSize(new Dimension(60, 40));
+        toggleButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        toggleButton.setBorderPainted(false);
+        toggleButton.setFocusPainted(false);
+
+        toggleButton.addItemListener(e -> {
+            boolean selected = toggleButton.isSelected();
+            toggleButton.setText(selected ? "🌑" : "🌕");
+            controller.toggleTheme();
+
+
+        });
+
+        container.add(toggleButton);
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //alle container untereinander
-
-
-        JToggleButton toggleButton = new JToggleButton("Light Mode");
-        toggleButton.addItemListener(e -> controller.toggleTheme());
-        container.add(toggleButton, BorderLayout.NORTH);
 
         // Titel & Untertitel
         JLabel title = GUIStyle.getStyledLabel("Willkommen bei den friedlichen Koalas", 40);

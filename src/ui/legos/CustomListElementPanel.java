@@ -17,6 +17,7 @@ public class CustomListElementPanel<T> extends JPanel {
 
         setLayout(new GridLayout(1, 3)); // 1 Zeile, 3 Spalten
         setBorder(BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
+        setOpaque(false);
 
         add(getPanel("←", null));
         add(getPanel(element.getElement(), element));

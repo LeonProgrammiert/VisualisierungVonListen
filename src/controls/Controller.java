@@ -12,6 +12,7 @@ import ui.legos.CustomOptionPane;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -199,16 +200,42 @@ public class Controller<T> {
     }
 
     public void toggleTheme() {
-        // Close open windows
-        listEditor.dispose();
-        listViewer.dispose();
-        launcher.dispose();
-
-        // Set new color theme
         darkMode = !darkMode;
         GUIStyle.setColorMode(darkMode);
 
-        // restart programm
-        instance = new Controller<>();
+        updateThemeForWindow(launcher);
+        updateThemeForWindow(listEditor);
+        updateThemeForWindow(listViewer);
     }
+
+    private void updateThemeForWindow(JFrame frame) {
+        if (frame == null || !frame.isDisplayable()) return;
+        updateComponentTreeColors(frame.getContentPane());
+        frame.repaint();
+        frame.revalidate();
+    }
+    public static void updateComponentTreeColors(Component comp) {
+        if (comp instanceof JPanel panel) {
+            panel.setBackground(GUIStyle.getBackgroundColor());
+        }
+        if (comp instanceof JButton button) {
+            button.setBackground(GUIStyle.getButtonColor());
+            button.setForeground(GUIStyle.getFontColor());
+        }
+        if (comp instanceof JToggleButton toggle) {
+            toggle.setBackground(GUIStyle.getButtonColor());
+            toggle.setForeground(GUIStyle.getFontColor());
+        }
+        if (comp instanceof JLabel label) {
+            label.setForeground(GUIStyle.getFontColor());
+        }
+
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                updateComponentTreeColors(child);
+            }
+        }
+    }
+
+
 }
