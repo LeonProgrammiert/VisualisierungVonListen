@@ -112,25 +112,32 @@ public class DeleteDialog<T> extends CustomDialog<T> {
 
 
     private void showEmptyListOptions() {
-        String[] options = {"Zurück zum Launcher", "Neues Element hinzufügen"};
-        int choice = JOptionPane.showOptionDialog(
-                listEditor,
-                "Die Liste ist jetzt leer. Was möchtest du tun?",
-                "Aktion nach dem Löschen",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
+        CustomDialog<T> dialog = new CustomDialog<>(listEditor, "Aktion nach dem Löschen", "Die Liste ist jetzt leer. Was möchtest du tun?") {
 
-        if (choice == 0) {
-            // Deletes the list and opens the launcher
-            controller.deleteList();
-            controller.backToLauncher();
-        } else if (choice == 1) {
-            // Deletes the current element and asks to enter a new one
-            controller.addList(controller.getCurrentListName(), true);
-        }
+            @Override
+            public CustomPanel getOptionPanel() {
+                CustomPanel panel = new CustomPanel();
+                panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+
+                CustomButton launcherButton = new CustomButton("Zurück zum Launcher", 14);
+                launcherButton.addActionListener(e -> {
+                    dispose();
+                    controller.deleteList();
+                    controller.backToLauncher();
+                });
+
+                CustomButton addButton = new CustomButton("Neues Element hinzufügen", 14);
+                addButton.addActionListener(e -> {
+                    dispose();
+                    controller.addList(controller.getCurrentListName(), true);
+                });
+
+                panel.add(launcherButton);
+                panel.add(addButton);
+                return panel;
+            }
+        };
+
+        dialog.setVisible(true);
     }
 }
