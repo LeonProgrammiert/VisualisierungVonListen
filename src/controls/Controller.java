@@ -146,7 +146,6 @@ public class Controller<T> {
         if (oldState == null) {
             displayMessage("Es gibt keinen vorherigen Zustand", "Fehlermeldung");
             return;
-            //TODO update unsavedChanges
         }
 
         // Displays the previous state in the editor
