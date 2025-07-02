@@ -117,7 +117,10 @@ public class DeleteDialog<T> extends CustomDialog<T> {
             @Override
             public CustomPanel getOptionPanel() {
                 CustomPanel panel = new CustomPanel();
-                panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+                panel.setBackground(GUIStyle.getGrayColor());
+                panel.setBorder(new EmptyBorder(0, 5, 5, 5));
+
+                panel.setLayout(new GridLayout(2, 1, 0, 10));
 
                 CustomButton launcherButton = new CustomButton("Zurück zum Launcher", 14);
                 launcherButton.addActionListener(e -> {
@@ -133,6 +136,7 @@ public class DeleteDialog<T> extends CustomDialog<T> {
                 });
 
                 panel.add(launcherButton);
+
                 panel.add(addButton);
                 return panel;
             }
