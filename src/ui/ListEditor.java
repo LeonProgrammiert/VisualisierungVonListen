@@ -21,7 +21,7 @@ public class ListEditor <T> extends JFrame {
 
     private final Controller<T> controller;
 
-    private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList, viewList}
+    private enum eventTypes {backToLauncher, previous, next, add, delete, saveList, viewList}
 
     private ListElement<T> currentListElement;
 
@@ -83,7 +83,7 @@ public class ListEditor <T> extends JFrame {
         fontsize = 24;
         predecessor = createButton("Vorgänger", fontsize, eventTypes.previous);
         successor = createButton("Nachfolger", fontsize, eventTypes.next);
-        current = createButton("Aktuell", fontsize, eventTypes.current);
+        current = createButton("Aktuell", fontsize, null);
 
         current.setNewSize(100, 160);
 
@@ -199,8 +199,8 @@ public class ListEditor <T> extends JFrame {
         // Add click action
         button.addActionListener(e -> {
             switch (eventType) {
+                case null -> {}
                 case backToLauncher -> backToLauncher();
-                case current -> {} // to be implemented
                 case next -> displayObject(currentListElement.getNext());
                 case previous -> displayObject(currentListElement.getPrevious());
                 case add -> clickedAddNode();
@@ -268,9 +268,6 @@ public class ListEditor <T> extends JFrame {
             System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
             this.setVisible(true);
         }
-
-        revalidate();
-        repaint();
     }
 
     private void displayObject(ListElement<T> newObject) {
