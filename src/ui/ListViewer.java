@@ -4,6 +4,7 @@ import backend.ListElement;
 import controls.Controller;
 import ui.legos.CustomButton;
 import ui.legos.CustomListElementPanel;
+import ui.legos.WrapLayout;
 import ui.style.GUIStyle;
 
 import javax.swing.*;
@@ -11,6 +12,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ListViewer<T> extends JFrame {
 
@@ -26,17 +29,28 @@ public class ListViewer<T> extends JFrame {
     }
 
     private void setValues() {
-        setTitle("ListViewer");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("ListEditor");
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(GUIStyle.getFrameSize());
-        setSize(getWidth(), getHeight()/2);
         setLocationRelativeTo(null);
 
         EmptyBorder emptyBorder = new EmptyBorder(5, 5, 5, 5);
         LineBorder lineBorder = new LineBorder(GUIStyle.getPinkColor());
         border = BorderFactory.createCompoundBorder(emptyBorder, lineBorder);
         border = BorderFactory.createCompoundBorder(border, emptyBorder);
+
+        setCloseOperation();
     }
+
+    private void setCloseOperation() {
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                backToListEditor();
+            }
+        });
+    }
+
 
     private void build() {
         // Container
@@ -54,13 +68,19 @@ public class ListViewer<T> extends JFrame {
         backToListEditorButton.addActionListener(e -> backToListEditor());
 
         // Body
-        contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        contentPanel = new JPanel(new WrapLayout(FlowLayout.CENTER));
         contentPanel.setBackground(GUIStyle.getGrayColor());
         contentPanel.setBorder(border);
 
+        // ScrollPanel
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        // Scroll speed
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         container.add(headerPanel, BorderLayout.NORTH);
-        container.add(contentPanel, BorderLayout.CENTER);
+        container.add(scrollPane, BorderLayout.CENTER);
 
         add(container);
     }
@@ -98,7 +118,4 @@ public class ListViewer<T> extends JFrame {
         contentPanel.removeAll();
         controller.backToListEditor(current);
     }
-
-
-
 }

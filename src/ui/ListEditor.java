@@ -40,15 +40,15 @@ public class ListEditor <T> extends JFrame {
 
     public ListEditor(Controller<T> controller) {
         this.controller = controller;
+        setVisible(false);
+
         setValues();
         build();
-        setVisible(true);
     }
 
     //stellt die Grundeinstellungen des Fensters ein
     private void setValues() {
         setTitle("List-Editor");
-        setVisible(true);
         setSize(GUIStyle.getFrameSize());
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
