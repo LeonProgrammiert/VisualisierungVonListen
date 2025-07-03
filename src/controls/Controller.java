@@ -213,6 +213,7 @@ public class Controller<T> {
     private void updateThemeForWindow(JFrame frame) {
         if (frame == null || !frame.isDisplayable()) return;
         updateComponentTreeColors(frame.getContentPane());
+
         frame.repaint();
         frame.revalidate();
     }
@@ -238,7 +239,7 @@ public class Controller<T> {
                 updateComponentTreeColors(child);
             }
         }
+        comp.repaint();
+        comp.revalidate();
     }
-
-
 }
