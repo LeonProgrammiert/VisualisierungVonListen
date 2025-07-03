@@ -40,7 +40,6 @@ public class Launcher<T> extends JFrame {
         topRightPanel.setBackground(GUIStyle.getBackgroundColor());
 
         JToggleButton toggleButton = new JToggleButton("🌕");
-
         toggleButton.setToolTipText("🌕 ⇄ 🌑: Darstellungsmodus wechseln");
         toggleButton.setPreferredSize(new Dimension(70, 40));
         toggleButton.setFont(new Font("Arial", Font.PLAIN, 20));
