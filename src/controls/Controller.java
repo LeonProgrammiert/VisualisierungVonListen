@@ -216,6 +216,7 @@ public class Controller<T> {
         frame.repaint();
         frame.revalidate();
     }
+
     public static void updateComponentTreeColors(Component comp) {
         if (comp instanceof JPanel panel) {
             panel.setBackground(GUIStyle.getBackgroundColor());
