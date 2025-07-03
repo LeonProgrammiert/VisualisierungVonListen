@@ -32,6 +32,7 @@ public class ListViewer<T> extends JFrame {
         setTitle("ListEditor");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(GUIStyle.getFrameSize());
+        setSize(getWidth(), getHeight()/2);
         setLocationRelativeTo(null);
 
         EmptyBorder emptyBorder = new EmptyBorder(5, 5, 5, 5);
@@ -50,7 +51,6 @@ public class ListViewer<T> extends JFrame {
             }
         });
     }
-
 
     private void build() {
         // Container

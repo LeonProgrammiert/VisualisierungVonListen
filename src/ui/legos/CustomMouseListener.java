@@ -20,6 +20,7 @@ public class CustomMouseListener extends MouseAdapter {
     public CustomMouseListener(CustomButton parent, JLabel label, Border padding) {
         this.parent = parent;
         this.label = label;
+
         emptyBorder = padding;
         highlightBorder = BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 1);
         unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getButtonColor(), 1);

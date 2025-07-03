@@ -7,11 +7,13 @@ import storage.DatabaseAccessor;
 import ui.ListEditor;
 import ui.Launcher;
 import ui.ListViewer;
+import ui.style.GUIStyle;
 import ui.legos.CustomOptionPane;
 import ui.style.GUIStyle;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -31,9 +33,13 @@ public class Controller<T> {
     private final ListEditor<T> listEditor;
     private final Launcher<T> launcher;
 
+    private static Controller instance;
+
+    private static boolean darkMode = true;
+
     public static void main(String[] args) {
 
-        // sorgt dafür, dass das Aussehen des Programms dem Betriebssystem angepasst wird
+        // Sorgt dafür, dass das Aussehen des Programms dem Betriebssystem angepasst wird
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException |
@@ -41,14 +47,16 @@ public class Controller<T> {
             throw new RuntimeException(e);
         }
 
-        new Controller<>(); // startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
-    }
+        // Set color theme
+        GUIStyle.setColorMode(darkMode);
 
-    private static Controller instance;
+        // Startet Konstruktor dieser Klasse → damit wird gesamte GUI aufgebaut
+        instance = new Controller<>();
+
+    }
 
     public Controller() {
         // Initialize
-        instance = this;
         unsavedChanges = false;
 
         GUIStyle.setColorMode(true);
@@ -182,14 +190,54 @@ public class Controller<T> {
         listViewer.setVisible(true);
     }
 
+    public void backToListEditor(ListElement<T> current) {
+        backToListEditor();
+        listEditor.openList(current);
+    }
+
     public void backToListEditor() {
         listViewer.setVisible(false);
         listEditor.setVisible(true);
         listEditor.toFront();
     }
 
-    public void backToListEditor(ListElement<T> current) {
-        backToListEditor();
-        listEditor.openList(current);
+    public void toggleTheme() {
+        darkMode = !darkMode;
+        GUIStyle.setColorMode(darkMode);
+
+        updateThemeForWindow(launcher);
+        updateThemeForWindow(listEditor);
+        updateThemeForWindow(listViewer);
     }
+
+    private void updateThemeForWindow(JFrame frame) {
+        if (frame == null || !frame.isDisplayable()) return;
+        updateComponentTreeColors(frame.getContentPane());
+        frame.repaint();
+        frame.revalidate();
+    }
+    public static void updateComponentTreeColors(Component comp) {
+        if (comp instanceof JPanel panel) {
+            panel.setBackground(GUIStyle.getBackgroundColor());
+        }
+        if (comp instanceof JButton button) {
+            button.setBackground(GUIStyle.getButtonColor());
+            button.setForeground(GUIStyle.getFontColor());
+        }
+        if (comp instanceof JToggleButton toggle) {
+            toggle.setBackground(GUIStyle.getButtonColor());
+            toggle.setForeground(GUIStyle.getFontColor());
+        }
+        if (comp instanceof JLabel label) {
+            label.setForeground(GUIStyle.getFontColor());
+        }
+
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                updateComponentTreeColors(child);
+            }
+        }
+    }
+
+
 }

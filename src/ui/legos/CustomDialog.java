@@ -1,6 +1,5 @@
 package ui.legos;
 
-import ui.ListEditor;
 import ui.style.GUIStyle;
 
 import javax.swing.*;
