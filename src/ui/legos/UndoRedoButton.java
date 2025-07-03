@@ -1,5 +1,7 @@
 package ui.legos;
 
+import backend.ListEvent;
+import backend.ListElement;
 import controls.Controller;
 import backend.ListElement;
 import ui.style.GUIStyle;

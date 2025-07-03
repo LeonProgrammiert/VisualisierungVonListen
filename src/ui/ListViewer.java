@@ -95,7 +95,7 @@ public class ListViewer<T> extends JFrame {
 
         // Start
         JPanel nullPanelStart = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
-        nullPanelStart.setBorder(new LineBorder(Color.BLACK, 2));
+        nullPanelStart.setBorder(new LineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
         contentPanel.add(nullPanelStart);
 
         // In between
@@ -107,7 +107,7 @@ public class ListViewer<T> extends JFrame {
 
         // End
         JPanel nullPanelEnd = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
-        nullPanelEnd.setBorder(new LineBorder(Color.BLACK, 2));
+        nullPanelEnd.setBorder(new LineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
         contentPanel.add(nullPanelEnd);
         repaint();
         revalidate();
