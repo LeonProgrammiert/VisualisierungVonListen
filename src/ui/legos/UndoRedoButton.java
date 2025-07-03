@@ -1,5 +1,7 @@
 package ui.legos;
 
+import backend.ListEvent;
+import backend.ListElement;
 import controls.Controller;
 import backend.ListElement;
 import ui.style.GUIStyle;
@@ -32,7 +34,7 @@ public class UndoRedoButton extends JPanel {
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(GUIStyle.getGrayButtonColor());
+                g2.setColor(GUIStyle.getButtonColor());
                 g2.fillOval(0, 0, getWidth(), getHeight());
                 g2.dispose();
             }
@@ -61,7 +63,7 @@ public class UndoRedoButton extends JPanel {
 
             public void mouseEntered(MouseEvent e) {
                 // Highlights the button if available
-                if (isAvailable) iconLabel.setForeground(GUIStyle.getPinkColor());
+                if (isAvailable) iconLabel.setForeground(GUIStyle.getHighlightedColor());
             }
 
             public void mouseExited(MouseEvent e) {
@@ -77,7 +79,7 @@ public class UndoRedoButton extends JPanel {
         this.isAvailable = isAvailable;
 
         // Update Color
-        currentColor = isAvailable ? GUIStyle.getWhiteColor() : unavailableColor;
+        currentColor = isAvailable ? GUIStyle.getFontColor() : unavailableColor;
         iconLabel.setForeground(currentColor);
     }
 }

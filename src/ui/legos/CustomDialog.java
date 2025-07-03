@@ -1,6 +1,5 @@
 package ui.legos;
 
-import ui.ListEditor;
 import ui.style.GUIStyle;
 
 import javax.swing.*;
@@ -23,7 +22,7 @@ public abstract class CustomDialog<T> extends JDialog {
         setLayout(new BorderLayout());
         setSize(400, 200);
         setLocationRelativeTo(parent);
-        getContentPane().setBackground(GUIStyle.getGrayColor());
+        getContentPane().setBackground(GUIStyle.getBackgroundColor());
     }
 
     private void build(String message) {

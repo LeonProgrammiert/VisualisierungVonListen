@@ -13,7 +13,6 @@ import controls.Controller;
 import backend.ListEvent;
 import ui.style.GUIStyle;
 
-import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.io.File;
 import java.awt.*;
@@ -22,7 +21,7 @@ public class ListEditor <T> extends JFrame {
 
     private final Controller<T> controller;
 
-    private enum eventTypes {backToLauncher, previous, current, next, add, delete, saveList, viewList}
+    private enum eventTypes {backToLauncher, previous, next, add, delete, saveList, viewList}
 
     private ListElement<T> currentListElement;
 
@@ -40,15 +39,15 @@ public class ListEditor <T> extends JFrame {
 
     public ListEditor(Controller<T> controller) {
         this.controller = controller;
+        setVisible(false);
+
         setValues();
         build();
-        setVisible(true);
     }
 
     //stellt die Grundeinstellungen des Fensters ein
     private void setValues() {
         setTitle("List-Editor");
-        setVisible(true);
         setSize(GUIStyle.getFrameSize());
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
@@ -62,7 +61,7 @@ public class ListEditor <T> extends JFrame {
 
     //baut die Benutzeroberfläche
     public void build() {
-        Color backgroundColor = GUIStyle.getGrayColor();
+        Color backgroundColor = GUIStyle.getBackgroundColor();
 
         // Create container
         JPanel container = new JPanel();
@@ -84,7 +83,7 @@ public class ListEditor <T> extends JFrame {
         fontsize = 24;
         predecessor = createButton("Vorgänger", fontsize, eventTypes.previous);
         successor = createButton("Nachfolger", fontsize, eventTypes.next);
-        current = createButton("Aktuell", fontsize, eventTypes.current);
+        current = createButton("Aktuell", fontsize, null);
 
         current.setNewSize(100, 160);
 
@@ -194,17 +193,14 @@ public class ListEditor <T> extends JFrame {
         // erstellt Button und verknüpft ihn mit der richtigen Funktion
         CustomButton button = new CustomButton(buttonText, fontSize);
 
-        // Add padding
-        button.setBorder(new EmptyBorder(5,5,5,5));
-
         // Set size
         button.setNewSize(160, 80);
 
         // Add click action
         button.addActionListener(e -> {
             switch (eventType) {
+                case null -> {}
                 case backToLauncher -> backToLauncher();
-                case current -> {} // to be implemented
                 case next -> displayObject(currentListElement.getNext());
                 case previous -> displayObject(currentListElement.getPrevious());
                 case add -> clickedAddNode();
@@ -272,9 +268,6 @@ public class ListEditor <T> extends JFrame {
             System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
             this.setVisible(true);
         }
-
-        revalidate();
-        repaint();
     }
 
     private void displayObject(ListElement<T> newObject) {

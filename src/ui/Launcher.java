@@ -32,13 +32,13 @@ public class Launcher<T> extends JFrame {
     public void build() {
         // Hintergrund
         JPanel container = new JPanel();
-        container.setBackground(GUIStyle.getGrayColor());
+        container.setBackground(GUIStyle.getBackgroundColor());
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //alle container untereinander
 
         // Titel & Untertitel
         JLabel title = GUIStyle.getStyledLabel("Willkommen bei den friedlichen Koalas", 40);
         JLabel subtitle1 = GUIStyle.getStyledLabel("Hier wird deine Liste visualisiert", 30);
-        JLabel subtitle2 = GUIStyle.getStyledLabel("Erstelle oder öffne eine Liste", 22, GUIStyle.getPinkColor());
+        JLabel subtitle2 = GUIStyle.getStyledLabel("Erstelle oder öffne eine Liste", 22, GUIStyle.getHighlightedColor());
 
         // Container für alle Buttons (nebeneinander, zentriert)
         JPanel buttonPanel = new JPanel();
@@ -58,7 +58,7 @@ public class Launcher<T> extends JFrame {
         centerPanel.setBackground(container.getBackground());
         centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(GUIStyle.getPinkColor(), 2),  // sichtbarer Rahmen
+                BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 2),  // sichtbarer Rahmen
                 BorderFactory.createEmptyBorder(30, 50, 30, 50)
         ));
 
@@ -83,7 +83,7 @@ public class Launcher<T> extends JFrame {
 
     private JPanel createIconButton(String icon, String labelText, eventTypes eventType) {
         CustomIconButton button = new CustomIconButton(icon, labelText);
-        button.setForeground(GUIStyle.getWhiteColor());
+        button.setForeground(GUIStyle.getFontColor());
         // Set size
         button.setNewSize(220, 110);
 

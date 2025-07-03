@@ -30,9 +30,9 @@ public class SaveButton extends CustomPanel{
         unavailableIcon = loadAndScaleIcon("src/assets/saveIconGray.png");
         highlightedIcon = loadAndScaleIcon("src/assets/saveIconPink.png");
 
-        availableColor = GUIStyle.getWhiteColor();
+        availableColor = GUIStyle.getFontColor();
         unavailableColor = GUIStyle.getButtonUnavailableColor();
-        highlightedColor = GUIStyle.getPinkColor();
+        highlightedColor = GUIStyle.getHighlightedColor();
 
 
         // Image container
@@ -51,7 +51,7 @@ public class SaveButton extends CustomPanel{
     }
 
     private void setValues() {
-        setBackground(GUIStyle.getGrayButtonColor());
+        setBackground(GUIStyle.getButtonColor());
         setBorder(new EmptyBorder(new Insets(5, 5, 5, 5)));
         setSize(60, 60);
         setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -65,7 +65,7 @@ public class SaveButton extends CustomPanel{
                     Controller.getController().getListEditor().saveList();
                     imageContainer.setIcon(unavailableIcon);
                     textContainer.setForeground(unavailableColor);
-                    setBackground(GUIStyle.getGrayButtonColor());
+                    setBackground(GUIStyle.getButtonColor());
                 }
             }
 
@@ -74,7 +74,7 @@ public class SaveButton extends CustomPanel{
                 if(Controller.unsavedChanges){
                     imageContainer.setIcon(highlightedIcon);
                     textContainer.setForeground(highlightedColor);
-                    setBackground(GUIStyle.getGrayButtonHighlightedColor());
+                    setBackground(GUIStyle.getHighlightedButtonColor());
                 }
             }
 
@@ -87,7 +87,7 @@ public class SaveButton extends CustomPanel{
                     textContainer.setForeground(unavailableColor);
                     imageContainer.setIcon(unavailableIcon);
                 }
-                setBackground(GUIStyle.getGrayButtonColor());
+                setBackground(GUIStyle.getButtonColor());
             }
         });
     }

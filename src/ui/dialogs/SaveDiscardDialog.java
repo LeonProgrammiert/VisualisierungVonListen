@@ -27,7 +27,7 @@ public class SaveDiscardDialog<T> extends CustomDialog<T>{
     @Override
     public CustomPanel getOptionPanel() {
         CustomPanel container = new CustomPanel();
-        container.setBackground(GUIStyle.getGrayColor());
+        container.setBackground(GUIStyle.getBackgroundColor());
         container.setBorder(new EmptyBorder(5,5,5,5));
         container.setLayout(new FlowLayout());
         
