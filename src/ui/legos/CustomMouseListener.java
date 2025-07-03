@@ -22,7 +22,7 @@ public class CustomMouseListener extends MouseAdapter {
         this.label = label;
         emptyBorder = padding;
         highlightBorder = BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 1);
-        unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getButtonColor(), 1);
+        unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1);
     }
 
     public void mouseEntered(MouseEvent e) {
