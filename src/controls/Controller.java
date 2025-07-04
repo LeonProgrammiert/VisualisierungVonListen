@@ -1,17 +1,14 @@
 package controls;
 
-import ui.legos.CustomMouseListener;
-import ui.legos.CustomOptionPane;
 import storage.DatabaseAccessor;
-import ui.legos.CustomButton;
 import backend.StackManager;
-import ui.legos.CustomPanel;
 import backend.ListElement;
-import ui.style.GUIStyle;
 import backend.ListEvent;
+import ui.style.GUIStyle;
 import ui.ListEditor;
-import ui.Launcher;
 import ui.ListViewer;
+import ui.Launcher;
+import ui.legos.*;
 
 import java.awt.event.MouseListener;
 import javax.sound.sampled.*;
@@ -244,7 +241,9 @@ public class Controller<T> {
                     }
                 }
             }
-
+        }
+        if (comp instanceof SaveButton) {
+            ((SaveButton) comp).setTheme();
         }
         if (comp instanceof JToggleButton toggle) {
             toggle.setBackground(GUIStyle.getButtonColor());
