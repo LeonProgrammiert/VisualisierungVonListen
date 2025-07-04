@@ -14,6 +14,15 @@ public class Launcher<T> extends JFrame {
 
     private final Controller<T> controller;
 
+    private JPanel centerPanel;
+
+    public void setCentralPanelTheme() {
+        centerPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 2),  // sichtbarer Rahmen
+                BorderFactory.createEmptyBorder(30, 50, 30, 50)
+        ));
+    }
+
     enum eventTypes {add, open}
 
     public Launcher(Controller<T> controller) {
@@ -42,7 +51,7 @@ public class Launcher<T> extends JFrame {
         JToggleButton toggleButton = new JToggleButton("🌕");
         toggleButton.setToolTipText("🌕 ⇄ 🌑: Darstellungsmodus wechseln");
         toggleButton.setPreferredSize(new Dimension(70, 40));
-        toggleButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        toggleButton.setFont(GUIStyle.getFont(28));
         toggleButton.setBorderPainted(false);
         toggleButton.setFocusPainted(false);
 
@@ -72,14 +81,11 @@ public class Launcher<T> extends JFrame {
         buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen", eventTypes.open));
 
         // Neues Panel für mittigen Inhalt mit Rahmen
-        JPanel centerPanel = new JPanel();
+        centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(container.getBackground());
         centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 2),  // sichtbarer Rahmen
-                BorderFactory.createEmptyBorder(30, 50, 30, 50)
-        ));
+        setCentralPanelTheme();
 
 
         centerPanel.add(Box.createRigidArea(new Dimension(10, 50)));

@@ -1,5 +1,7 @@
 package controls;
 
+import ui.legos.CustomButton;
+import ui.legos.CustomMouseListener;
 import ui.legos.CustomOptionPane;
 import storage.DatabaseAccessor;
 import backend.StackManager;
@@ -12,6 +14,7 @@ import ui.Launcher;
 import ui.ListViewer;
 
 import javax.sound.sampled.*;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import javax.swing.*;
 import java.io.File;
@@ -211,6 +214,9 @@ public class Controller<T> {
         GUIStyle.setColorMode(darkMode);
 
         updateThemeForWindow(launcher);
+        // Has to be updated manually
+        launcher.setCentralPanelTheme();
+
         updateThemeForWindow(listEditor);
         updateThemeForWindow(listViewer);
     }
@@ -230,6 +236,17 @@ public class Controller<T> {
         if (comp instanceof CustomPanel button) {
             button.setBackground(GUIStyle.getButtonColor());
             button.setForeground(GUIStyle.getFontColor());
+
+            // Updates hover-effect
+            if (comp instanceof CustomButton) {
+                MouseListener[] listeners = comp.getMouseListeners();
+                for (MouseListener listener : listeners) {
+                    if (listener instanceof CustomMouseListener) {
+                        ((CustomMouseListener) listener).setTheme();
+                    }
+                }
+            }
+
         }
         if (comp instanceof JToggleButton toggle) {
             toggle.setBackground(GUIStyle.getButtonColor());
