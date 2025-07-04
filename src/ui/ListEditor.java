@@ -144,7 +144,7 @@ public class ListEditor <T> extends JFrame {
         addComponentToGrid(container, actionPanel, editorLayout, 0, 3, 3, GridBagConstraints.BOTH, new Insets(30, 30, 30, 30), GridBagConstraints.CENTER);
 
         addComponentToGrid(container, centerPanel, editorLayout, 0, 0, 3, GridBagConstraints.NONE, new Insets(0, 0, 30, 0), GridBagConstraints.CENTER);
-        add(container);
+        setContentPane(container);
     }
 
     private void clickedRemoveNode() {
@@ -263,11 +263,6 @@ public class ListEditor <T> extends JFrame {
         predecessor.setEnabled(true);
         current.setEnabled(true);
         successor.setEnabled(true);
-
-        if (!isVisible()) {
-            System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
-            this.setVisible(true);
-        }
     }
 
     private void displayObject(ListElement<T> newObject) {
