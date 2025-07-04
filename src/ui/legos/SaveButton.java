@@ -11,28 +11,32 @@ import controls.Controller;
 import ui.style.GUIStyle;
 
 public class SaveButton extends CustomPanel{
-    private final ImageIcon availableIcon;
+    private ImageIcon availableIcon;
     private final ImageIcon unavailableIcon;
-    private final ImageIcon highlightedIcon;
+    private ImageIcon highlightedIcon;
 
-    private final Color availableColor;
+    private Color availableColor;
     private final Color unavailableColor;
-    private final Color highlightedColor;
+    private Color highlightedColor;
 
     private final JLabel imageContainer;
     private final JLabel textContainer;
 
+    public void setTheme() {
+        availableColor = GUIStyle.getFontColor();
+        highlightedColor = GUIStyle.getHighlightedColor();
+
+        highlightedIcon = loadAndScaleIcon(GUIStyle.getHighlightedSaveImage());
+        availableIcon = loadAndScaleIcon(GUIStyle.getAvailableSaveImage());
+    }
+
     public SaveButton(int fontsize){
         setValues();
 
-        // Initialize images
-        availableIcon = loadAndScaleIcon("src/assets/saveIconWhite.png");
+        // Initialize
         unavailableIcon = loadAndScaleIcon("src/assets/saveIconGray.png");
-        highlightedIcon = loadAndScaleIcon("src/assets/saveIconPink.png");
-
-        availableColor = GUIStyle.getFontColor();
         unavailableColor = GUIStyle.getButtonUnavailableColor();
-        highlightedColor = GUIStyle.getHighlightedColor();
+        setTheme();
 
 
         // Image container

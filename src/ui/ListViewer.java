@@ -105,7 +105,6 @@ public class ListViewer<T> extends JFrame {
         }
 
         // End
-
         JPanel nullPanelEnd = new CustomListElementPanel<>(first, this).getPanel("null", null);
         nullPanelEnd.setBorder(new LineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
         contentPanel.add(nullPanelEnd);

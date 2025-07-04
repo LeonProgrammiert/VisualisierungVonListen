@@ -4,7 +4,6 @@ import backend.ListElement;
 import ui.style.GUIStyle;
 import ui.ListViewer;
 
-import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 

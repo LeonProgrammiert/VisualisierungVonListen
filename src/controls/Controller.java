@@ -1,11 +1,8 @@
 package controls;
 
-import ui.legos.CustomButton;
-import ui.legos.CustomMouseListener;
-import ui.legos.CustomOptionPane;
+import ui.legos.*;
 import storage.DatabaseAccessor;
 import backend.StackManager;
-import ui.legos.CustomPanel;
 import backend.ListElement;
 import backend.ListEvent;
 import ui.style.GUIStyle;
@@ -246,7 +243,9 @@ public class Controller<T> {
                     }
                 }
             }
-
+        }
+        if (comp instanceof SaveButton) {
+            ((SaveButton) comp).setTheme();
         }
         if (comp instanceof JToggleButton toggle) {
             toggle.setBackground(GUIStyle.getButtonColor());

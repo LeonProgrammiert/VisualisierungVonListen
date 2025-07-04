@@ -2,8 +2,6 @@ package ui;
 
 import controls.Controller;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.*;
 import ui.dialogs.NewListDialog;
@@ -51,6 +49,7 @@ public class Launcher<T> extends JFrame {
         JToggleButton toggleButton = new JToggleButton("🌕");
         toggleButton.setToolTipText("🌕 ⇄ 🌑: Darstellungsmodus wechseln");
         toggleButton.setPreferredSize(new Dimension(70, 40));
+        toggleButton.setForeground(GUIStyle.getFontColor());
         toggleButton.setFont(GUIStyle.getFont(28));
         toggleButton.setBorderPainted(false);
         toggleButton.setFocusPainted(false);
@@ -59,6 +58,7 @@ public class Launcher<T> extends JFrame {
             boolean selected = toggleButton.isSelected();
             toggleButton.setText(selected ? "🌑" : "🌕");
             controller.toggleTheme();
+            controller.playSound(GUIStyle.getClickSoundFile());
         });
         topRightPanel.add(toggleButton);
         container.add(topRightPanel, BorderLayout.NORTH);
@@ -114,14 +114,12 @@ public class Launcher<T> extends JFrame {
 
 
         // Actions that happen when button is clicked
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
+        button.addActionListener(e -> {
+                controller.playSound(GUIStyle.getClickSoundFile());
                 switch (eventType) {
                     case open -> open();
                     case add -> addList();
                 }
-            }
         });
         return button;
     }

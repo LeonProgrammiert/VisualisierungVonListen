@@ -198,6 +198,10 @@ public class ListEditor <T> extends JFrame {
 
         // Add click action
         button.addActionListener(e -> {
+            if (eventType != eventTypes.next && eventType != eventTypes.previous) {
+                controller.playSound(GUIStyle.getClickSoundFile());
+            }
+
             switch (eventType) {
                 case null -> {}
                 case backToLauncher -> backToLauncher();
@@ -267,7 +271,7 @@ public class ListEditor <T> extends JFrame {
 
     private void displayObject(ListElement<T> newObject) {
         if (newObject != null) {
-            controller.playSound(clickSound);
+            controller.playSound(GUIStyle.getSwapSoundFile());
             setData(newObject);
         } else {
             controller.playSound(errorSound);
