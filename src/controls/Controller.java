@@ -134,20 +134,24 @@ public class Controller<T> {
     }
 
     public void playSound(File soundFile) {
-        new Thread(() -> {
-            try {
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                clip.start();
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
 
-                // Wait for the clip to finish playing
-                Thread.sleep(clip.getMicrosecondLength() / 1000);
-            } catch (UnsupportedAudioFileException | IOException | InterruptedException |
-                     LineUnavailableException e) {
-                displayMessage(e.getMessage(), "Fehlermeldung");
-            }
-        }).start();
+            // Thread.sleep() is too imprecise -> leads to delayed or weird audio
+            // LineListener is exact because it listens to what the Clip-object is doing directly
+            // closes the clip once it is finished -> no memory leak
+            clip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    clip.close();
+                }
+            });
+
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            displayMessage(e.getMessage(), "Fehlermeldung");
+        }
     }
 
     public void push(ListEvent<T> event) {
