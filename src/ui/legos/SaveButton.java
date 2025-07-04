@@ -1,11 +1,10 @@
 package ui.legos;
 
-import java.awt.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 import controls.Controller;
 import ui.style.GUIStyle;
@@ -56,7 +55,7 @@ public class SaveButton extends CustomPanel{
 
     private void setValues() {
         setBackground(GUIStyle.getButtonColor());
-        setBorder(new EmptyBorder(new Insets(5, 5, 5, 5)));
+        setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, new EmptyBorder(5, 5, 5, 5)));
         setSize(60, 60);
         setLayout(new FlowLayout(FlowLayout.CENTER));
     }
