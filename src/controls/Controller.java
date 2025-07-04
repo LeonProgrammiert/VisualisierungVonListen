@@ -1,21 +1,21 @@
 package controls;
 
+import ui.legos.CustomOptionPane;
+import storage.DatabaseAccessor;
+import backend.StackManager;
+import ui.legos.CustomPanel;
 import backend.ListElement;
 import backend.ListEvent;
-import backend.StackManager;
-import storage.DatabaseAccessor;
+import ui.style.GUIStyle;
 import ui.ListEditor;
 import ui.Launcher;
 import ui.ListViewer;
-import ui.style.GUIStyle;
-import ui.legos.CustomOptionPane;
-import ui.style.GUIStyle;
 
 import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
+import javax.swing.*;
+import java.io.File;
+import java.awt.*;
 
 
 //  verbindet UI, Daten und Logik
@@ -115,6 +115,11 @@ public class Controller<T> {
         // Opens the list in the ListEditor
         launcher.setVisible(false);
         listEditor.openList(firstElement);
+
+        if (!listEditor.isVisible()) {
+            System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
+            listEditor.setVisible(true);
+        }
     }
 
     public void backToLauncher() {
@@ -211,7 +216,7 @@ public class Controller<T> {
     }
 
     private void updateThemeForWindow(JFrame frame) {
-        if (frame == null || !frame.isDisplayable()) return;
+        if (frame == null) return;
         updateComponentTreeColors(frame.getContentPane());
 
         frame.repaint();
@@ -222,7 +227,7 @@ public class Controller<T> {
         if (comp instanceof JPanel panel) {
             panel.setBackground(GUIStyle.getBackgroundColor());
         }
-        if (comp instanceof JButton button) {
+        if (comp instanceof CustomPanel button) {
             button.setBackground(GUIStyle.getButtonColor());
             button.setForeground(GUIStyle.getFontColor());
         }
