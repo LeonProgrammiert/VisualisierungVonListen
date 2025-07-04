@@ -14,6 +14,15 @@ public class Launcher<T> extends JFrame {
 
     private final Controller<T> controller;
 
+    private JPanel centerPanel;
+
+    public void setCentralPanelTheme() {
+        centerPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 2),  // sichtbarer Rahmen
+                BorderFactory.createEmptyBorder(30, 50, 30, 50)
+        ));
+    }
+
     enum eventTypes {add, open}
 
     public Launcher(Controller<T> controller) {
@@ -31,9 +40,28 @@ public class Launcher<T> extends JFrame {
 
     public void build() {
         // Hintergrund
-        JPanel container = new JPanel();
+        JPanel container = new JPanel(new BorderLayout());
         container.setBackground(GUIStyle.getBackgroundColor());
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //alle container untereinander
+
+        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 0));
+        topRightPanel.setBackground(GUIStyle.getBackgroundColor());
+
+        JToggleButton toggleButton = new JToggleButton("🌕");
+        toggleButton.setToolTipText("🌕 ⇄ 🌑: Darstellungsmodus wechseln");
+        toggleButton.setPreferredSize(new Dimension(70, 40));
+        toggleButton.setFont(GUIStyle.getFont(28));
+        toggleButton.setBorderPainted(false);
+        toggleButton.setFocusPainted(false);
+
+        toggleButton.addItemListener(e -> {
+            boolean selected = toggleButton.isSelected();
+            toggleButton.setText(selected ? "🌑" : "🌕");
+            controller.toggleTheme();
+        });
+        topRightPanel.add(toggleButton);
+        container.add(topRightPanel, BorderLayout.NORTH);
 
         // Titel & Untertitel
         JLabel title = GUIStyle.getStyledLabel("Willkommen bei den friedlichen Koalas", 40);
@@ -53,14 +81,11 @@ public class Launcher<T> extends JFrame {
         buttonPanel.add(createIconButton("\uD83D\uDCC2", "Öffnen", eventTypes.open));
 
         // Neues Panel für mittigen Inhalt mit Rahmen
-        JPanel centerPanel = new JPanel();
+        centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(container.getBackground());
         centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 2),  // sichtbarer Rahmen
-                BorderFactory.createEmptyBorder(30, 50, 30, 50)
-        ));
+        setCentralPanelTheme();
 
 
         centerPanel.add(Box.createRigidArea(new Dimension(10, 50)));

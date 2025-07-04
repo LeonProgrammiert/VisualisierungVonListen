@@ -14,15 +14,14 @@ public class CustomMouseListener extends MouseAdapter {
     private final JLabel label;
 
     private final Border emptyBorder;
-    private final Border highlightBorder;
-    private final Border unhighlightedBorder;
+    private Border highlightBorder;
+    private Border unhighlightedBorder;
 
     public CustomMouseListener(CustomButton parent, JLabel label, Border padding) {
         this.parent = parent;
         this.label = label;
         emptyBorder = padding;
-        highlightBorder = BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 1);
-        unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1);
+        setTheme();
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -39,5 +38,10 @@ public class CustomMouseListener extends MouseAdapter {
 
     public void mouseClicked(MouseEvent e) {
         parent.fireActionEvent();
+    }
+
+    public void setTheme() {
+        highlightBorder = BorderFactory.createLineBorder(GUIStyle.getHighlightedColor(), 1);
+        unhighlightedBorder = BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1);
     }
 }

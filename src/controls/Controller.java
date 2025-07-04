@@ -1,20 +1,24 @@
 package controls;
 
-import backend.ListElement;
-import backend.ListEvent;
-import backend.StackManager;
+import ui.legos.CustomMouseListener;
+import ui.legos.CustomOptionPane;
 import storage.DatabaseAccessor;
+import ui.legos.CustomButton;
+import backend.StackManager;
+import ui.legos.CustomPanel;
+import backend.ListElement;
+import ui.style.GUIStyle;
+import backend.ListEvent;
 import ui.ListEditor;
 import ui.Launcher;
 import ui.ListViewer;
-import ui.style.GUIStyle;
-import ui.legos.CustomOptionPane;
 
+import java.awt.event.MouseListener;
 import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
+import javax.swing.*;
+import java.io.File;
+import java.awt.*;
 
 
 //  verbindet UI, Daten und Logik
@@ -114,6 +118,11 @@ public class Controller<T> {
         // Opens the list in the ListEditor
         launcher.setVisible(false);
         listEditor.openList(firstElement);
+
+        if (!listEditor.isVisible()) {
+            System.out.println("[LOG] Fenster war unsichtbar – wird sichtbar gemacht");
+            listEditor.setVisible(true);
+        }
     }
 
     public void backToLauncher() {
@@ -198,9 +207,22 @@ public class Controller<T> {
         listEditor.openList(current);
     }
 
+    public void toggleTheme() {
+        darkMode = !darkMode;
+        GUIStyle.setColorMode(darkMode);
+
+        updateThemeForWindow(launcher);
+        // Has to be updated manually
+        launcher.setCentralPanelTheme();
+
+        updateThemeForWindow(listEditor);
+        updateThemeForWindow(listViewer);
+    }
+
     private void updateThemeForWindow(JFrame frame) {
-        if (frame == null || !frame.isDisplayable()) return;
+        if (frame == null) return;
         updateComponentTreeColors(frame.getContentPane());
+
         frame.repaint();
         frame.revalidate();
     }
@@ -209,9 +231,20 @@ public class Controller<T> {
         if (comp instanceof JPanel panel) {
             panel.setBackground(GUIStyle.getBackgroundColor());
         }
-        if (comp instanceof JButton button) {
+        if (comp instanceof CustomPanel button) {
             button.setBackground(GUIStyle.getButtonColor());
             button.setForeground(GUIStyle.getFontColor());
+
+            // Updates hover-effect
+            if (comp instanceof CustomButton) {
+                MouseListener[] listeners = comp.getMouseListeners();
+                for (MouseListener listener : listeners) {
+                    if (listener instanceof CustomMouseListener) {
+                        ((CustomMouseListener) listener).setTheme();
+                    }
+                }
+            }
+
         }
         if (comp instanceof JToggleButton toggle) {
             toggle.setBackground(GUIStyle.getButtonColor());
@@ -226,5 +259,7 @@ public class Controller<T> {
                 updateComponentTreeColors(child);
             }
         }
+        comp.repaint();
+        comp.revalidate();
     }
 }
