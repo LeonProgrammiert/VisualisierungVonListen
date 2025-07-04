@@ -48,18 +48,24 @@ public class Launcher<T> extends JFrame {
         topRightPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 0));
         topRightPanel.setBackground(GUIStyle.getBackgroundColor());
 
-        JToggleButton toggleButton = new JToggleButton("🌕");
-        toggleButton.setToolTipText("🌕 ⇄ 🌑: Darstellungsmodus wechseln");
-        toggleButton.setPreferredSize(new Dimension(70, 40));
-        toggleButton.setFont(GUIStyle.getFont(28));
+        ImageIcon moonLight = getScaledIcon("/assets/moon_light.png", 25, 25);
+        ImageIcon moonDark = getScaledIcon("/assets/moon_dark.png", 25, 25);
+
+
+        JToggleButton toggleButton = new JToggleButton();
+        toggleButton.setIcon(moonLight);
+        toggleButton.setSelectedIcon(moonDark);
+
+        toggleButton.setToolTipText("Darstellungsmodus wechseln");
+        toggleButton.setPreferredSize(new Dimension(45, 35));
         toggleButton.setBorderPainted(false);
         toggleButton.setFocusPainted(false);
+        toggleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         toggleButton.addItemListener(e -> {
-            boolean selected = toggleButton.isSelected();
-            toggleButton.setText(selected ? "🌑" : "🌕");
             controller.toggleTheme();
         });
+
         topRightPanel.add(toggleButton);
         container.add(topRightPanel, BorderLayout.NORTH);
 
@@ -144,6 +150,11 @@ public class Launcher<T> extends JFrame {
             controller.initializeStacks();
             controller.openList(file);
         }
+    }
+    private ImageIcon getScaledIcon(String path, int width, int height) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
     }
 
     private void addList() {
