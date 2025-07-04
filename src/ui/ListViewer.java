@@ -68,7 +68,10 @@ public class ListViewer<T> extends JFrame {
 
         CustomButton backToListEditorButton = new CustomButton("Zurück zum Editor", 18);
         headerPanel.add(backToListEditorButton);
-        backToListEditorButton.addActionListener(e -> backToListEditor(currentList));
+        backToListEditorButton.addActionListener(e -> {
+            controller.playSound(GUIStyle.getClickSoundFile());
+            backToListEditor(currentList);
+        });
 
         // Body
         contentPanel = new JPanel(new WrapLayout(FlowLayout.CENTER));
