@@ -218,6 +218,7 @@ public class Controller<T> {
 
         updateThemeForWindow(listEditor);
         updateThemeForWindow(listViewer);
+        listViewer.setTheme();
     }
 
     private void updateThemeForWindow(JFrame frame) {

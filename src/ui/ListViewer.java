@@ -22,13 +22,29 @@ public class ListViewer<T> extends JFrame {
 
     private ListElement<T> currentList;
 
+    private JPanel headerPanel;
     private JPanel contentPanel;
     private CompoundBorder border;
+
 
     public ListViewer(Controller<T> controller) {
         this.controller = controller;
         setValues();
         build();
+    }
+
+    public void setTheme() {
+        EmptyBorder emptyBorder = new EmptyBorder(5, 5, 5, 5);
+        LineBorder lineBorder = new LineBorder(GUIStyle.getHighlightedColor());
+        border = BorderFactory.createCompoundBorder(emptyBorder, lineBorder);
+        border = BorderFactory.createCompoundBorder(border, emptyBorder);
+
+        if (contentPanel != null) {
+            contentPanel.setBorder(border);
+        }
+        if (headerPanel != null) {
+            headerPanel.setBorder(border);
+        }
     }
 
     private void setValues() {
@@ -37,10 +53,7 @@ public class ListViewer<T> extends JFrame {
         setSize(GUIStyle.getFrameSize());
         setLocationRelativeTo(null);
 
-        EmptyBorder emptyBorder = new EmptyBorder(5, 5, 5, 5);
-        LineBorder lineBorder = new LineBorder(GUIStyle.getHighlightedColor());
-        border = BorderFactory.createCompoundBorder(emptyBorder, lineBorder);
-        border = BorderFactory.createCompoundBorder(border, emptyBorder);
+        setTheme();
 
         setCloseOperation();
     }
@@ -62,7 +75,7 @@ public class ListViewer<T> extends JFrame {
         container.setLayout(new BorderLayout());
 
         // Header
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         headerPanel.setBackground(GUIStyle.getBackgroundColor());
         headerPanel.setBorder(border);
 
