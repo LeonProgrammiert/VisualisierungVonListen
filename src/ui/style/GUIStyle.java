@@ -2,6 +2,7 @@ package ui.style;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class GUIStyle {
     private static final String fontName = "SansSerif";
@@ -18,7 +19,8 @@ public class GUIStyle {
 
     private static Color unhighlightedBorderColor;
 
-
+    private static String highlightedSaveImage;
+    private static String availableSaveImage;
 
     public static void setColorMode(boolean darkMode) {
         if (darkMode) {
@@ -32,17 +34,23 @@ public class GUIStyle {
             unhighlightedButtonColor = new Color(40,40,40);
             highlightedButtonColor = new Color(65, 65, 65);
 
+            highlightedSaveImage = "src/assets/saveIconPink.png";
+            availableSaveImage = "src/assets/saveIconWhite.png";
+
             unhighlightedBorderColor = new Color(89, 89, 89);
         } else {
             // Light mode
             fontColor = Color.BLACK;
 
-            highlightColor = new Color(224, 14, 46);
+            highlightColor = new Color(0, 179, 255);
             backgroundColor = new Color(240, 242, 244);
 
             buttonUnavailableColor = new Color(70, 70, 70);
             unhighlightedButtonColor = new Color(230, 232, 234);
             highlightedButtonColor = new Color(215, 217, 219);
+
+            highlightedSaveImage = "src/assets/saveIconBlue.png";
+            availableSaveImage = "src/assets/saveIconBlack.png";
 
             unhighlightedBorderColor = new Color(15, 15, 15);
         }
@@ -113,4 +121,26 @@ public class GUIStyle {
         return new Dimension(1400, 800);
     }
 
+
+    // Files
+    public static File getClickSoundFile() {
+        return new File(System.getProperty("user.dir") + "/src/assets/clickSound.wav");
+    }
+
+    public static File getErrorSoundFile() {
+        return new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
+    }
+
+    public static File getSwapSoundFile() {
+        return new File(System.getProperty("user.dir") + "/src/assets/swapSound.wav");
+    }
+
+    public static String getHighlightedSaveImage() {
+        return highlightedSaveImage;
+    }
+
+
+    public static String getAvailableSaveImage() {
+        return availableSaveImage;
+    }
 }

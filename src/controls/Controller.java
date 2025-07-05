@@ -1,20 +1,17 @@
 package controls;
 
-import ui.legos.CustomButton;
-import ui.legos.CustomMouseListener;
-import ui.legos.CustomOptionPane;
 import storage.DatabaseAccessor;
 import backend.StackManager;
-import ui.legos.CustomPanel;
 import backend.ListElement;
 import backend.ListEvent;
 import ui.style.GUIStyle;
 import ui.ListEditor;
-import ui.Launcher;
 import ui.ListViewer;
+import ui.Launcher;
+import ui.legos.*;
 
-import javax.sound.sampled.*;
 import java.awt.event.MouseListener;
+import javax.sound.sampled.*;
 import java.io.IOException;
 import javax.swing.*;
 import java.io.File;
@@ -137,20 +134,24 @@ public class Controller<T> {
     }
 
     public void playSound(File soundFile) {
-        new Thread(() -> {
-            try {
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                clip.start();
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
 
-                // Wait for the clip to finish playing
-                Thread.sleep(clip.getMicrosecondLength() / 1000);
-            } catch (UnsupportedAudioFileException | IOException | InterruptedException |
-                     LineUnavailableException e) {
-                displayMessage(e.getMessage(), "Fehlermeldung");
-            }
-        }).start();
+            // Thread.sleep() is too imprecise -> leads to delayed or weird audio
+            // LineListener is exact because it listens to what the Clip-object is doing directly
+            // closes the clip once it is finished -> no memory leak
+            clip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    clip.close();
+                }
+            });
+
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            displayMessage(e.getMessage(), "Fehlermeldung");
+        }
     }
 
     public void push(ListEvent<T> event) {
@@ -193,20 +194,18 @@ public class Controller<T> {
     }
 
     public void openListView(ListElement<T> current) {
-        listEditor.setVisible(false);
-        listViewer.openList(current.getFirst());
-        listViewer.setVisible(true);
+        if (!listViewer.isVisible()) {
+            listEditor.setVisible(false);
+            listViewer.openList(current.getFirst());
+            listViewer.setVisible(true);
+        }
     }
 
     public void backToListEditor(ListElement<T> current) {
-        backToListEditor();
-        listEditor.openList(current);
-    }
-
-    public void backToListEditor() {
         listViewer.setVisible(false);
         listEditor.setVisible(true);
         listEditor.toFront();
+        listEditor.openList(current);
     }
 
     public void toggleTheme() {
@@ -246,7 +245,9 @@ public class Controller<T> {
                     }
                 }
             }
-
+        }
+        if (comp instanceof SaveButton) {
+            ((SaveButton) comp).setTheme();
         }
         if (comp instanceof JToggleButton toggle) {
             toggle.setBackground(GUIStyle.getButtonColor());

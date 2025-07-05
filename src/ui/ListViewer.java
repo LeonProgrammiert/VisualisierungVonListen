@@ -1,6 +1,7 @@
 package ui;
 
 import backend.ListElement;
+import backend.ListUtilities;
 import controls.Controller;
 import ui.legos.CustomButton;
 import ui.legos.CustomListElementPanel;
@@ -18,6 +19,8 @@ import java.awt.event.WindowEvent;
 public class ListViewer<T> extends JFrame {
 
     private final Controller<T> controller;
+
+    private ListElement<T> currentList;
 
     private JPanel contentPanel;
     private CompoundBorder border;
@@ -46,7 +49,7 @@ public class ListViewer<T> extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                backToListEditor();
+                backToListEditor(currentList);
             }
         });
     }
@@ -65,7 +68,10 @@ public class ListViewer<T> extends JFrame {
 
         CustomButton backToListEditorButton = new CustomButton("Zurück zum Editor", 18);
         headerPanel.add(backToListEditorButton);
-        backToListEditorButton.addActionListener(e -> backToListEditor());
+        backToListEditorButton.addActionListener(e -> {
+            controller.playSound(GUIStyle.getClickSoundFile());
+            backToListEditor(currentList);
+        });
 
         // Body
         contentPanel = new JPanel(new WrapLayout(FlowLayout.CENTER));
@@ -87,38 +93,41 @@ public class ListViewer<T> extends JFrame {
 
 
     public void openList(ListElement<T> first) {
-        if (isVisible()) {
-            return;
-        }
+        // Set current list
+        this.currentList = ListUtilities.deepCopy(first);
 
         // Start
-        JPanel nullPanelStart = new CustomListElementPanel<>(first, this).getPanel("null", null);
+        JPanel nullPanelStart = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
         nullPanelStart.setBorder(new LineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
         contentPanel.add(nullPanelStart);
-
 
         // In between
         ListElement<T> current = first;
         while (current != null) {
-            contentPanel.add(new CustomListElementPanel<>(current, this));
+            contentPanel.add(new CustomListElementPanel<>(current, this, controller));
             current = current.getNext();
         }
 
         // End
-
-        JPanel nullPanelEnd = new CustomListElementPanel<>(first, this).getPanel("null", null);
+        JPanel nullPanelEnd = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
         nullPanelEnd.setBorder(new LineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
         contentPanel.add(nullPanelEnd);
-
-    }
-
-    public void backToListEditor() {
-        contentPanel.removeAll();
-        controller.backToListEditor();
+        repaint();
+        revalidate();
     }
 
     public void backToListEditor(ListElement<T> current) {
         contentPanel.removeAll();
         controller.backToListEditor(current);
+    }
+
+    public void update(ListElement<T> newList) {
+        // Remove all components and update the frame
+        contentPanel.removeAll();
+        repaint();
+        revalidate();
+
+        // Open new list (saves the current state of the list)
+        openList(newList.getFirst());
     }
 }

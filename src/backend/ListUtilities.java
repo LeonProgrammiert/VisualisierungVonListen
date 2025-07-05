@@ -1,5 +1,8 @@
 package backend;
 
+import backend.enumerations.SwapPositions;
+import ui.legos.CustomListElementPanel;
+
 public class ListUtilities<T>{
 
     public static String[] getData(ListElement current) {
@@ -39,4 +42,55 @@ public class ListUtilities<T>{
         return newFirst;
     }
 
+    public static boolean switchAvailable(ListElement listElement, SwapPositions swapPositions) {
+        if (swapPositions == SwapPositions.previous) {
+            return !listElement.isFirst();
+        }
+        else if (swapPositions == SwapPositions.next) {
+            return !listElement.isLast();
+        }
+        return false;
+    }
+
+    public static ListElement switchElements(ListElement current, SwapPositions position) {
+        if (position == SwapPositions.previous) {
+            ListElement prev = current.getPrevious();
+            if (prev == null) return current; // Can't switch if no previous
+
+            ListElement before = prev.getPrevious();
+            ListElement next = current.getNext();
+
+            // Re-link surrounding nodes
+            if (before != null) before.setNext(current);
+            current.setPrevious(before);
+            current.setNext(prev);
+
+            prev.setPrevious(current);
+            prev.setNext(next);
+
+            if (next != null) next.setPrevious(prev);
+
+            // Return new "current"
+            return current;
+        } else {
+            ListElement next = current.getNext();
+            if (next == null) return current; // Can't switch if no next
+
+            ListElement after = next.getNext();
+            ListElement prev = current.getPrevious();
+
+            // Re-link surrounding nodes
+            if (prev != null) prev.setNext(next);
+            next.setPrevious(prev);
+            next.setNext(current);
+
+            current.setPrevious(next);
+            current.setNext(after);
+
+            if (after != null) after.setPrevious(current);
+
+            // Return new "current"
+            return next;
+        }
+    }
 }

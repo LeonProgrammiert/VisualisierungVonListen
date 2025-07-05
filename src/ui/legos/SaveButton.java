@@ -1,38 +1,41 @@
 package ui.legos;
 
-import java.awt.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 import controls.Controller;
 import ui.style.GUIStyle;
 
 public class SaveButton extends CustomPanel{
-    private final ImageIcon availableIcon;
+    private ImageIcon availableIcon;
     private final ImageIcon unavailableIcon;
-    private final ImageIcon highlightedIcon;
+    private ImageIcon highlightedIcon;
 
-    private final Color availableColor;
+    private Color availableColor;
     private final Color unavailableColor;
-    private final Color highlightedColor;
+    private Color highlightedColor;
 
     private final JLabel imageContainer;
     private final JLabel textContainer;
 
+    public void setTheme() {
+        availableColor = GUIStyle.getFontColor();
+        highlightedColor = GUIStyle.getHighlightedColor();
+
+        highlightedIcon = loadAndScaleIcon(GUIStyle.getHighlightedSaveImage());
+        availableIcon = loadAndScaleIcon(GUIStyle.getAvailableSaveImage());
+    }
+
     public SaveButton(int fontsize){
         setValues();
 
-        // Initialize images
-        availableIcon = loadAndScaleIcon("src/assets/saveIconWhite.png");
+        // Initialize
         unavailableIcon = loadAndScaleIcon("src/assets/saveIconGray.png");
-        highlightedIcon = loadAndScaleIcon("src/assets/saveIconPink.png");
-
-        availableColor = GUIStyle.getFontColor();
         unavailableColor = GUIStyle.getButtonUnavailableColor();
-        highlightedColor = GUIStyle.getHighlightedColor();
+        setTheme();
 
 
         // Image container
@@ -52,7 +55,7 @@ public class SaveButton extends CustomPanel{
 
     private void setValues() {
         setBackground(GUIStyle.getButtonColor());
-        setBorder(new EmptyBorder(new Insets(5, 5, 5, 5)));
+        setBorder(BorderFactory.createCompoundBorder(unhighlightedBorder, new EmptyBorder(5, 5, 5, 5)));
         setSize(60, 60);
         setLayout(new FlowLayout(FlowLayout.CENTER));
     }
