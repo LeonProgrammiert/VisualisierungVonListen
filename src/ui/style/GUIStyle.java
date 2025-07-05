@@ -21,6 +21,7 @@ public class GUIStyle {
 
     private static String highlightedSaveImage;
     private static String availableSaveImage;
+    private static String unavailableSaveImage;
 
     public static void setColorMode(boolean darkMode) {
         if (darkMode) {
@@ -36,6 +37,7 @@ public class GUIStyle {
 
             highlightedSaveImage = "src/assets/saveIconPink.png";
             availableSaveImage = "src/assets/saveIconWhite.png";
+            unavailableSaveImage = "src/assets/saveIconGray.png";
 
             unhighlightedBorderColor = new Color(89, 89, 89);
         } else {
@@ -45,12 +47,13 @@ public class GUIStyle {
             highlightColor = new Color(0, 179, 255);
             backgroundColor = new Color(240, 242, 244);
 
-            buttonUnavailableColor = new Color(70, 70, 70);
+            buttonUnavailableColor = new Color(147, 147, 147);
             unhighlightedButtonColor = new Color(230, 232, 234);
             highlightedButtonColor = new Color(215, 217, 219);
 
             highlightedSaveImage = "src/assets/saveIconBlue.png";
             availableSaveImage = "src/assets/saveIconBlack.png";
+            unavailableSaveImage = "src/assets/saveIconLightGray.png";
 
             unhighlightedBorderColor = new Color(15, 15, 15);
         }
@@ -142,5 +145,9 @@ public class GUIStyle {
 
     public static String getAvailableSaveImage() {
         return availableSaveImage;
+    }
+
+    public static String getUnavailableSaveImage() {
+        return unavailableSaveImage;
     }
 }

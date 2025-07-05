@@ -78,7 +78,7 @@ public class ListEditor <T> extends JFrame {
         int fontsize = 18;
         CustomButton backToLauncher = createButton("← Zurück zum Launcher", fontsize, eventTypes.backToLauncher);
         CustomButton listViewButton = createButton("Liste anzeigen", fontsize, eventTypes.viewList);
-        saveListButton = new SaveButton(fontsize);
+        saveListButton = new SaveButton<>(fontsize, controller);
 
         fontsize = 24;
         predecessor = createButton("Vorgänger", fontsize, eventTypes.previous);

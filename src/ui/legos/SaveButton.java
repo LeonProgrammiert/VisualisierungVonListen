@@ -9,13 +9,16 @@ import java.awt.*;
 import controls.Controller;
 import ui.style.GUIStyle;
 
-public class SaveButton extends CustomPanel{
+public class SaveButton<T> extends CustomPanel{
+
+    private final Controller<T> controller;
+
     private ImageIcon availableIcon;
-    private final ImageIcon unavailableIcon;
+    private ImageIcon unavailableIcon;
     private ImageIcon highlightedIcon;
 
     private Color availableColor;
-    private final Color unavailableColor;
+    private Color unavailableColor;
     private Color highlightedColor;
 
     private final JLabel imageContainer;
@@ -24,17 +27,19 @@ public class SaveButton extends CustomPanel{
     public void setTheme() {
         availableColor = GUIStyle.getFontColor();
         highlightedColor = GUIStyle.getHighlightedColor();
+        unavailableColor = GUIStyle.getButtonUnavailableColor();
 
         highlightedIcon = loadAndScaleIcon(GUIStyle.getHighlightedSaveImage());
         availableIcon = loadAndScaleIcon(GUIStyle.getAvailableSaveImage());
+        unavailableIcon = loadAndScaleIcon(GUIStyle.getUnavailableSaveImage());
+
     }
 
-    public SaveButton(int fontsize){
+    public SaveButton(int fontsize, Controller<T> controller) {
+        this.controller = controller;
         setValues();
 
         // Initialize
-        unavailableIcon = loadAndScaleIcon("src/assets/saveIconGray.png");
-        unavailableColor = GUIStyle.getButtonUnavailableColor();
         setTheme();
 
 
@@ -65,19 +70,30 @@ public class SaveButton extends CustomPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(Controller.unsavedChanges){
-                    Controller.getController().getListEditor().saveList();
+                    // Play sound
+                    controller.playSound(GUIStyle.getClickSoundFile());
+                    // Save  list
+                    controller.getListEditor().saveList();
+                    // Change button appearance
                     imageContainer.setIcon(unavailableIcon);
                     textContainer.setForeground(unavailableColor);
                     setBackground(GUIStyle.getButtonColor());
+                    // Change cursor
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
                 }
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
                 if(Controller.unsavedChanges){
+                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
                     imageContainer.setIcon(highlightedIcon);
                     textContainer.setForeground(highlightedColor);
                     setBackground(GUIStyle.getHighlightedButtonColor());
+                } else {
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 }
             }
 
