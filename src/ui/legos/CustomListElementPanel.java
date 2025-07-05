@@ -36,15 +36,26 @@ public class CustomListElementPanel<T> extends JPanel {
         setBorder(BorderFactory.createLineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
         setOpaque(false);
 
-        add(getPanel("←", buttonTypes.previous));
-        add(getPanel(element.getElement(), buttonTypes.current));
-        add(getPanel("→", buttonTypes.next));
+        if (element.getPrevious() != null) {
+            add(getPanel("←", buttonTypes.previous));
+        } else {
+            add(Box.createHorizontalStrut(0)); // Platzhalter für Ausrichtung
+        }
 
+        add(getPanel(element.getElement(), buttonTypes.current));
+
+        // Nur "→" anzeigen, wenn es ein nächstes Element gibt
+        if (element.getNext() != null) {
+            add(getPanel("→", buttonTypes.next));
+        } else {
+            add(Box.createHorizontalStrut(0)); // Platzhalter für Ausrichtung
+        }
     }
 
     public JPanel getPanel(String text, buttonTypes type) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.setBackground(GUIStyle.getButtonColor());
+
         CustomButton button = new CustomButton(text, 28);
 
         button.addActionListener(e -> actionPerformed(type));
@@ -86,4 +97,5 @@ public class CustomListElementPanel<T> extends JPanel {
         return listElement;
     }
 }
+
 

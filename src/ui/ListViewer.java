@@ -68,10 +68,7 @@ public class ListViewer<T> extends JFrame {
 
         CustomButton backToListEditorButton = new CustomButton("Zurück zum Editor", 18);
         headerPanel.add(backToListEditorButton);
-        backToListEditorButton.addActionListener(e -> {
-            controller.playSound(GUIStyle.getClickSoundFile());
-            backToListEditor(currentList);
-        });
+        backToListEditorButton.addActionListener(e -> backToListEditor(currentList));
 
         // Body
         contentPanel = new JPanel(new WrapLayout(FlowLayout.CENTER));
@@ -96,22 +93,12 @@ public class ListViewer<T> extends JFrame {
         // Set current list
         this.currentList = ListUtilities.deepCopy(first);
 
-        // Start
-        JPanel nullPanelStart = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
-        nullPanelStart.setBorder(new LineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
-        contentPanel.add(nullPanelStart);
-
-        // In between
+        // Nur echte Listenelemente anzeigen
         ListElement<T> current = first;
         while (current != null) {
             contentPanel.add(new CustomListElementPanel<>(current, this, controller));
             current = current.getNext();
         }
-
-        // End
-        JPanel nullPanelEnd = new CustomListElementPanel<>(first, this, controller).getPanel("null", CustomListElementPanel.buttonTypes.none);
-        nullPanelEnd.setBorder(new LineBorder(GUIStyle.getUnhighlightedButtonBorderColor(), 1));
-        contentPanel.add(nullPanelEnd);
         repaint();
         revalidate();
     }
