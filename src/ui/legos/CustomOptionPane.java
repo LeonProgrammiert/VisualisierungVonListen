@@ -33,6 +33,7 @@ public class CustomOptionPane extends JDialog {
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+        setIconImage(GUIStyle.getWindowIcon());
 
         JPanel panel = new JPanel();
         panel.setBackground(GUIStyle.getBackgroundColor());

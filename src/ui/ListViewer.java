@@ -36,6 +36,7 @@ public class ListViewer<T> extends JFrame {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(GUIStyle.getFrameSize());
         setLocationRelativeTo(null);
+        setIconImage(GUIStyle.getWindowIcon());
 
         EmptyBorder emptyBorder = new EmptyBorder(5, 5, 5, 5);
         LineBorder lineBorder = new LineBorder(GUIStyle.getHighlightedColor());

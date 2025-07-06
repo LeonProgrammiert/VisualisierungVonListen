@@ -31,9 +31,10 @@ public class Launcher<T> extends JFrame {
 
     public void setValues() {
         setTitle("Visualisierung von Listen");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(GUIStyle.getFrameSize());
         setLocationRelativeTo(null);
+        setIconImage(GUIStyle.getWindowIcon());
     }
 
     public void build() {
@@ -136,7 +137,7 @@ public class Launcher<T> extends JFrame {
         File src = new File(path);
 
         fileChooser.setCurrentDirectory(src);
-        if(fileChooser.showOpenDialog(null) == JFileChooser.CANCEL_OPTION){
+        if(fileChooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION){
             return;
         }
         File file = fileChooser.getSelectedFile();
