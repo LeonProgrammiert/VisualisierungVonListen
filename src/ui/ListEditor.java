@@ -14,7 +14,6 @@ import backend.ListEvent;
 import ui.style.GUIStyle;
 
 import javax.swing.*;
-import java.io.File;
 import java.awt.*;
 
 public class ListEditor <T> extends JFrame {
@@ -30,9 +29,6 @@ public class ListEditor <T> extends JFrame {
     private CustomButton current;
     private SaveButton saveListButton;
     private JLabel index;
-
-    private File clickSound;
-    private File errorSound;
 
     private UndoRedoButton undoButton;
     private UndoRedoButton redoButton;
@@ -51,12 +47,10 @@ public class ListEditor <T> extends JFrame {
         setSize(GUIStyle.getFrameSize());
         setMinimumSize(new Dimension(540, 360));
         setLocationRelativeTo(null);
+        setIconImage(GUIStyle.getWindowIcon());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         System.out.println(System.getProperty("user.dir"));
-
-        clickSound = new File(System.getProperty("user.dir") + "/src/assets/clickSound.wav");
-        errorSound = new File(System.getProperty("user.dir") + "/src/assets/errorSound.wav");
     }
 
     //baut die Benutzeroberfläche
@@ -274,7 +268,7 @@ public class ListEditor <T> extends JFrame {
             controller.playSound(GUIStyle.getSwapSoundFile());
             setData(newObject);
         } else {
-            controller.playSound(errorSound);
+            controller.playSound(GUIStyle.getErrorSoundFile());
         }
     }
 

@@ -142,12 +142,15 @@ public class GUIStyle {
         return highlightedSaveImage;
     }
 
-
     public static String getAvailableSaveImage() {
         return availableSaveImage;
     }
 
     public static String getUnavailableSaveImage() {
         return unavailableSaveImage;
+    }
+
+    public static Image getWindowIcon(){
+        return new ImageIcon("src/assets/windowIcon.png").getImage();
     }
 }

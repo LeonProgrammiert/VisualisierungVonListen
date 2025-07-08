@@ -52,6 +52,7 @@ public class ListViewer<T> extends JFrame {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(GUIStyle.getFrameSize());
         setLocationRelativeTo(null);
+        setIconImage(GUIStyle.getWindowIcon());
 
         setTheme();
 
