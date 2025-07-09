@@ -1,6 +1,6 @@
 package controls;
 
-import storage.DatabaseAccessor;
+import storage.FileAccessor;
 import backend.StackManager;
 import backend.ListElement;
 import backend.ListEvent;
@@ -27,7 +27,7 @@ public class Controller<T> {
     private File currentListFile;
 
     // Instances
-    private final DatabaseAccessor<T> databaseAccessor;
+    private final FileAccessor<T> databaseAccessor;
     private final StackManager<T> stackManager;
     private final ListViewer<T> listViewer;
     private final ListEditor<T> listEditor;
@@ -66,7 +66,7 @@ public class Controller<T> {
         listEditor = new ListEditor<>(this);
         listViewer = new ListViewer<>(this);
         launcher = new Launcher<>(this);
-        databaseAccessor = new DatabaseAccessor<>();
+        databaseAccessor = new FileAccessor<>();
 
         // Set visibilities
         listEditor.setVisible(false);
