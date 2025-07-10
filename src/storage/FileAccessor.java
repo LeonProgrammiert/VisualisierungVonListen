@@ -2,6 +2,7 @@ package storage;
 
 import backend.ListElement;
 import controls.Controller;
+import ui.legos.CustomOptionPane;
 
 import javax.swing.*;
 import java.io.*;
@@ -52,7 +53,7 @@ public class FileAccessor<T> {
 
         File file = new File(source + name + ".csv");
         if (file.exists() && !overwrite) {
-            int ans = JOptionPane.showConfirmDialog(null, "Es gibt bereits eine Datei mit diesem Namen.\r\nDatei überschreiben?", "Datei existiert bereits", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int ans = CustomOptionPane.showConfirmDialog(null,  "Datei existiert bereits", "Es gibt bereits eine Datei mit diesem Namen. Willst du diese Datei überschreiben?");
 
             if (ans == JOptionPane.NO_OPTION || ans == JOptionPane.CLOSED_OPTION) {
                 return false;
