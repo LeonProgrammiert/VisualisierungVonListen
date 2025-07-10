@@ -6,7 +6,7 @@ import controls.Controller;
 import javax.swing.*;
 import java.io.*;
 
-public class DatabaseAccessor<T> {
+public class FileAccessor<T> {
 
     private final String source = "src/saves/";
 
