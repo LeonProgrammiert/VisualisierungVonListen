@@ -27,7 +27,7 @@ public class Controller<T> {
     private File currentListFile;
 
     // Instances
-    private final FileAccessor<T> databaseAccessor;
+    private final FileAccessor<T> fileAccessor;
     private final StackManager<T> stackManager;
     private final ListViewer<T> listViewer;
     private final ListEditor<T> listEditor;
@@ -66,7 +66,7 @@ public class Controller<T> {
         listEditor = new ListEditor<>(this);
         listViewer = new ListViewer<>(this);
         launcher = new Launcher<>(this);
-        databaseAccessor = new FileAccessor<>();
+        fileAccessor = new FileAccessor<>();
 
         // Set visibilities
         listEditor.setVisible(false);
@@ -90,7 +90,7 @@ public class Controller<T> {
         // Creates a new list
         this.currentListName = name;
 
-        boolean check = databaseAccessor.addList(name, overwrite);
+        boolean check = fileAccessor.addList(name, overwrite);
 
         initializeStacks();
         if (check) {
@@ -110,7 +110,7 @@ public class Controller<T> {
         currentListFile = file;
 
         // Anker ist das erste Element der Liste und kommt als Rückgabewert vom DatabaseAccessor
-        ListElement<T> firstElement = databaseAccessor.openList(file);
+        ListElement<T> firstElement = fileAccessor.openList(file);
 
         // Opens the list in the ListEditor
         launcher.setVisible(false);
@@ -174,7 +174,7 @@ public class Controller<T> {
     }
 
     public void saveList(ListElement<T> firstElement) {
-        databaseAccessor.saveListToFile(firstElement, currentListFile);
+        fileAccessor.saveListToFile(firstElement, currentListFile);
         unsavedChanges = false;
     }
 
@@ -183,7 +183,7 @@ public class Controller<T> {
     }
 
     public void deleteList() {
-        boolean confirmed = databaseAccessor.deleteList(currentListFile);
+        boolean confirmed = fileAccessor.deleteList(currentListFile);
         // Print LOG
         if (confirmed) {
             System.out.println("[LOG] Datei erfolgreich gelöscht: " + currentListFile.getAbsolutePath());
